@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 #---------------------------------------------------------------
 #
 # CMPUT 331 Student Submission License
@@ -10,7 +11,7 @@
 #
 # This software was produced as a solution for an assignment in the course
 # CMPUT 331 - Computational Cryptography at the University of
-# Alberta, Canada. This solution is confidential and remains confidential
+# Alberta, Canada. This solution is confidential and remains confidential 
 # after it is submitted for grading.
 #
 # Copying any part of this solution without including this copyright notice
@@ -21,64 +22,40 @@
 # the sanctions for plagiarism at that institution.
 #
 # If this software is found in any public website or public repository, the
-# person finding it is kindly requested to immediately report, including
+# person finding it is kindly requested to immediately report, including 
 # the URL or other repository locating information, to the following email
 # address:
 #
-# gkondrak <at> ualberta.ca
+#          gkondrak <at> ualberta.ca
 #
 #---------------------------------------------------------------
+
 """
-CMPUT 331 Assignment 3 Student Solution
+CMPUT 331 Assignment 1 Student Solution
 September 2026
 Author: Chris Scheerschmidt
 """
+
+
 from sys import flags
+from a1p1 import encrypt, decrypt
+
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-def get_map(letters=LETTERS):
-    char_to_index = {}
-    index_to_char = {}
 
-    for index, character in enumerate(letters):
-        char_to_index[character] = index
-        index_to_char[index] = character
-    return char_to_index, index_to_char
 
-def encrypt(message: str, key: str):
-    message = message.upper()
-    char_to_index, index_to_char = get_map()
-    shift = char_to_index[key]
-    encrypted = ""
+def crack_caesar(ciphertext, val_words):
+    
+    raise NotImplementedError()
 
-    for letter in message:
-        if letter in char_to_index:
-            encrypted = encrypted + index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
-        else:
-            encrypted = encrypted + letter
 
-    return encrypted
+def form_dictionary(text_address='carroll-alice.txt'):
+    raise NotImplementedError()
 
-def decrypt(message: str, key: str):
-    message = message.upper()
-    char_to_index, index_to_char = get_map()
-    shift = char_to_index[key]
-    decrypted = ""
 
-    for letter in message:
-        if letter in char_to_index:
-            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]    
-        else:
-            decrypted = decrypted + letter
-
-    return decrypted
 
 def test():
-    #global SHIFTDICT, LETTERDICT
-    #SHIFTDICT, LETTERDICT = get_map()
-    #print(decrypt(encrypt("FOO", "G"), "G"))
-    code = encrypt("WELCOME TO 2026 FALL CMPUT 331!", "X")
-    print(code)
-    print(decrypt(code, "X"))
-    
+    assert crack_caesar('TBIZLJB QL TLKABOIXKA', form_dictionary()) == ('WELCOME TO WONDERLAND', 'X')
+
+
 if __name__ == "__main__" and not flags.interactive:
     test()
