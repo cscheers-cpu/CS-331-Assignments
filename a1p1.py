@@ -36,7 +36,13 @@ Author: Chris Scheerschmidt
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 def get_map(letters=LETTERS):
-    raise NotImplementedError()
+    char_to_index = {}
+    index_to_char = {}
+
+    for index, character in enumerate(letters):
+        char_to_index[character] = index
+        index_to_char[index] = character
+    return char_to_index, index_to_char
 
 def encrypt(message: str, key: str):
     message = message.upper()
