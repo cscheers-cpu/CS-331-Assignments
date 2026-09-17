@@ -3,7 +3,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright 2026 <<Insert your name here>>
+# Copyright 2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -31,7 +31,7 @@
 """
 CMPUT 331 Assignment 1 Student Solution
 September 2026
-Author: <Your name here>
+Author: Chris Scheerschmidt
 """
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
