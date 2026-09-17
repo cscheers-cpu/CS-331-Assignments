@@ -51,10 +51,10 @@ def encrypt(message: str, key: str):
     encrypted = ""
 
     for letter in message:
-        if letter in message:
-            encrypted += index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
+        if letter in char_to_index:
+            encrypted = encrypted + index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
         else:
-            encrypted += letter
+            encrypted = encrypted + letter
 
     return encrypted
 
@@ -62,20 +62,21 @@ def decrypt(message: str, key: str):
     message = message.upper()
     char_to_index, index_to_char = get_map()
     shift = char_to_index[key]
-    encrypted = ""
+    decrypted = ""
 
     for letter in message:
         if letter in char_to_index:
-            encrypted += index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
+            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
         else:
-            decrypted += letter
+            decrypted = decrypted + letter
 
     return decrypted
 
 def test():
-    global SHIFTDICT, LETTERDICT
-    SHIFTDICT, LETTERDICT = get_map()
-    assert decrypt(encrypt("FOO", "G"), "G") == "FOO"
+    #global SHIFTDICT, LETTERDICT
+    #SHIFTDICT, LETTERDICT = get_map()
+    #print(decrypt(encrypt("FOO", "G"), "G"))
+    print(decrypt(encrypt("WELCOME TO 2026 FALL CMPUT 331!", "X"), "X"))
     
 if __name__ == "__main__" and not flags.interactive:
     test()
