@@ -35,7 +35,7 @@ Author: Chris Scheerschmidt
 """
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-def get_map(letters=LETTERS):
+def get_map(letters: str=LETTERS) -> dict:
     char_to_index = {}
     index_to_char = {}
 
@@ -44,7 +44,7 @@ def get_map(letters=LETTERS):
         index_to_char[index] = character
     return char_to_index, index_to_char
 
-def encrypt(message: str, key: str):
+def encrypt(message: str, key: str) -> str:
     message = message.upper()
     char_to_index, index_to_char = get_map()
     shift = char_to_index[key]
@@ -58,7 +58,7 @@ def encrypt(message: str, key: str):
 
     return encrypted
 
-def decrypt(message: str, key: str):
+def decrypt(message: str, key: str) -> str:
     message = message.upper()
     char_to_index, index_to_char = get_map()
     shift = char_to_index[key]
