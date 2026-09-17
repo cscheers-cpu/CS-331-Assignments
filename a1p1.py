@@ -46,7 +46,17 @@ def get_map(letters=LETTERS):
 
 def encrypt(message: str, key: str):
     message = message.upper()
-    raise NotImplementedError()
+    char_to_index, index_to_char = get_map()
+    shift = char_to_index[key]
+    encrypted = ""
+
+    for letter in message:
+        if letter in message:
+            encrypted = index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
+        else:
+            encrypted += letter
+
+    return encrypted
 
 def decrypt(message: str, key: str):
     raise NotImplementedError()
