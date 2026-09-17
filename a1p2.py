@@ -55,7 +55,7 @@ def encrypt(message: str, key: str):
             index = (char_to_index[letter] + shift) % len(LETTERS)
             char = index_to_char[index]
             encrypted = encrypted + char
-            shift = char_to_index[char]
+            shift = char_to_index[letter]
         else:
             encrypted = encrypted + letter
 
@@ -68,10 +68,13 @@ def decrypt(message: str, key: str):
     decrypted = ""
 
     for letter in message:
-        index = (char_to_index[letter] - shift) % len(LETTERS)
-        char = index_to_char[index]
-        decrypted = decrypted + char
-        shift = char_to_index[char]
+        if letter in char_to_index:
+            index = (char_to_index[letter] - shift) % len(LETTERS)
+            char = index_to_char[index]
+            decrypted = decrypted + char
+            shift = char_to_index[char]
+        else:
+            decrypted = decrypted + letter
 
     return decrypted
 
