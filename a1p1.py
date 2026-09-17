@@ -66,7 +66,13 @@ def decrypt(message: str, key: str):
 
     for letter in message:
         if letter in char_to_index:
-            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
+            left_shift = (char_to_index[letter] - shift) % len(LETTERS)
+
+            if left_shift > 0:
+                decrypted = decrypted  + index_to_char[left_shift]
+            else:
+                decrypted = decrypted + index_to_char[len(LETTERS) - left_shift]
+                
         else:
             decrypted = decrypted + letter
 
