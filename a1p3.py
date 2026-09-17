@@ -29,7 +29,7 @@
 #
 #---------------------------------------------------------------
 """
-CMPUT 331 Assignment  Student Solution
+CMPUT 331 Assignment 3 Student Solution
 September 2026
 Author: Chris Scheerschmidt
 """
@@ -52,10 +52,7 @@ def encrypt(message: str, key: str):
 
     for letter in message:
         if letter in char_to_index:
-            index = (char_to_index[letter] + shift) % len(LETTERS)
-            char = index_to_char[index]
-            encrypted = encrypted + char
-            shift = char_to_index[letter]
+            encrypted = encrypted + index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
         else:
             encrypted = encrypted + letter
 
@@ -69,10 +66,7 @@ def decrypt(message: str, key: str):
 
     for letter in message:
         if letter in char_to_index:
-            index = (char_to_index[letter] - shift) % len(LETTERS)
-            char = index_to_char[index]
-            decrypted = decrypted + char
-            shift = char_to_index[char]
+            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]    
         else:
             decrypted = decrypted + letter
 
@@ -81,7 +75,8 @@ def decrypt(message: str, key: str):
 def test():
     #global SHIFTDICT, LETTERDICT
     #SHIFTDICT, LETTERDICT = get_map()
-    code = encrypt("THIS IS PROBLEM 2 OF ASSIGNMENT 1.", "X")
+    #print(decrypt(encrypt("FOO", "G"), "G"))
+    code = encrypt("WELCOME TO 2026 FALL CMPUT 331!", "X")
     print(code)
     print(decrypt(code, "X"))
     
