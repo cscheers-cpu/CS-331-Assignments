@@ -43,13 +43,20 @@ from a1p1 import encrypt, decrypt
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-def crack_caesar(ciphertext, val_words):
+def crack_caesar(ciphertext: str, val_words: set):
     
     raise NotImplementedError()
 
 
 def form_dictionary(text_address='carroll-alice.txt'):
-    raise NotImplementedError()
+    word_set = set()
+    with open(text_address, 'r', encoding = 'uff8') as f:
+        for line in f.readlines():
+            word_set.update(line.split())
+
+    return word_set
+
+
 
 
 
