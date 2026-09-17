@@ -1,7 +1,3 @@
-
-Page
-1
-of 2
 #!/usr/bin/python3
 #---------------------------------------------------------------
 #
@@ -40,15 +36,19 @@ Author: <Your name here>
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 def get_map(letters=LETTERS):
-raise NotImplementedError()
+    raise NotImplementedError()
+
 def encrypt(message: str, key: str):
-message = message.upper()
-raise NotImplementedError()
+    message = message.upper()
+    raise NotImplementedError()
+
 def decrypt(message: str, key: str):
-raise NotImplementedError()
+    raise NotImplementedError()
+
 def test():
-global SHIFTDICT, LETTERDICT
-SHIFTDICT, LETTERDICT = get_map()
-assert decrypt(encrypt("FOO", "G"), "G") == "FOO"
+    global SHIFTDICT, LETTERDICT
+    SHIFTDICT, LETTERDICT = get_map()
+    assert decrypt(encrypt("FOO", "G"), "G") == "FOO"
+    
 if __name__ == "__main__" and not flags.interactive:
-test()
+    test()
