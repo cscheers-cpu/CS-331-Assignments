@@ -65,10 +65,8 @@ def decrypt(message: str, key: str):
     decrypted = ""
 
     for letter in message:
-            
         if letter in char_to_index:
-            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
-            
+            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]    
         else:
             decrypted = decrypted + letter
 
