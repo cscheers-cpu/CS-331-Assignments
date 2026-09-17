@@ -65,14 +65,10 @@ def decrypt(message: str, key: str):
     decrypted = ""
 
     for letter in message:
+            
         if letter in char_to_index:
-            left_shift = (char_to_index[letter] - shift) % len(LETTERS)
-
-            if left_shift > 0:
-                decrypted = decrypted  + index_to_char[left_shift]
-            else:
-                decrypted = decrypted + index_to_char[len(LETTERS) - left_shift]
-                
+            decrypted =  decrypted + index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
+            
         else:
             decrypted = decrypted + letter
 
@@ -82,7 +78,9 @@ def test():
     #global SHIFTDICT, LETTERDICT
     #SHIFTDICT, LETTERDICT = get_map()
     #print(decrypt(encrypt("FOO", "G"), "G"))
-    print(decrypt(encrypt("WELCOME TO 2026 FALL CMPUT 331!", "X"), "X"))
+    code = encrypt("WELCOME TO 2026 FALL CMPUT 331!", "X")
+    print(code)
+    print(decrypt(code, "X"))
     
 if __name__ == "__main__" and not flags.interactive:
     test()
