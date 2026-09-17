@@ -52,14 +52,25 @@ def encrypt(message: str, key: str):
 
     for letter in message:
         if letter in message:
-            encrypted = index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
+            encrypted += index_to_char[(char_to_index[letter] + shift) % len(LETTERS)]
         else:
             encrypted += letter
 
     return encrypted
 
 def decrypt(message: str, key: str):
-    raise NotImplementedError()
+    message = message.upper()
+    char_to_index, index_to_char = get_map()
+    shift = char_to_index[key]
+    encrypted = ""
+
+    for letter in message:
+        if letter in char_to_index:
+            encrypted += index_to_char[(char_to_index[letter] - shift) % len(LETTERS)]
+        else:
+            decrypted += letter
+
+    return decrypted
 
 def test():
     global SHIFTDICT, LETTERDICT
