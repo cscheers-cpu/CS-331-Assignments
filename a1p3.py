@@ -36,7 +36,7 @@ September 2026
 Author: Chris Scheerschmidt
 """
 
-
+from sys import re
 from sys import flags
 from a1p1 import encrypt, decrypt
 
@@ -45,20 +45,17 @@ LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 def crack_caesar(ciphertext: str, val_words: set):
     
-    raise NotImplementedError()
 
 
-def form_dictionary(text_address='carroll-alice.txt'):
+def form_dictionary(text_address='carroll-alice.txt') -> set:
     word_set = set()
-    with open(text_address, 'r', encoding = 'uff8') as f:
+    with open(text_address, 'r', encoding = 'utf-8') as f:
         for line in f.readlines():
+            line = line.upper()
+            line = re.sub(r'[^A-Z\s]', '', line)
             word_set.update(line.split())
 
     return word_set
-
-
-
-
 
 def test():
     assert crack_caesar('TBIZLJB QL TLKABOIXKA', form_dictionary()) == ('WELCOME TO WONDERLAND', 'X')
