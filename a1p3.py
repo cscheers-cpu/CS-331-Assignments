@@ -53,8 +53,15 @@ def crack_caesar(ciphertext: str, val_words: set) -> str:
     for letter in LETTERS:
         plaintext = decrypt(ciphertext, letter) 
         plainlist = re.sub(r'[^A-Z\s]', '', plaintext).split()
-        
-        for word in plainlist:
+
+        for index, word in enumerate(plainlist):
+            if index == 5 and matches <= 1:
+                matches = 0
+                break
+
+            if len(word) >= 4 and word in val_words:
+                if plainlist[index - 1] in val_words and plainlist[index + 1] in val_words:
+                    return plaintext, letter
 
             if word in val_words:
                 matches += 1
@@ -82,8 +89,8 @@ def form_dictionary(text_address='carroll-alice.txt') -> set:
     return word_set
 
 def test():
-    sample = "THIS IS PROBLEM 2 OF ASSIGNMENT 1."
-    key = "X"
+    sample = "Zephyr quixotically wandered through the labyrinthine corridors of an abandoned observatory, where iridescent instruments gathered dust beneath a vaulted ceiling. Obfuscation became inevitable as the eccentric astronomer recorded cryptic observations in a weathered journal, describing nebulous phenomena that appeared beyond the western horizon."
+    key = "Z"
     cracked, key = crack_caesar(encrypt(sample, key), form_dictionary())
     print(cracked, key)
     
