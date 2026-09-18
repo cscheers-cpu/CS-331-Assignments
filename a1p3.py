@@ -43,22 +43,50 @@ from a1p1 import encrypt, decrypt
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-def crack_caesar(ciphertext: str, val_words: set):
-    raise (NotImplementedError)
+def crack_caesar(ciphertext: str, val_words: set) -> str:
+    plaintext = ""
+    plainlist = []
+    matchlist = []
+    matches = 0
+    bestmatch = ""
+
+    for letter in LETTERS:
+        plaintext = decrypt(ciphertext, letter) 
+        plainlist = re.sub(r'[^A-Z\s]', '', plaintext).split()
+        
+        for word in plainlist:
+
+            if word in val_words:
+                matches += 1
+
+            if matches == len(plainlist):
+                return plaintext, letter
+
+        matchlist.append(matches)
+
+    bestmatch = LETTERS[(matchlist.index(max(matchlist)))]
+
+    return decrypt(ciphertext , bestmatch), bestmatch
+
+
+
     
 
 
 def form_dictionary(text_address='carroll-alice.txt') -> set:
     word_set = set()
-    
+
     with open(text_address, 'r', encoding = 'utf-8') as f:
         word_set.update(re.sub(r'[^A-Z\s]', '', f.read().upper()).split())
 
     return word_set
 
 def test():
-    dict = form_dictionary()
-    print(dict)
+    sample = "THIS IS PROBLEM 2 OF ASSIGNMENT 1."
+    key = "X"
+    cracked, key = crack_caesar(encrypt(sample, key), form_dictionary())
+    print(cracked, key)
+    
     #assert crack_caesar('TBIZLJB QL TLKABOIXKA', form_dictionary()) == ('WELCOME TO WONDERLAND', 'X')
 
 
