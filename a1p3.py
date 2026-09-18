@@ -50,11 +50,9 @@ def crack_caesar(ciphertext: str, val_words: set):
 
 def form_dictionary(text_address='carroll-alice.txt') -> set:
     word_set = set()
+    
     with open(text_address, 'r', encoding = 'utf-8') as f:
-        for line in f.readlines():
-            line = line.upper()
-            line = re.sub(r'[^A-Z\s]', '', line)
-            word_set.update(line.split())
+        word_set.update(re.sub(r'[^A-Z\s]', '', f.read().upper()).split())
 
     return word_set
 
