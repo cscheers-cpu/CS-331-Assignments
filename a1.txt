@@ -1,0 +1,22 @@
+4a. How many distinct keys (non-trivial keys which each produce different
+ciphertexts for the same message) do each of the ciphers have?
+Note:
+1. Only replace the "___" with your answer.
+2. Any other change in the template might result in a potential mark
+deduction.
+Problem 1 implementation
+Answer: 25 (Number)
+Explanation: The ordered alphabet may only be shifted over 25 times before it resets. 0 is trivial key. (10-20 words)
+Problem 2 implementation
+Answer: 26 (Number)
+Explanation: The key only decides the first character of message. 0 is valid because rest of message is encrypted. (10-20 words)
+4b. Assume that an attacker knows which cipher you are using, but is
+unaware of your key(s). In this case, is the Problem 2 cipher stronger
+than the original Caesar cipher?
+Answer: Yes (Yes/No)
+Explanation: There is one more possible key and it is harder to analyze character frequency. (10-20 words)
+4c. The Caesar cipher has several weaknesses. Will encrypting the space
+character help address any of these weaknesses? Specify which weaknesses
+in your explanation.
+Answer: Yes (Yes/No)
+Explanation: Adds another possible key, harder to determine amount of and length of words.(10-20 words)
