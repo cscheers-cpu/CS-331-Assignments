@@ -48,33 +48,27 @@ def crack_caesar(ciphertext: str, val_words: set) -> str:
     plainlist = []
     matchlist = []
     matches = 0
+    bestmatches = []
+    firstwords = []
     bestmatch = ""
 
-    for letter in LETTERS:
+    for i, letter in enumerate(LETTERS):
         plaintext = decrypt(ciphertext, letter) 
         plainlist = re.sub(r'[^A-Z\s]', '', plaintext).split()
+        firstwords[i] = plainlist[0]
 
         for index, word in enumerate(plainlist):
-            if len(word) >= 6 and word in val_words:
-                if plainlist[index - 1] in val_words and plainlist[index + 1] in val_words:
-                    return plaintext, letter
-
             if word in val_words:
                 matches += 1
 
-            if index == 10 and matches <= 1:
-                break
-
-            if index == 10 and matches >= 8:
-                return plaintext, letter
-
-            if matches == len(plainlist):
-                return plaintext, letter
-        
         matchlist.append(matches)
         matches = 0
 
-    bestmatch = LETTERS[(matchlist.index(max(matchlist)))]
+    maxval = max(matchlist)
+    bestmatches = [i for i, val in enumerate(bestmatches) if val == maxval]
+    bestmatch = LETTERS[bestmatches.index(min(bestmatches))]
+
+    
 
     return decrypt(ciphertext , bestmatch), bestmatch
 
