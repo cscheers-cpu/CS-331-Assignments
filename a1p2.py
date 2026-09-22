@@ -35,6 +35,8 @@ Author: Chris Scheerschmidt
 """
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+#generate dicts
 def get_map(letters=LETTERS) -> dict:
     char_to_index = {}
     index_to_char = {}
@@ -42,14 +44,20 @@ def get_map(letters=LETTERS) -> dict:
     for index, character in enumerate(letters):
         char_to_index[character] = index
         index_to_char[index] = character
+
     return char_to_index, index_to_char
 
 def encrypt(message: str, key: str) -> str:
     message = message.upper()
     char_to_index, index_to_char = get_map()
+
+    #shift magnitude based on letter key
     shift = char_to_index[key]
     encrypted = ""
 
+    #initial right shift based on index of key passed to function.
+    #after initial shift, shift to reach next char is decided by index of previous letter
+    #write encrypted message to string = encrypted
     for letter in message:
         if letter in char_to_index:
             index = (char_to_index[letter] + shift) % len(LETTERS)
@@ -64,9 +72,14 @@ def encrypt(message: str, key: str) -> str:
 def decrypt(message: str, key: str) -> str:
     message = message.upper()
     char_to_index, index_to_char = get_map()
+
+    #shift magnitude based on letter key
     shift = char_to_index[key]
     decrypted = ""
 
+    #initial left shift based on index of key passed to function
+    #after initial shift, shift to reach next letter decided by index of previous decrypted char (plaintext letter)
+    #write encrypted message to string = decrypted
     for letter in message:
         if letter in char_to_index:
             index = (char_to_index[letter] - shift) % len(LETTERS)
@@ -79,11 +92,7 @@ def decrypt(message: str, key: str) -> str:
     return decrypted
 
 def test():
-    #global SHIFTDICT, LETTERDICT
-    #SHIFTDICT, LETTERDICT = get_map()
-    code = encrypt("THIS IS PROBLEM 2 OF ASSIGNMENT 1.", "X")
-    print(code)
-    print(decrypt(code, "X"))
+    pass
     
 if __name__ == "__main__" and not flags.interactive:
     test()

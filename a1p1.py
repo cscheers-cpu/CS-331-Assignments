@@ -36,7 +36,7 @@ Author: Chris Scheerschmidt
 from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-#generate dicts for shifts
+#generate dicts
 def get_map(letters: str=LETTERS) -> dict:
     char_to_index = {}
     index_to_char = {}
