@@ -102,7 +102,7 @@ def form_dictionary(text_address='carroll-alice.txt') -> set:
     return word_set
 
 def test():
-        form_dictionary()
+        pass
 
 if __name__ == "__main__" and not flags.interactive:
     test()
