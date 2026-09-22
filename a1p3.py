@@ -48,28 +48,31 @@ def crack_caesar(ciphertext: str, val_words: set) -> str:
     plainlist = []
     matchlist = []
     matches = 0
-    bestmatches = []
     firstwords = []
     bestmatch = ""
+    firstalpha = ""
 
-    for i, letter in enumerate(LETTERS):
+    for letter in LETTERS:
         plaintext = decrypt(ciphertext, letter) 
         plainlist = re.sub(r'[^A-Z\s]', '', plaintext).split()
-        firstwords[i] = plainlist[0]
+        firstwords.append(plainlist[0])
 
-        for index, word in enumerate(plainlist):
+        for word in plainlist:
             if word in val_words:
                 matches += 1
 
         matchlist.append(matches)
         matches = 0
 
+    #get decryption with most matches
+    #test if more than one decryption with this many matches
+    #select decryption with plaintext that comes first alphabetically
     maxval = max(matchlist)
-    bestmatches = [i for i, val in enumerate(bestmatches) if val == maxval]
-    bestmatch = LETTERS[bestmatches.index(min(bestmatches))]
-
-    
-
+    for i, val in enumerate(matchlist):
+         if val == maxval:
+              if not firstalpha or firstwords[i] < firstalpha:
+                   bestmatch = LETTERS[i]
+                   
     return decrypt(ciphertext , bestmatch), bestmatch
 
 def form_dictionary(text_address='carroll-alice.txt') -> set:
