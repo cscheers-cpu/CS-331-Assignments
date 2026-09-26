@@ -37,7 +37,19 @@ Author: Chris Scheerschmidt
 """
 
 def encipherMessage(key: int, message: str) -> str:
-    raise NotImplementedError()
+    ciphertext = ""
+
+    rows = len(message) / key
+    if (len(message) % key > 0):
+        rows = rows + 1
+
+    for column in range(key):
+
+        for row in range(rows):
+            ciphertext = ciphertext + message[column + (row * key)]
+    
+        
+    return ciphertext
 
 def decipherMessage(key: int, message: str) -> str:
     raise NotImplementedError()
