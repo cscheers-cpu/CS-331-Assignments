@@ -39,10 +39,27 @@ Author: Chris Scheerschmidt
 from typing import List
 
 def encipherMessage(key: List[int], message: str) -> str:
-    raise NotImplementedError()
+    ciphertext = ""
+    rows = len(message) // len(key)
+    if len(message) % len(key) > 0:
+        rows = rows + 1
+
+    for column  in key:
+        column = column - 1
+        for row in range(rows):
+            index = column + (len(key) * row)
+            if index > len(message) - 1:
+                continue
+            ciphertext = ciphertext + message[index]
+
+    print(ciphertext)
+    return ciphertext
+
+
 
 def test():
     assert encipherMessage([2, 4, 1, 5, 3], "CIPHERS ARE FUN") == "IS HAUCREERNP F"
+    
    
 
 from sys import flags
