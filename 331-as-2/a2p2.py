@@ -44,7 +44,7 @@ def encipherMessage(key: List[int], message: str) -> str:
     if len(message) % len(key) > 0:
         rows = rows + 1
 
-    for column  in key:
+    for column in key:
         column = column - 1
         for row in range(rows):
             index = column + (len(key) * row)
