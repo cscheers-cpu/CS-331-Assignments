@@ -39,50 +39,44 @@ Author: Chris Scheerschmidt
 def encipherMessage(key: int, message: str) -> str:
     ciphertext = ""
     rows = len(message) // key
+
     if (len(message) % key > 0):
         rows = rows + 1
 
-    print(rows)
     for column in range(key):
         for row in range(rows):
+
             index = column + (row * key)
-            if index > len(message):
+            if index > len(message) - 1:
                 break
 
             ciphertext = ciphertext + message[index]
-
-    print(ciphertext)
     
     return ciphertext
 
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
     columns = len(message) // key
+
     if (len(message) % key > 0):
         columns = columns + 1
 
-    print(columns)
-
     for column in range(columns):
         for row in range(key):
-            
-            
-            if index < len(message):
-                plaintext = plaintext + message[index]
 
-    print(plaintext)
+            index = column + (row * columns)
+            if index > len(message) - 1:
+                break
+
+            plaintext = plaintext + message[index]
+
     return plaintext
 
 def test():
-    """
     assert encipherMessage(5, "CIPHERS ARE FUN") == "CREIS P FHAUERN"
     assert decipherMessage(2, encipherMessage(2, "SECRET")) == "SECRET"
     assert decipherMessage(3, encipherMessage(3, "CIPHERS ARE FUN")) == "CIPHERS ARE FUN"
-    """
-   
     assert decipherMessage(4, encipherMessage(4, "HELLO WORLD")) == "HELLO WORLD"
-    
-    
 
 from sys import flags
 
