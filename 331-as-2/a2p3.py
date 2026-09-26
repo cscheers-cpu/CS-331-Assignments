@@ -39,10 +39,27 @@ Author: Chris Scheerschmidt
 from typing import List
 
 def decipherMessage(key: List[int], message: str) -> str:
-    raise NotImplementedError()
+    plaintext = ""
+    rows = len(message) // len(key)
+    if len(message) % len(key) > 0:
+        rows = rows + 1
+
+    blankspaces = len(key) * rows - len(message)
+    for row in range(rows):
+        for i in range(1, len(key) + 1):
+            ind = key.index(i)
+            cind = (ind * rows) + row
+            plaintext = plaintext + message[cind]
+
+    print(plaintext)
+    return plaintext
+
+
+
 
 def test():
     assert decipherMessage([2, 4, 1, 5, 3], "IS HAUCREERNP F") == "CIPHERS ARE FUN"
+    assert decipherMessage([2, 4, 1, 5, 3], "ISHACREERP ") == "CIPHERS ARE"
 
 from sys import flags
 
