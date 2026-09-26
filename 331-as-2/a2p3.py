@@ -42,23 +42,20 @@ from typing import List
 def decipherBlank(key: List[int], blanks: int, columns: int, message: str) -> str:
     placeholder = [None] * (len(message) + blanks)
     messageindex = 0
-    rowindex = 1
-    row = key.index(rowindex)
+    rowindex = 0
     cutoff = len(key) - blanks
 
     for i in range(len(placeholder)):
 
         if (i + 1) % columns == 0:
-            rowindex = rowindex + 1
-
-            if row > cutoff:
+            if key[rowindex] > cutoff:
+                rowindex = rowindex + 1
                 continue
+
+            rowindex = rowindex + 1
         
         placeholder[i] = message[messageindex]
         messageindex = messageindex + 1
-        
-    print(placeholder)
-
     pass
         
 
