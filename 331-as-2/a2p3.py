@@ -38,6 +38,21 @@ Author: Chris Scheerschmidt
 
 from typing import List
 
+
+def decipherBlank(key: List[int], blanks: int, columns: int, rows: int, message: str) -> str:
+    placeholder = [None] * (len(message) + blanks)
+    messageindex = 0
+    rowindex = 0
+    row = key.index(rowindex)
+    for i in range(len(placeholder)):
+        if (i + 1) % columns:
+            rowindex = index + 1
+            if row > rows - blanks:
+                continue
+        placeholder[]
+        
+
+
 def decipherMessage(key: List[int], message: str) -> str:
     plaintext = ""
     rows = len(message) // len(key)
@@ -45,10 +60,14 @@ def decipherMessage(key: List[int], message: str) -> str:
         rows = rows + 1
 
     blankspaces = len(key) * rows - len(message)
+    print(blankspaces)
+
     for row in range(rows):
         for i in range(1, len(key) + 1):
             ind = key.index(i)
             cind = (ind * rows) + row
+            if cind > len(message):
+                break
             plaintext = plaintext + message[cind]
 
     print(plaintext)
@@ -58,7 +77,7 @@ def decipherMessage(key: List[int], message: str) -> str:
 
 
 def test():
-    assert decipherMessage([2, 4, 1, 5, 3], "IS HAUCREERNP F") == "CIPHERS ARE FUN"
+    #assert" decipherMessage([2, 4, 1, 5, 3], "IS HAUCREERNP F") == "CIPHERS ARE FUN"
     assert decipherMessage([2, 4, 1, 5, 3], "ISHACREERP ") == "CIPHERS ARE"
 
 from sys import flags
