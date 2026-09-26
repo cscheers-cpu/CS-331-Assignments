@@ -39,33 +39,46 @@ Author: Chris Scheerschmidt
 from typing import List
 
 
-def decipherBlank(key: List[int], blanks: int, columns: int, rows: int, message: str) -> str:
+def decipherBlank(key: List[int], blanks: int, columns: int, message: str) -> str:
     placeholder = [None] * (len(message) + blanks)
     messageindex = 0
-    rowindex = 0
+    rowindex = 1
     row = key.index(rowindex)
+    cutoff = len(key) - blanks
+
     for i in range(len(placeholder)):
-        if (i + 1) % columns:
-            rowindex = index + 1
-            if row > rows - blanks:
+
+        if (i + 1) % columns == 0:
+            rowindex = rowindex + 1
+
+            if row > cutoff:
                 continue
-        placeholder[]
+        
+        placeholder[i] = message[messageindex]
+        messageindex = messageindex + 1
+        
+    print(placeholder)
+
+    pass
         
 
 
 def decipherMessage(key: List[int], message: str) -> str:
     plaintext = ""
-    rows = len(message) // len(key)
+    columns = len(message) // len(key)
     if len(message) % len(key) > 0:
-        rows = rows + 1
+        columns = columns + 1
 
-    blankspaces = len(key) * rows - len(message)
+    blankspaces = len(key) * columns - len(message)
+    if blankspaces > 0:
+        decipherBlank(key, blankspaces, columns, message)
+        return ""
     print(blankspaces)
 
-    for row in range(rows):
+    for column in range(columns):
         for i in range(1, len(key) + 1):
             ind = key.index(i)
-            cind = (ind * rows) + row
+            cind = (ind * columns) + column
             if cind > len(message):
                 break
             plaintext = plaintext + message[cind]
