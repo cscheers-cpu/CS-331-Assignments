@@ -49,7 +49,11 @@ def getKeys(keylength:int) -> list[list]:
     for i in range(1, keylength + 1):
         genlist[i-1] = i
 
-    print(genlist)
+    permobject = permutations(genlist)
+
+    return [list(p) for p in permobject]
+
+
 
 
 def form_dictionary(text_address='dictionary.txt') -> set:
