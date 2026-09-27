@@ -41,22 +41,31 @@ from itertools import permutations
 from a2p3 import decipherMessage
 
 def crackSharedKey(keylength: int, cipherWords: List[str]): 
-    with open("dictionary.txt", "r", encoding="utf-8") as file:
-        pass
+    dict = form_dictionary()
+    keysets = []
+
+def getKeys(keylength:int) -> list[list]:
+    genlist = [0] * keylength
+    for i in range(1, keylength + 1):
+        genlist[i-1] = i
+
+    print(genlist)
+
 
 def form_dictionary(text_address='dictionary.txt') -> set:
     word_set = set()
     with open(text_address, 'r', encoding = 'utf-8') as f:
         for line in f:
             word_set.update(line.strip())
-
     return word_set
 
 def test():
-    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
+    getKeys(3)
+    """    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
     assert len(crackSharedKey(3, ["WSA"])) == 2 # [[1, 3, 2], [3, 1, 2]]
     assert len(crackSharedKey(3, ["AET", "WSA"])) ==  1 # [[1, 3, 2]]
-    assert len(crackSharedKey(3, ["AET", "WSA", "OSM"])) == 0 # []
+    assert len(crackSharedKey(3, ["AET", "WSA", "OSM"])) == 0 # []"""
+
 
 from sys import flags
 
