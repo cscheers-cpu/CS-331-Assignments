@@ -69,11 +69,11 @@ def decipherMessage(key: List[int], message: str) -> str:
 
     for row in range(rows):
         for i in range(1, len(key) + 1):
-            ind = key.index(i)
-            cind = (ind * rows) + row
-            if cind >= len(plaintext):
+            targetcolumn = key.index(i)
+            targetindex = (targetcolumn * rows) + row
+            if targetindex >= len(plaintext):
                 continue
-            letter = plaintext[cind]
+            letter = plaintext[targetindex]
             if letter is None:
                 continue
             else:
