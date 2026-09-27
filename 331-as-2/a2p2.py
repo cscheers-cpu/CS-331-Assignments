@@ -52,7 +52,6 @@ def encipherMessage(key: List[int], message: str) -> str:
                 continue
             ciphertext = ciphertext + message[index]
 
-    print(ciphertext)
     return ciphertext
 
 
