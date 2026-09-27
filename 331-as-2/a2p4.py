@@ -41,7 +41,16 @@ from itertools import permutations
 from a2p3 import decipherMessage
 
 def crackSharedKey(keylength: int, cipherWords: List[str]): 
-    raise NotImplementedError()
+    with open("dictionary.txt", "r", encoding="utf-8") as file:
+        pass
+
+def form_dictionary(text_address='dictionary.txt') -> set:
+    word_set = set()
+    with open(text_address, 'r', encoding = 'utf-8') as f:
+        for line in f:
+            word_set.update(line.strip())
+
+    return word_set
 
 def test():
     assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
