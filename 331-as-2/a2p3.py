@@ -66,7 +66,7 @@ def decipherMessage(key: List[int], message: str) -> str:
     if blankspaces > 0:
         plaintext = insertBlanks(key, plaintext, blankspaces, rows)
 
-
+    #make seperate function
     for row in range(rows):
         for i in range(1, len(key) + 1):
             targetcolumn = key.index(i)
