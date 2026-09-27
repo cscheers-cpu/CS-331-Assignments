@@ -42,7 +42,22 @@ from a2p3 import decipherMessage
 
 def crackSharedKey(keylength: int, cipherWords: List[str]): 
     dict = form_dictionary()
-    keysets = []
+    keyperms = getKeys(keylength)
+    keymatches = [0] * len(keyperms)
+    goodkeys = []
+
+    for word in cipherWords:
+        for j, perm in enumerate(keyperms):
+            plaintext = decipherMessage(perm, word)
+            if plaintext in dict:
+                keymatches[j] = keymatches[j] + 1
+
+    for i, hits in enumerate(keymatches):
+        if hits == len(cipherWords):
+            goodkeys.append(keyperms[i])
+
+    return goodkeys
+
 
 def getKeys(keylength:int) -> list[list]:
     genlist = [0] * keylength
@@ -53,22 +68,18 @@ def getKeys(keylength:int) -> list[list]:
 
     return [list(p) for p in permobject]
 
-
-
-
 def form_dictionary(text_address='dictionary.txt') -> set:
     word_set = set()
     with open(text_address, 'r', encoding = 'utf-8') as f:
-        for line in f:
-            word_set.update(line.strip())
+        word_set = {line.rstrip('\n') for line in f}
     return word_set
 
 def test():
-    getKeys(3)
-    """    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
+    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
+    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
     assert len(crackSharedKey(3, ["WSA"])) == 2 # [[1, 3, 2], [3, 1, 2]]
     assert len(crackSharedKey(3, ["AET", "WSA"])) ==  1 # [[1, 3, 2]]
-    assert len(crackSharedKey(3, ["AET", "WSA", "OSM"])) == 0 # []"""
+    assert len(crackSharedKey(3, ["AET", "WSA", "OSM"])) == 0 # []
 
 
 from sys import flags
