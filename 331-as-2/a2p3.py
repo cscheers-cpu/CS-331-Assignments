@@ -56,33 +56,36 @@ def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -
 
 def decipherMessage(key: List[int], message: str) -> str:
     plaintext = list(message)
+    plainstring = ""
 
     rows = len(message) // len(key)
     if len(message) % len(key) > 0:
         rows = rows + 1
 
-    blankspaces = len(key) * columns - len(message)
+    blankspaces = len(key) * rows - len(message)
     if blankspaces > 0:
         plaintext = insertBlanks(key, plaintext, blankspaces, rows)
 
-    print(plaintext)
 
     for row in range(rows):
         for i in range(1, len(key) + 1):
             ind = key.index(i)
-            cind = (ind * columns) + column
-            if cind > len(message):
-                break
-            plaintext = plaintext + message[cind]
+            cind = (ind * rows) + row
+            if cind >= len(plaintext):
+                continue
+            letter = plaintext[cind]
+            if letter is None:
+                continue
+            else:
+                plainstring = plainstring + letter
 
-    print(plaintext)
-    return plaintext
+    return plainstring
 
 
 
 
 def test():
-    #assert" decipherMessage([2, 4, 1, 5, 3], "IS HAUCREERNP F") == "CIPHERS ARE FUN"
+    assert decipherMessage([2, 4, 1, 5, 3], "IS HAUCREERNP F") == "CIPHERS ARE FUN"
     assert decipherMessage([2, 4, 1, 5, 3], "ISHACREERP ") == "CIPHERS ARE"
 
 from sys import flags
