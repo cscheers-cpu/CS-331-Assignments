@@ -39,40 +39,35 @@ Author: Chris Scheerschmidt
 from typing import List
 
 
-def decipherBlank(key: List[int], blanks: int, columns: int, message: str) -> str:
-    placeholder = [None] * (len(message) + blanks)
-    messageindex = 0
-    rowindex = 0
+def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -> list:
     cutoff = len(key) - blanks
+    counter = 0
+    insertion = rows - 1
+    while counter < blanks:
+        if key[counter] > cutoff:
+            plaintext.insert(insertion, None)
 
-    for i in range(len(placeholder)):
+        counter = counter + 1
+        insertion = insertion + rows
 
-        if (i + 1) % columns == 0:
-            if key[rowindex] > cutoff:
-                rowindex = rowindex + 1
-                continue
+    return plaintext
 
-            rowindex = rowindex + 1
-        
-        placeholder[i] = message[messageindex]
-        messageindex = messageindex + 1
-    pass
-        
 
 
 def decipherMessage(key: List[int], message: str) -> str:
-    plaintext = ""
-    columns = len(message) // len(key)
+    plaintext = list(message)
+
+    rows = len(message) // len(key)
     if len(message) % len(key) > 0:
-        columns = columns + 1
+        rows = rows + 1
 
     blankspaces = len(key) * columns - len(message)
     if blankspaces > 0:
-        decipherBlank(key, blankspaces, columns, message)
-        return ""
-    print(blankspaces)
+        plaintext = insertBlanks(key, plaintext, blankspaces, rows)
 
-    for column in range(columns):
+    print(plaintext)
+
+    for row in range(rows):
         for i in range(1, len(key) + 1):
             ind = key.index(i)
             cind = (ind * columns) + column
