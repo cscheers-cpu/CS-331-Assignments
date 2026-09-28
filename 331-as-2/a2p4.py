@@ -40,7 +40,7 @@ from typing import List
 from itertools import permutations
 from a2p3 import decipherMessage
 
-def crackSharedKey(keylength: int, cipherWords: List[str]): 
+def crackSharedKey(keylength: int, cipherWords: List[str]) -> str: 
     dict = form_dictionary()
     keyperms = getKeys(keylength)
     keymatches = [0] * len(keyperms)
@@ -59,20 +59,19 @@ def crackSharedKey(keylength: int, cipherWords: List[str]):
     return goodkeys
 
 
-def getKeys(keylength:int) -> list[list]:
+def getKeys(keylength:int) -> list[list[int]] :
     genlist = [0] * keylength
     for i in range(1, keylength + 1):
         genlist[i-1] = i
 
-    permobject = permutations(genlist)
+    return [list(p) for p in permutations(genlist)]
 
-    return [list(p) for p in permobject]
-
-def form_dictionary(text_address='dictionary.txt') -> set:
-    word_set = set()
+def form_dictionary(text_address='dictionary.txt') -> set[str]:
+    dict = set()
     with open(text_address, 'r', encoding = 'utf-8') as f:
-        word_set = {line.rstrip('\n') for line in f}
-    return word_set
+        dict = {line.rstrip('\n') for line in f}
+
+    return dict
 
 def test():
     assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
