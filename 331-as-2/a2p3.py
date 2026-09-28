@@ -43,7 +43,7 @@ def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -
     cutoff = len(key) - blanks
     counter = 0
     insertion = rows - 1
-    while counter < blanks:
+    while counter <= blanks:
         if key[counter] > cutoff:
             plaintext.insert(insertion, None)
 
@@ -53,11 +53,9 @@ def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -
     return plaintext
 
 
-
 def decipherMessage(key: List[int], message: str) -> str:
     plaintext = list(message)
     plainstring = ""
-
     rows = len(message) // len(key)
     if len(message) % len(key) > 0:
         rows = rows + 1
@@ -66,13 +64,15 @@ def decipherMessage(key: List[int], message: str) -> str:
     if blankspaces > 0:
         plaintext = insertBlanks(key, plaintext, blankspaces, rows)
 
+    print(len(plaintext))
+    print(plaintext)
+
     #make seperate function
     for row in range(rows):
         for i in range(1, len(key) + 1):
             targetcolumn = key.index(i)
             targetindex = (targetcolumn * rows) + row
-            if targetindex >= len(plaintext):
-                continue
+            
             letter = plaintext[targetindex]
             if letter is None:
                 continue
