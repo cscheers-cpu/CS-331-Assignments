@@ -62,7 +62,6 @@ def decipherMessage(key: int, message: str) -> str:
             index = column + (row * columns)
             if index > len(message) - 1:
                 break
-
             plaintext = plaintext + message[index]
 
     return plaintext

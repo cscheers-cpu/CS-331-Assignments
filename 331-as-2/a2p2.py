@@ -40,14 +40,14 @@ from typing import List
 
 def encipherMessage(key: List[int], message: str) -> str:
     ciphertext = ""
-    rows = len(message) // len(key)
+    columns = len(message) // len(key)
     if len(message) % len(key) > 0:
-        rows = rows + 1
+        columns = columns + 1
 
-    for column in key:
-        column = column - 1
-        for row in range(rows):
-            index = column + (len(key) * row)
+    for row in key:
+        row = row - 1
+        for column in range(columns):
+            index = row + (len(key) * column)
             if index > len(message) - 1:
                 continue
             ciphertext = ciphertext + message[index]
