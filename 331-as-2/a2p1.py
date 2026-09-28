@@ -42,10 +42,10 @@ def encipherMessage(key: int, message: str) -> str:
     if (len(message) % key > 0):
         columns = columns + 1
 
-    for row in range(key):
-        for column in range(columns):
+    for row in range(key): #iter through rows (vertical axes)
+        for column in range(columns): #iter through columns (horizontal axes)
             index = row + (column * key)
-            if index > len(message) - 1:
+            if index > len(message) - 1: #break if leftover blankspaces reached
                 break
             ciphertext = ciphertext + message[index]
     
@@ -53,14 +53,14 @@ def encipherMessage(key: int, message: str) -> str:
 
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
-    columns = len(message) // key
+    rows = len(message) // key
     if (len(message) % key > 0):
-        columns = columns + 1
+        rows = rows + 1
 
-    for column in range(columns):
-        for row in range(key):
-            index = column + (row * columns)
-            if index > len(message) - 1:
+    for row in range(rows): #iter through rows (vertical axes)
+        for column in range(key): #iter through columns (horizontal axes)
+            index = row + (column * rows)
+            if index > len(message) - 1: #break if leftover blankspaces reached
                 break
             plaintext = plaintext + message[index]
 
