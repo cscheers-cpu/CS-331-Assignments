@@ -38,18 +38,15 @@ Author: Chris Scheerschmidt
 
 def encipherMessage(key: int, message: str) -> str:
     ciphertext = ""
-    rows = len(message) // key
-
+    columns = len(message) // key
     if (len(message) % key > 0):
-        rows = rows + 1
+        columns = columns + 1
 
-    for column in range(key):
-        for row in range(rows):
-
-            index = column + (row * key)
+    for row in range(key):
+        for column in range(columns):
+            index = row + (column * key)
             if index > len(message) - 1:
                 break
-
             ciphertext = ciphertext + message[index]
     
     return ciphertext
@@ -57,13 +54,11 @@ def encipherMessage(key: int, message: str) -> str:
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
     columns = len(message) // key
-
     if (len(message) % key > 0):
         columns = columns + 1
 
     for column in range(columns):
         for row in range(key):
-
             index = column + (row * columns)
             if index > len(message) - 1:
                 break
