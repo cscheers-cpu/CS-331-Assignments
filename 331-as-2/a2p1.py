@@ -44,12 +44,13 @@ def encipherMessage(key: int, message: str) -> str:
 
     for row in range(key): #iter through rows (vertical axes)
         for column in range(columns): #iter through columns (horizontal axes)
-            index = row + (column * key)
+            index = row + (column * key) #jump to next column and maintain row
             if index > len(message) - 1: #break if leftover blankspaces reached
                 break
             ciphertext = ciphertext + message[index]
     
     return ciphertext
+
 
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
@@ -57,14 +58,16 @@ def decipherMessage(key: int, message: str) -> str:
     if (len(message) % key > 0):
         rows = rows + 1
 
-    for row in range(rows): #iter through rows (vertical axes)
-        for column in range(key): #iter through columns (horizontal axes)
-            index = row + (column * rows)
-            if index > len(message) - 1: #break if leftover blankspaces reached
+    #same logic as encipherMessage except row, column length swapped
+    for row in range(rows): 
+        for column in range(key): 
+            index = row + (column * rows) 
+            if index > len(message) - 1: 
                 break
             plaintext = plaintext + message[index]
 
     return plaintext
+
 
 def test():
     pass

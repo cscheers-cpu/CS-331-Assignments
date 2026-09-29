@@ -38,37 +38,37 @@ Author: Chris Scheerschmidt
 
 from typing import List
 
-
+#inserts None at points in list plaintext where blankspaces would be
 def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -> list:
-    cutoff = len(key) - blanks
+    cutoff = len(key) - blanks #blanks will be in rows with largest values, stop at some smaller value
     counter = 0
-    insertion = rows - 1
+    insertionpoint = rows - 1 #initial insertion point, will be at bottom of row
     while counter <= blanks:
-        if key[counter] > cutoff:
-            plaintext.insert(insertion, None)
+        if key[counter] > cutoff: #check if current row is large enough
+            plaintext.insert(insertionpoint, None)
         counter = counter + 1
-        insertion = insertion + rows
+        insertionpoint = insertionpoint + rows #jump to botom of next row
 
     return plaintext
 
 
 def decipherMessage(key: List[int], message: str) -> str:
-    plaintext = list(message)
+    plainlist = list(message)
     plainstring = ""
     rows = len(message) // len(key)
     if len(message) % len(key) > 0:
         rows = rows + 1
 
+    #if blankspaces present, pad list with None at their coordinates
     blankspaces = len(key) * rows - len(message)
     if blankspaces > 0:
-        plaintext = insertBlanks(key, plaintext, blankspaces, rows)
+        plainlist = insertBlanks(key, plainlist, blankspaces, rows)
 
-    #make seperate function
-    for row in range(rows):
-        for column in range(1, len(key) + 1):
-            column = key.index(column)
-            index = (column * rows) + row
-            letter = plaintext[index]
+    for row in range(rows): #iter through rows (vertical axis)
+        for column in range(1, len(key) + 1): #iter through column values
+            column = key.index(column) #get index of column from key
+            index = (column * rows) + row #jump between columns while maintaining row
+            letter = plainlist[index]
 
             if letter is None:
                 continue

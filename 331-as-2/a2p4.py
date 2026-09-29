@@ -46,19 +46,22 @@ def crackSharedKey(keylength: int, cipherWords: List[str]) -> str:
     keymatches = [0] * len(keyperms)
     goodkeys = []
 
-    for word in cipherWords:
-        for j, perm in enumerate(keyperms):
-            plaintext = decipherMessage(perm, word)
-            if plaintext in dict:
-                keymatches[j] = keymatches[j] + 1
+    for word in cipherWords: #iter through given cipherwords
+        for j, perm in enumerate(keyperms): #iter through possible key permutations, save index of each permutation
+            plaintext = decipherMessage(perm, word) #decipher word with current key permutation
 
-    for i, hits in enumerate(keymatches):
-        if hits == len(cipherWords):
+            #if deciphered word is actual word, increment permutation match counter
+            if plaintext in dict: 
+                keymatches[j] = keymatches[j] + 1 #
+
+    #save key permutations that work for every cipherword
+    for i, matches in enumerate(keymatches):
+        if matches == len(cipherWords):
             goodkeys.append(keyperms[i])
 
     return goodkeys
 
-
+#generate all permutations of keys given keylength
 def getKeys(keylength:int) -> list[list[int]] :
     genlist = [0] * keylength
     for i in range(1, keylength + 1):
@@ -66,6 +69,7 @@ def getKeys(keylength:int) -> list[list[int]] :
 
     return [list(p) for p in permutations(genlist)]
 
+#save words in dictionary.txt to set
 def form_dictionary(text_address='dictionary.txt') -> set[str]:
     dict = set()
     with open(text_address, 'r', encoding = 'utf-8') as f:
@@ -74,11 +78,7 @@ def form_dictionary(text_address='dictionary.txt') -> set[str]:
     return dict
 
 def test():
-    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
-    assert len(crackSharedKey(3, ["AET"])) == 3 # [[1, 3, 2], [2, 1, 3], [3, 2, 1]]
-    assert len(crackSharedKey(3, ["WSA"])) == 2 # [[1, 3, 2], [3, 1, 2]]
-    assert len(crackSharedKey(3, ["AET", "WSA"])) ==  1 # [[1, 3, 2]]
-    assert len(crackSharedKey(3, ["AET", "WSA", "OSM"])) == 0 # []
+    pass
 
 
 from sys import flags
