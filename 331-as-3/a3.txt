@@ -1,0 +1,16 @@
+In this document you will place your answers to the short answer questions q1 and q4. You will be finding cipher keys and other numerical values
+Note: 
+1. Only replace the "___" with your answer.
+2. Any other change in the template might result in a potential mark deduction.
+
+Problem 1 
+  Value of a: 13 (Number mod 73)
+  Value of b: 47 (Number mod 73)
+
+Problem 4 
+  Value of a: 16 (Number mod 467)
+  Value of b: 227 (Number mod 467)
+  Value of c: 331 (Number mod 467)
+  Value of R_0: 334 (Number mod 467)
+  Value of R_1: 107 (Number mod 467)
+  Value of R_7: 247 (Number mod 467)
