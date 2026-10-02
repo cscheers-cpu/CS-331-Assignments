@@ -39,7 +39,7 @@ Author: Chris Scheerschmidt
 from typing import List
 
 #inserts None at points in list plaintext where blankspaces would be
-def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -> list:
+def insertBlanks(key: List[int], plaintext: list[str | None], blanks: int, rows: int) -> list:
     cutoff = len(key) - blanks #blanks will be in rows with largest values, stop at some smaller value
     counter = 0
     insertionpoint = rows - 1 #initial insertion point, will be at bottom of row
@@ -53,7 +53,7 @@ def insertBlanks(key: List[int], plaintext: list[str], blanks: int, rows: int) -
 
 
 def decipherMessage(key: List[int], message: str) -> str:
-    plainlist = list(message)
+    plainlist: list[str | None] = list(message)
     plainstring = ""
     rows = len(message) // len(key)
     if len(message) % len(key) > 0:

@@ -40,11 +40,11 @@ from typing import List
 from itertools import permutations
 from a2p3 import decipherMessage
 
-def crackSharedKey(keylength: int, cipherWords: List[str]) -> str: 
+def crackSharedKey(keylength: int, cipherWords: List[str]) -> list[list[int]]: 
     dict = form_dictionary()
     keyperms = getKeys(keylength)
     keymatches = [0] * len(keyperms)
-    goodkeys = []
+    goodkeys: list[list[int]] = []
 
     for word in cipherWords: #iter through given cipherwords
         for j, perm in enumerate(keyperms): #iter through possible key permutations, save index of each permutation
