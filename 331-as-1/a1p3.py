@@ -44,7 +44,7 @@ from a1p1 import encrypt, decrypt
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-def crack_caesar(ciphertext: str, val_words: set) -> str:
+def crack_caesar(ciphertext: str, val_words: set) -> tuple[str, str]:
     #store message 
     #store formatted message as list of CAPITALIZED WORDS
     plaintext = ""

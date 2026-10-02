@@ -37,7 +37,7 @@ from sys import flags
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 #generate dicts
-def get_map(letters=LETTERS) -> dict:
+def get_map(letters=LETTERS) -> tuple[dict[str, int], dict[int, str]]:
     char_to_index = {}
     index_to_char = {}
 
