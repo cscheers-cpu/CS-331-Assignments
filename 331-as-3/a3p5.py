@@ -71,20 +71,28 @@ def isolate_a (m: int, r4: list[int], r5: list[int], r6: list[int]):
         aisolate[1] -= m
 
     print(aisolate)
-
+    return aisolate
 
 
 
 
 
 def crack_rng(m: int, sequence: list[int]):
-    aisolate = list[int]
+    inversea = 0
+    aisolate = [0] * 2
     r4: list[int] = [sequence[2], sequence[1], sequence[0]]
     r5: list[int] = [sequence[3], sequence[2], sequence[1]]
     r6: list[int] = [sequence[4], sequence[3], sequence[2]]
 
     aisolate = isolate_a(m, r4, r5, r6)
-    
+    inversea = pow(aisolate[1], -1, m)
+    a = aisolate[0] * inversea
+
+    while a < 0:
+        a += m
+    while a > m:
+        a -= m
+
 
 
     
