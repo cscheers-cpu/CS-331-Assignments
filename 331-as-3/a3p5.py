@@ -40,18 +40,33 @@ import math
 
 def get_lcm (a: int, b: int):
     gcd_ab = math.gcd(a,b)
-    coprime_a = a/gcd_ab
-    coprime_b = b/gcd_ab
+    coprime_a = a // gcd_ab
+    coprime_b = b // gcd_ab
     return coprime_a, coprime_b
 
-def isolate_a (m: int, eq1, eq2, eq3):
+def remove_b(cgone1: list[int], cgone2: list[int]):
+    coprime1, coprime2 = get_lcm(cgone1[2], cgone2[2])
+    bgone = [0] * 3
+    for i in range(3):
+        bgone[i] = cgone1[i] * coprime2 - cgone2[i] * coprime1
+
+    return bgone
+
+def isolate_a (int, r4: list[int], r5: list[int], r6: list[int]):
+    cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
+    cgone2 = [r4[0] - r6[0], r4[1] - r5[1], r6[0] - r6[1]]
+    remove_b(cgone1, cgone2)
 
 
 
 def crack_rng(m: int, sequence: list[int]):
-    r4: tuple = (sequence[0], sequence[1])
-    r5: tuple = (sequence[1], sequence[2])
-    r5: tuple = (sequence[2], sequence[3])
+    r4: list[int] = [sequence[2], sequence[1], sequence[0]]
+    r5: list[int] = [sequence[3], sequence[2], sequence[1]]
+    r6: list[int] = [sequence[4], sequence[3], sequence[2]]
+
+    aisolate = isolate_a(m, r4, r5, r6)
+
+    
     
 
 
