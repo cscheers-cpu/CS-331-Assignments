@@ -54,17 +54,23 @@ def remove_b(cgone1: list[int], cgone2: list[int]):
 
 def isolate_a (int, r4: list[int], r5: list[int], r6: list[int]):
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
-    cgone2 = [r4[0] - r6[0], r4[1] - r5[1], r6[0] - r6[1]]
+    cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]
+    print(cgone1)
+    print(cgone2)
     remove_b(cgone1, cgone2)
 
 
 
+
 def crack_rng(m: int, sequence: list[int]):
+    aisolate = list[int]
     r4: list[int] = [sequence[2], sequence[1], sequence[0]]
     r5: list[int] = [sequence[3], sequence[2], sequence[1]]
     r6: list[int] = [sequence[4], sequence[3], sequence[2]]
 
     aisolate = isolate_a(m, r4, r5, r6)
+    
+
 
     
     
