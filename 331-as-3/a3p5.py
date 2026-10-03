@@ -42,14 +42,15 @@ def get_lcm (a: int, b: int):
     gcd_ab = math.gcd(a,b)
     coprime_a = a // gcd_ab
     coprime_b = b // gcd_ab
+    print(coprime_a, coprime_b)
     return coprime_a, coprime_b
 
 def remove_b(cgone1: list[int], cgone2: list[int]):
     coprime1, coprime2 = get_lcm(cgone1[2], cgone2[2])
-    bgone = [0] * 3
-    for i in range(3):
+    bgone = [0] * 2
+    for i in range(2):
         bgone[i] = cgone1[i] * coprime2 - cgone2[i] * coprime1
-
+    print(bgone)
     return bgone
 
 def isolate_a (int, r4: list[int], r5: list[int], r6: list[int]):
