@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright <<Insert the date here>> <<Insert your name here>>
+# Copyright 10/3/2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -32,15 +32,22 @@
 
 """
 CMPUT 331 Assignment 3 Student Solution
-Author: <Your name here>
+Author: Chris Scheerschmidt
 """
 
 from sys import flags
+import math
 
 
 def affine_key_count(m):
-    raise NotImplementedError
-
+    if m == 1:
+        return 0
+    
+    count = 0
+    for i in range(1, m):
+        if math.gcd(i, m) == 1:
+            count = count + 1
+    return count * m - 1
 
 def test():
     assert affine_key_count(65) == 3119
