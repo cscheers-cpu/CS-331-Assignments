@@ -36,11 +36,23 @@ Author: Chris Scheerschmidt
 """
 
 from sys import flags
+import math
+
+def get_lcm (a: int, b: int):
+    gcd_ab = math.gcd(a,b)
+    coprime_a = a/gcd_ab
+    coprime_b = b/gcd_ab
+    return coprime_a, coprime_b
+
+def isolate_a (m: int, eq1, eq2, eq3):
 
 
-def crack_rng(m, sequence):
-    r2, r3, r4, r5, r6 = tuple(sequence)
-    pass
+
+def crack_rng(m: int, sequence: list[int]):
+    r4: tuple = (sequence[0], sequence[1])
+    r5: tuple = (sequence[1], sequence[2])
+    r5: tuple = (sequence[2], sequence[3])
+    
 
 
 def test():
