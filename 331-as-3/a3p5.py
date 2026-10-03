@@ -53,12 +53,26 @@ def remove_b(cgone1: list[int], cgone2: list[int]):
     print(bgone)
     return bgone
 
-def isolate_a (int, r4: list[int], r5: list[int], r6: list[int]):
+def isolate_a (m: int, r4: list[int], r5: list[int], r6: list[int]):
+    aisolate = [0] * 2
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
     cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]
     print(cgone1)
-    #print(cgone2)
-    remove_b(cgone1, cgone2)
+    print(cgone2)
+    aisolate = remove_b(cgone1, cgone2)
+    while aisolate[0] < 0:
+        aisolate[0] += m
+    while aisolate[0] > m:
+        aisolate[0] -= m
+
+    while aisolate[1] < 0:
+        aisolate[1] += m
+    while aisolate[1] > m:
+        aisolate[1] -= m
+
+    print(aisolate)
+
+
 
 
 
