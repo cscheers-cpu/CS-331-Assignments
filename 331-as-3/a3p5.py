@@ -57,7 +57,7 @@ def isolate_a (int, r4: list[int], r5: list[int], r6: list[int]):
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
     cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]
     print(cgone1)
-    print(cgone2)
+    #print(cgone2)
     remove_b(cgone1, cgone2)
 
 
