@@ -40,7 +40,7 @@ import math
 
 
 def affine_key_count(m):
-    if m == 1:
+    if m == 1 or m == 0:
         return 0
     
     count = 0
