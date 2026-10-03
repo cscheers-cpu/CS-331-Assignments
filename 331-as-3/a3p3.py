@@ -39,8 +39,15 @@ from sys import flags
 
 
 def random_generator(a, b, c, m, r0, r1, n):
-    
-
+    randlist = [0] * n
+    rand = 0
+    for i in range(0, n):
+        rand = ( (a * r1) + (b * r0) + c ) % m
+        randlist[i] = rand
+        r0 = r1
+        r1 = rand
+        
+    return randlist
 
 def test():
     assert random_generator(3, 5, 9, 17, 11, 6, 3) == [14, 13, 16]
