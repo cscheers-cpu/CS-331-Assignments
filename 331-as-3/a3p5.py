@@ -45,53 +45,66 @@ def get_lcm (a: int, b: int):
     print(coprime_a, coprime_b)
     return coprime_a, coprime_b
 
-def remove_b(cgone1: list[int], cgone2: list[int]):
-    coprime1, coprime2 = get_lcm(cgone1[2], cgone2[2])
-    bgone = [0] * 2
+def remove_constant(m: int, equ1: list[int], equ2: list[int]):
+    coprime1, coprime2 = get_lcm(equ1[2], equ2[2])
+    constgone = [0] * 2
     for i in range(2):
-        bgone[i] = cgone1[i] * coprime2 - cgone2[i] * coprime1
-    print(bgone)
-    return bgone
+        constgone[i] = (equ1[i] * coprime2 - equ2[i] * coprime1) % m
+    print(constgone)
+    
+    return constgone
 
-def isolate_a (m: int, r4: list[int], r5: list[int], r6: list[int]):
-    aisolate = [0] * 2
+def apply_modinverse(m: int, isolate: list[int]):
+    inversex = pow(isolate[1], -1, m)
+    x = (isolate[0] * inversex) % m
+
+    return x
+
+    
+def find_ab (m: int, r4: list[int], r5: list[int], r6: list[int]):
+    a = 0
+    b = 0
+    bgone = [0] * 2
+    acgone = [0] * 2
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
     cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]
     print(cgone1)
     print(cgone2)
-    aisolate = remove_b(cgone1, cgone2)
-    while aisolate[0] < 0:
-        aisolate[0] += m
-    while aisolate[0] > m:
-        aisolate[0] -= m
+    bgone = remove_constant(m, cgone1, cgone2)
+    print(bgone)
+    a = apply_modinverse(m, bgone)
+    print(a)
+    print()
+    print("-" * 20)
+    print()
+    print(cgone1[0])
+    print(cgone1[1])
+    acgone[0] = (cgone1[0] - cgone1[1] * a) % m
+    acgone[1] = cgone1[2]
+    print(acgone)
+    b = apply_modinverse(m, acgone)
+    print(b)
+    
 
-    while aisolate[1] < 0:
-        aisolate[1] += m
-    while aisolate[1] > m:
-        aisolate[1] -= m
+    return a, b
 
-    print(aisolate)
-    return aisolate
-
-
+    
 
 
 
 def crack_rng(m: int, sequence: list[int]):
     inversea = 0
-    aisolate = [0] * 2
+    constgone = [0] * 2
     r4: list[int] = [sequence[2], sequence[1], sequence[0]]
     r5: list[int] = [sequence[3], sequence[2], sequence[1]]
     r6: list[int] = [sequence[4], sequence[3], sequence[2]]
 
-    aisolate = isolate_a(m, r4, r5, r6)
-    inversea = pow(aisolate[1], -1, m)
-    a = aisolate[0] * inversea
+    a, b = find_ab(m, r4, r5, r6)
+    #sub a for each equation
+    r4[1] = r4[1] * a
+    r5[1] = r5[1] * a
+    r6[1] = r6[1] * a
 
-    while a < 0:
-        a += m
-    while a > m:
-        a -= m
 
 
 
