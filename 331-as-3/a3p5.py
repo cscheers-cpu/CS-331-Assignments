@@ -64,8 +64,10 @@ def apply_modinverse(m: int, isolate: list[int]):
 def find_ab (m: int, r4: list[int], r5: list[int], r6: list[int]):
     a = 0
     b = 0
+    c = 0
     bgone = [0] * 2
     acgone = [0] * 2
+    abgone = [0] * 3
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #cgone = R4 - R5
     cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]
     print(cgone1)
@@ -84,8 +86,11 @@ def find_ab (m: int, r4: list[int], r5: list[int], r6: list[int]):
     print(acgone)
     b = apply_modinverse(m, acgone)
     print(b)
-    
-
+    abgone[0] = r4[0]
+    abgone[1] = r4[1] * a
+    abgone[2] = r4[2] * b
+    c = (r4[0] - r4[1] * a - r4[2] * b) % m
+    print(c)
     return a, b
 
     
