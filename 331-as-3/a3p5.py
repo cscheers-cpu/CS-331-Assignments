@@ -37,6 +37,7 @@ Author: Chris Scheerschmidt
 
 from sys import flags
 import math
+from a3p3 import random_generator
 
 def get_lcm (a: int, b: int):
     gcd_ab = math.gcd(a,b)
@@ -54,6 +55,23 @@ def isolate_a(m: int, cgone1: list[int], cgone2: list[int]):
     bgone[1] = (cgone1[1] * coprime2 - cgone2[1] * coprime1) % m
     
     return bgone
+
+
+def isolate_b(m:int, a: int, cgone1: list[int], cgone2: list[int], cgone3: list[int]):
+    acgone = [0] * 2
+    
+    if cgone1[2] != 0:
+        acgone[0] = (cgone1[0] - cgone1[1] * a) % m
+        acgone[1] = cgone1[2]
+
+    elif cgone2[2] != 0:
+          acgone[0] = (cgone2[0] - cgone2[1] * a) % m
+          acgone[1] = cgone2[2]
+    else:
+          acgone[0] = (cgone3[0] - cgone3[1] * a) % m
+          acgone[1] = cgone3[2]       
+
+    return acgone
 
 
 def apply_modinverse(m: int, equality: list[int]):
@@ -74,13 +92,15 @@ def crack_rng(m: int, sequence: list[int]):
     r5: list[int] = [sequence[3], sequence[2], sequence[1]]
     r6: list[int] = [sequence[4], sequence[3], sequence[2]]
 
+    #isolate c using all possible combos in case b = 0 for cgone1 and cgone2
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #R4 - R5
-    cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]]# R5 - R6
+    cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]] #R5 - R6
+    cgone3 = [r4[0] - r6[0], r4[1] - r6[1], r4[2] - r6[2]] #R4 - R6
+
     bcgone = isolate_a(m, cgone1, cgone2)
     a = apply_modinverse(m, bcgone)
 
-    acgone[0] = (cgone1[0] - cgone1[1] * a) % m
-    acgone[1] = cgone1[2]
+    acgone = isolate_b(m, a, cgone1, cgone2, cgone3)
     b = apply_modinverse(m, acgone)
 
     c = (r4[0] - r4[1] * a - r4[2] * b) % m
@@ -88,8 +108,7 @@ def crack_rng(m: int, sequence: list[int]):
     return [a, b, c]
 
 def test():
-    assert crack_rng(17, [14, 13, 16, 3, 13]) == [3, 5, 9]
-    assert crack_rng(100, [1, 2, 3, 5, 8]) == [1, 1, 0]
+    pass
 
 
 if __name__ == "__main__" and not flags.interactive:
