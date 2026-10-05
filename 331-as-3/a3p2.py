@@ -38,7 +38,8 @@ Author: Chris Scheerschmidt
 from sys import flags
 import math
 
-
+#find possible affine cypher key pairings given modulus
+#do not count case where a = 1, b = 0 (result is same cypher-alphabet as plain-alphabet)
 def affine_key_count(m):
     if m == 1 or m == 0:
         return 0

@@ -37,7 +37,8 @@ Author: Chris Scheerschmidt
 
 from sys import flags
 
-
+#generate list of random numbers of size n according to algorithm Ri+2 = a*R1+1 + bRi + c (mod m)
+#list consists of elements R2, R3, ..., R1+n
 def random_generator(a, b, c, m, r0, r1, n):
     randlist = [0] * n
     rand = 0

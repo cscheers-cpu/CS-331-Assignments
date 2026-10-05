@@ -39,6 +39,7 @@ from sys import flags
 import math
 from a3p3 import random_generator
 
+#get lcm of two integers
 def get_lcm (a: int, b: int):
     gcd_ab = math.gcd(a,b)
     coprime_a = a // gcd_ab
@@ -46,7 +47,7 @@ def get_lcm (a: int, b: int):
 
     return coprime_a, coprime_b
 
-
+#isolate a given two equations with c eliminated (eliminate b)
 def isolate_a(m: int, cgone1: list[int], cgone2: list[int]):
     bgone = [0] * 2
     coprime1, coprime2 = get_lcm(cgone1[2], cgone2[2])
@@ -56,7 +57,8 @@ def isolate_a(m: int, cgone1: list[int], cgone2: list[int]):
     
     return bgone
 
-
+#isolate b given 3 equations with c eliminated and by substituting a
+#consider possibilty of only 1 equation having non-zero b value
 def isolate_b(m:int, a: int, cgone1: list[int], cgone2: list[int], cgone3: list[int]):
     acgone = [0] * 2
     
@@ -73,7 +75,7 @@ def isolate_b(m:int, a: int, cgone1: list[int], cgone2: list[int], cgone3: list[
 
     return acgone
 
-
+#apply modular inverse to find a/b
 def apply_modinverse(m: int, equality: list[int]):
     inversex = pow(equality[1], -1, m)
     x = (equality[0] * inversex) % m
@@ -92,7 +94,7 @@ def crack_rng(m: int, sequence: list[int]):
     r5: list[int] = [sequence[3], sequence[2], sequence[1]]
     r6: list[int] = [sequence[4], sequence[3], sequence[2]]
 
-    #isolate c using all possible combos in case b = 0 for cgone1 and cgone2
+    #isolate c using all possible combos in case b = 0 for cgone1[2] and cgone2[2]
     cgone1 = [r4[0] - r5[0], r4[1] - r5[1], r4[2] - r5[2]] #R4 - R5
     cgone2 = [r5[0] - r6[0], r5[1] - r6[1], r5[2] - r6[2]] #R5 - R6
     cgone3 = [r4[0] - r6[0], r4[1] - r6[1], r4[2] - r6[2]] #R4 - R6
