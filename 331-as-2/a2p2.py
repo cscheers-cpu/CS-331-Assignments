@@ -44,10 +44,10 @@ def encipherMessage(key: List[int], message: str) -> str:
     if len(message) % len(key) > 0:
         columns = columns + 1
 
-    for row in key:
-        row = row - 1
-        for column in range(columns):
-            index = row + (len(key) * column)
+    for row in key: #iter through rows (vertical axes)
+        row = row - 1 #convert row to index
+        for column in range(columns): #iter through columns (horizontal axes)
+            index = row + (len(key) * column) #jump to next column and maintain row
             if index > len(message) - 1:
                 continue
             ciphertext = ciphertext + message[index]
@@ -55,12 +55,9 @@ def encipherMessage(key: List[int], message: str) -> str:
     return ciphertext
 
 
-
 def test():
     pass
     
-   
-
 from sys import flags
 
 if __name__ == "__main__" and not flags.interactive:

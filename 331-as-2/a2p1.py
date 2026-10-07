@@ -38,13 +38,13 @@ Author: Chris Scheerschmidt
 
 def encipherMessage(key: int, message: str) -> str:
     ciphertext = ""
-    columns = len(message) // key
+    rows = len(message) // key
     if (len(message) % key > 0):
-        columns = columns + 1
+        rows = rows + 1
 
-    for row in range(key): #iter through rows (vertical axes)
-        for column in range(columns): #iter through columns (horizontal axes)
-            index = row + (column * key) #jump to next column and maintain row
+    for column in range(key): #iter through rows (vertical axes)
+        for row in range(rows): #iter through columns (horizontal axes)
+            index = column + (row * key) #jump to next column and maintain row
             if index > len(message) - 1: #break if leftover blankspaces reached
                 break
             ciphertext = ciphertext + message[index]
@@ -54,24 +54,36 @@ def encipherMessage(key: int, message: str) -> str:
 
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
-    rows = len(message) // key
-    if (len(message) % key > 0):
-        rows = rows + 1
+    columns = len(message) // key
+    blanks = len(message) % key
+    newmessage: list[str | None] = list(message)
+    if (blanks > 0):
+        columns = columns + 1
+        for i in range(blanks, 0, -1):
+            ind = columns * (key - i) + columns - 1
+            newmessage.insert(ind, None)
 
     #same logic as encipherMessage except row, column length swapped
-    for row in range(rows): 
-        for column in range(key): 
-            index = row + (column * rows) 
-            if index > len(message) - 1: 
+    for column in range(columns): 
+        for row in range(key):
+            index = column + (row * columns) 
+            if index > len(newmessage) - 1: 
                 break
-            plaintext = plaintext + message[index]
+
+            letter = newmessage[index]
+            if letter is not None:
+                plaintext = plaintext + letter
+            else:
+                pass
 
     return plaintext
 
 
 def test():
-    pass
-
+    assert decipherMessage(3, 'CU3MT3P 1') == 'CMPUT 331'
+    print(decipherMessage(6, 'CasihorpoelTonrursCmaiinntp'))
+    assert decipherMessage(6, 'CasihorpoelTonrursCmaiinntp') == 'ColumnarTranspositionCipher'
+   
 from sys import flags
 
 if __name__ == "__main__" and not flags.interactive:
