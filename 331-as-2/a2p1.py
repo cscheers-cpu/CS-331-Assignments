@@ -87,6 +87,7 @@ def decipherMessage(key: int, message: str) -> str:
 
 def test():
     pass
+
 from sys import flags
 
 if __name__ == "__main__" and not flags.interactive:

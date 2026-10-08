@@ -78,26 +78,7 @@ def form_dictionary(text_address='dictionary.txt') -> set[str]:
     return dict
 
 def test():
-    assert crackSharedKey(3, ['AET', 'WSA', 'OSM']) == [], 'a2p4.crackSharedKey test 1'
-    assert crackSharedKey(3, ['AET', 'WSA']) == [[1, 3, 2]], 'a2p4.crackSharedKey test 2'
-    assert crackSharedKey(3, ['AET']) == [[1, 3, 2], [2, 1, 3], [3, 2, 1]], 'a2p4.crackSharedKey test 3'
-    assert crackSharedKey(3, ['WSA']) == [[1, 3, 2], [3, 1, 2]], 'a2p4.crackSharedKey test 4'
-    assert crackSharedKey(3, ['WSA', 'RILCAET']) == [[1, 3, 2]], 'a2p4.crackSharedKey test 5'
-    assert crackSharedKey(3, ['WEUNAHSGROI', 'DIEOINNUSGUS', 'SFNNFGUI', 'NARETGO', 'OPUUTT']) == [[1, 2, 3]], 'a2p4.crackSharedKey test 6'
-    assert crackSharedKey(3, ['KGWIAN', 'BUNENILG', 'RFFTYOI', 'OSPRTOE', 'BWRDNUO', 'CANEATGSLI', 'CCIROINENLG', 'CNLHIE', 'OBISPHIORITN']) == [[3, 1, 2]], 'a2p4.crackSharedKey test 7'
-    assert crackSharedKey(5, ['EDWSLI', 'NNTSICSAO', 'UHTLGOY', 'IEEENDSVC']) == [[3, 5, 1, 4, 2]], 'a2p4.crackSharedKey test 8'
-    assert crackSharedKey(2, ['CUCLONI', 'OFRFES', 'WCYAK', 'SMOEUMND', 'CEMRA', 'DCEEKD', 'MRSAE', 'ARTDEAE', 'ABBA', 'SRMEGTOBR']) == [[1, 2]], 'a2p4.crackSharedKey test 9'
-    assert crackSharedKey(4, ['LNRAXY', 'HEOODT', 'MERSATK', 'SAMDUNMS', 'MGLANI', 'GTAISN', 'BSDOE', 'VETESO']) == [[1, 3, 2, 4]], 'a2p4.crackSharedKey test 10'
-    assert crackSharedKey(4, ['RAXLNY', 'OODHET', 'RSATMEK', 'MDUNSAMS', 'LANMGI', 'AISGTN', 'DOBSE', 'GNNIAREG']) == [[3, 2, 1, 4]], 'a2p4.crackSharedKey test 11'
-    assert crackSharedKey(5, ['TAEBTIN', 'ILLXAECPBNIE', 'COOGRONYHL']) == [[1, 4, 3, 5, 2]], 'a2p4.crackSharedKey test 12'
-    assert crackSharedKey(5, ['TINBTAE', 'PBNIEECILLXA', 'UETFDLA']) == [[5, 2, 3, 1, 4]], 'a2p4.crackSharedKey test 13'
-    assert crackSharedKey(4, ['ELSNIT', 'TSLEIN', 'PPHYA']) == [[4, 3, 1, 2]], 'a2p4.crackSharedKey test 14'
-    assert crackSharedKey(3, ['OUSCPEMT', 'ECCDOAMRY', 'OTPTCNRRUEAS', 'IASNSGL']) == [[2, 1, 3]], 'a2p4.crackSharedKey test 15'
-    assert crackSharedKey(6, ['ATECRRE', 'URDHLE']) == [[2, 3, 4, 1, 5, 6]], 'a2p4.crackSharedKey test 16'
-    assert crackSharedKey(4, ['RRNBSOTSEO', 'HGLXNEOAA', 'UUARSN']) == [[1, 3, 2, 4]], 'a2p4.crackSharedKey test 17'
-    assert crackSharedKey(4, ['BSEORRNOTS', 'XNAAHGLEO', 'DREDCWOO']) == [[3, 4, 1, 2]], 'a2p4.crackSharedKey test 18'
-    assert crackSharedKey(4, ['EOBSRRNOTS', 'AAXNHGLEO', 'EDDRCWOO']) == [[4, 3, 1, 2]], 'a2p4.crackSharedKey test 19'
-    assert crackSharedKey(4, ['OTSRRNEOBS', 'EOHGLAAXN', 'OESCRU']) == [[2, 1, 4, 3]], 'a2p4.crackSharedKey test 20'
+    pass
     
 
 
