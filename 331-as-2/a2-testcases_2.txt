@@ -1,0 +1,169 @@
+a2p1.py
+	encipherMessage
+		{'args': [3, 'CMPUT 331'], 'result': 'CU3MT3P 1'}
+
+		{'args': [6, 'ColumnarTranspositionCipher'], 'result': 'CasihorpoelTonrursCmaiinntp'}
+
+		{'args': [10, 'Cracking the columnar transposition cipher  '], 'result': 'Chriere tra ti ccro koaniln nuscgmpi noptash'}
+
+		{'args': [2, 'CMPUT 331 (LEC A1 Fall 2026) / Assignment 2'], 'result': 'CPT31(E 1Fl 06  sinet2MU 3 LCA al22)/Asgmn '}
+
+		{'args': [5, '   Me     ssage          With      Spa   ces             '], 'result': '  s  W S      s  i pc     a  t ae  M g  h  s  e e        '}
+
+		{'args': [3, '                '], 'result': '                '}
+
+		{'args': [11, "This Message won't Keep The Same!"], 'result': "Teph  iwTsoh neM' etSs asKmaeege!"}
+
+		{'args': [10, "!@#$%^&*()_+{}[]:;'<>?,./|"], 'result': "!_>@+?#{,$}.%[/^]|&:*;(')<"}
+
+		{'args': [15, '!@#$%^&*()_+-=[]{}|;:,./<>?~`!@#%^&'], 'result': '!]@@{##}%$|^%;&^:&,*.(/)<_>+?-~=`[!'}
+
+		{'args': [100, "The University of Alberta (also known as U of A or UAlberta) is a public research university located in Edmonton, Alberta, Canada. It was founded in 1908 by Alexander Cameron Rutherford, the first premier of Alberta, and Henry Marshall Tory the university's first president. It was enabled through the Post-secondary Learning Act. The university is considered a comprehensive academic and research university (CARU), which means that it offers a range of academic and professional programs that generally lead to undergraduate and graduate level credentials."], 'result': "T meiahii vlenePel  roryUE ss ndotilimf-tevo syaenAe drtlc( soboCtinenAot,rdR y taUu Aar)nol,y,dfb   e eaLwrArnehgltdairba rcae,Hnhdr ei utCnnmaaarget ny ae(a An adMcsalaat ns.r.tdo s h  IhTagktahtrn le aowl idwa utunsTn a  oiotafrvfesoyef  u relUntsre dhisvoeet efd yal  u   Ainirc nisaro v ner1ecgd 9roeeU0sn nA8isotl tifibbyd aey'ealr srcstA ea.alfdd)ei e xramias isntcc d o aepma rrpnp erduCse baihplmderieenocrnsf otiern.vse  essRI ieutaoat cnrhwaaceadlhrse  f mpuoeirnrncoida gv,bare lnartedmshd sie r t tetyfhsh irealroatosur ctgcga hhetp  nertuedehnr"}
+
+	decipherMessage
+		{'args': [3, 'CU3MT3P 1'], 'result': 'CMPUT 331'}
+
+		{'args': [6, 'CasihorpoelTonrursCmaiinntp'], 'result': 'ColumnarTranspositionCipher'}
+
+		{'args': [10, 'Chriere tra ti ccro koaniln nuscgmpi noptash'], 'result': 'Cracking the columnar transposition cipher  '}
+
+		{'args': [2, 'CPT31(E 1Fl 06  sinet2MU 3 LCA al22)/Asgmn '], 'result': 'CMPUT 331 (LEC A1 Fall 2026) / Assignment 2'}
+
+		{'args': [5, '  s  W S      s  i pc     a  t ae  M g  h  s  e e        '], 'result': '   Me     ssage          With      Spa   ces             '}
+
+		{'args': [3, '                '], 'result': '                '}
+
+		{'args': [11, "Teph  iwTsoh neM' etSs asKmaeege!"], 'result': "This Message won't Keep The Same!"}
+
+		{'args': [10, "!_>@+?#{,$}.%[/^]|&:*;(')<"], 'result': "!@#$%^&*()_+{}[]:;'<>?,./|"}
+
+		{'args': [15, '!]@@{##}%$|^%;&^:&,*.(/)<_>+?-~=`[!'], 'result': '!@#$%^&*()_+-=[]{}|;:,./<>?~`!@#%^&'}
+
+		{'args': [100, "T meiahii vlenePel  roryUE ss ndotilimf-tevo syaenAe drtlc( soboCtinenAot,rdR y taUu Aar)nol,y,dfb   e eaLwrArnehgltdairba rcae,Hnhdr ei utCnnmaaarget ny ae(a An adMcsalaat ns.r.tdo s h  IhTagktahtrn le aowl idwa utunsTn a  oiotafrvfesoyef  u relUntsre dhisvoeet efd yal  u   Ainirc nisaro v ner1ecgd 9roeeU0sn nA8isotl tifibbyd aey'ealr srcstA ea.alfdd)ei e xramias isntcc d o aepma rrpnp erduCse baihplmderieenocrnsf otiern.vse  essRI ieutaoat cnrhwaaceadlhrse  f mpuoeirnrncoida gv,bare lnartedmshd sie r t tetyfhsh irealroatosur ctgcga hhetp  nertuedehnr"], 'result': "The University of Alberta (also known as U of A or UAlberta) is a public research university located in Edmonton, Alberta, Canada. It was founded in 1908 by Alexander Cameron Rutherford, the first premier of Alberta, and Henry Marshall Tory the university's first president. It was enabled through the Post-secondary Learning Act. The university is considered a comprehensive academic and research university (CARU), which means that it offers a range of academic and professional programs that generally lead to undergraduate and graduate level credentials."}
+
+a2p2.py
+	encipherMessage
+		{'args': [[3, 2, 1], 'CMPUT 331'], 'result': 'P 1MT3CU3'}
+
+		{'args': [[6, 1, 5, 2, 4, 3, 7], 'CMPUT 331 (LEC A1 Fall 2023)'], 'result': ' Ea3C3 lTLF2M1A U( 0P 123Cl)'}
+
+		{'args': [[7, 10, 2, 8, 9, 5, 3, 4, 6, 1], 'CMPUT 331 F23 Computational Cryptography'], 'result': '3mla tryM2tp3p p1uChTCngP3itU oo oarCFay'}
+
+		{'args': [[2, 13, 3, 11, 8, 10, 9, 12, 15, 1, 7, 14, 4, 5, 6], 'Summer Time Rendering is a Japanese manga series written and illustrated by Yasuki Tanaka.'], 'result': 'ueneiYRJsa kmreslaeaanenTiatr m getaisntaT    danprdy.Sdai    mitieaenbamis lsenewuurg rsk'}
+
+		{'args': [[10, 7, 6, 9, 3, 2, 11, 15, 4, 8, 14, 1, 12, 13, 5], "KonoSuba: God's Blessing on This Wonderful World!, often referred to simply as KonoSuba, is a Japanese light novel series written by Natsume Akatsuki."], 'result': "  fesue  tbidotnpvtAusn  oaot :grt Snlnanl drsatwuoBslra h sGounibssbsshofyiiea.oeW!e   rmanefooaeek'TWel liNiK ire sgstonl maeeyud  rp, r kSso,dKJnie"}
+
+		{'args': [[2, 1], 'AB'], 'result': 'BA'}
+
+		{'args': [[1], 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{};:<>,./?'], 'result': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{};:<>,./?'}
+
+		{'args': [[7, 6, 5, 1, 10, 9, 8, 3, 2, 4], '              1               '], 'result': '       1                      '}
+
+		{'args': [[4, 9, 3, 6, 2, 5, 10, 8, 1, 7], 'abcdeFGHIJK'], 'result': 'dIcFbeJHaKG'}
+
+		{'args': [[2, 3, 1, 5, 4], '"\\`~_*^//#'], 'result': '\\^`/"*_#~/'}
+
+		{'args': [[19, 32, 38, 40, 47, 1, 31, 7, 16, 44, 35, 34, 15, 37, 46, 13, 45, 17, 27, 36, 24, 29, 3, 23, 48, 14, 11, 43, 5, 22, 25, 26, 33, 39, 30, 4, 20, 18, 21, 8, 41, 9, 12, 10, 42, 2, 50, 28, 49, 6], 'cmput 331'], 'result': 'c3ptu31m '}
+
+		{'args': [[2, 9, 10, 5, 6, 8, 4, 1, 3, 7], '290568413729056841372'], 'result': '993377668811552220044'}
+
+		{'args': [[6, 2, 4, 17, 11, 14, 7, 15, 13, 19, 18, 1, 10, 3, 16, 12, 5, 9, 8], '£¥§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊË'], 'result': 'ª¾¥º¨¼¶É°Ã³Æ«¿´Ç²Å¸Ë·Ê£¹¯Â§»µÈ±Ä©½®Á¬À'}
+
+		{'args': [[10, 21, 86, 84, 54, 35, 78, 67, 41, 18, 88, 39, 58, 7, 79, 40, 80, 83, 42, 46, 34, 8, 44, 52, 45, 57, 13, 16, 53, 97, 95, 33, 74, 65, 82, 29, 36, 56, 73, 5, 37, 60, 90, 69, 48, 61, 72, 30, 71, 22, 24, 77, 38, 96, 2, 31, 75, 59, 62, 23, 47, 99, 17, 64, 6, 100, 66, 51, 32, 76, 43, 50, 11, 63, 98, 19, 28, 55, 3, 14, 25, 94, 1, 89, 4, 9, 81, 49, 91, 68, 85, 20, 87, 93, 26, 70, 15, 27, 12, 92], 'Voix japonaise : Megumi Han, voix française : Kelly Marot\nEnfant star, la jeune Kana va rencontrer Aqua et se remettre en question. Cependant avec son entrée dans l\'adolescence, elle perd une grande partie de ses contrats et son statut "exceptionnel" . Cependant à travers de nombreux efforts elle va continuer à vivre de ses talents en enchainant les petits rôles dans des projets "peu qualitatifs".'], 'result': 'n srunsevreuapxpatCefpten ojtdraitehMere  fqçaxn\n nsa dneemeancc lbtn u"s pa cnn eu pseu vin e. :eoateetsm  :tnvMn pedeftaltxCts nd  \'  aee  o lre noépiae s eetan" naarenrarlvsese fnnôlcsevnse srdm    uteu,nondeernliourco.tnjcepEdd astliqesK nt  v" rtrtlàsjt iApa.satdy  si atee reatiln"eare n  ere se a ,inarretiatoeecvHe snreaVqa ruoux inoe eKlrslollnetlaoan e egetdadf og tass ,ee  tointotiesàc si'}
+
+		{'args': [[3, 5, 8, 7, 2, 1, 6, 9, 10, 4], '0\n1\n2\n3\n4\n5\n6\n7\n8\n9'], 'result': '1627\n\n38\n\n05\n\n49\n\n\n'}
+
+		{'args': [[2, 1, 3], 'AB'], 'result': 'BA'}
+
+		{'args': [[5, 2, 3, 4, 1], '  a    b '], 'result': '   ab    '}
+
+		{'args': [[162, 54, 148, 33, 155, 118, 172, 58, 52, 45, 125, 19, 126, 190, 44, 47, 32, 21, 195, 191, 86, 96, 108, 68, 80, 83, 201, 98, 156, 121, 176, 101, 143, 5, 104, 55, 48, 70, 149, 2, 1, 212, 28, 159, 7, 124, 77, 117, 184, 90, 81, 60, 24, 37, 56, 165, 73, 217, 85, 187, 34, 220, 30, 40, 95, 183, 153, 26, 69, 163, 204, 10, 206, 46, 76, 89, 202, 133, 123, 134, 110, 192, 64, 198, 189, 116, 94, 75, 139, 25, 66, 53, 186, 200, 20, 145, 150, 168, 112, 106, 177, 142, 129, 50, 178, 218, 97, 199, 158, 16, 147, 171, 13, 122, 82, 22, 72, 137, 23, 42, 111, 181, 216, 59, 170, 102, 15, 107, 113, 179, 213, 8, 197, 62, 71, 174, 194, 130, 115, 51, 63, 11, 167, 196, 210, 154, 29, 9, 209, 78, 221, 151, 173, 27, 84, 166, 207, 214, 39, 169, 74, 65, 49, 119, 61, 193, 57, 6, 88, 87, 211, 185, 35, 140, 103, 38, 164, 203, 36, 131, 161, 146, 219, 31, 152, 67, 188, 105, 43, 92, 3, 41, 215, 208, 136, 120, 17, 144, 182, 14, 99, 100, 18, 127, 175, 91, 205, 79, 93, 160, 180, 109, 4, 157, 132, 12, 138, 135, 141, 128, 114], "The opening is now considered inferior to 3.Bb5, the Ruy Lopez, and 3.Bc4, the Italian Game, and is accordingly rarely seen today at any level of play.\nMagnus Carlsen used it for a victory in 2013.[1] Black's main responses are 3...Nf6, leading to quiet play, and 3...d5, leading to sharp play. Ponziani's countergambit 3...f5!? was successfully played in the grandmaster game Hikaru Nakamura-Julio Becerra Rivero, US Championship 2007.[2]"], 'result': "ruRaltf geys -LgelB.t  aopie.35.ntoi1Unrncdbn   Ial' mitn eufia. norofud,d.laehsTei0eq ke  yhnlecrmttnpti oyyiea4.s2a rRepn itanmirMaeo3pl aon.ksb.toanBp inlanla o h[C vecaa Pe dtnr eo ]acdfmyrum  d!oolayyt,r p] i1hsin psdaifelainncy hsg dys ce[o erc. ,i?rs Bn0n3. z Batu0  erch ,sg. a3Sm amdui. pezs. iJr isnk'h 7  su, aa 5 seo2, npeGu oa2tarlvgc.r,sNliiaadar aoie\ngdpyir53 ,re onr.siytsfolodves6s  3wedl leecn i gCaaegw auHt  Nlen eraaau"}
+
+		{'args': [[66, 71, 100, 23, 97, 55, 29, 50, 74, 82, 64, 27, 51, 78, 1, 61, 72, 28, 35, 6, 98, 52, 79, 59, 34, 25, 86, 31, 99, 85, 41, 13, 76, 58, 9, 46, 84, 57, 12, 87, 36, 56, 39, 26, 20, 70, 92, 89, 24, 15, 8, 7, 22, 10, 3, 2, 17, 88, 42, 19, 60, 5, 63, 18, 45, 91, 4, 81, 43, 48, 53, 38, 62, 67, 21, 65, 96, 94, 77, 44, 73, 30, 80, 69, 68, 95, 93, 32, 14, 90, 40, 16, 49, 83, 75, 47, 11, 33, 37, 54], "Google's 25th Birthday!"], 'result': "!Geh tdBs'y2oorhltga i5"}
+
+		{'args': [[1, 2, 3, 4, 5], '\\"escape\\\'"'], 'result': '\\a""pees\\c\''}
+
+a2p3.py
+	decipherMessage
+		{'args': [[3, 2, 1], 'P 1MT3CU3'], 'result': 'CMPUT 331'}
+
+		{'args': [[6, 1, 5, 2, 4, 3, 7], ' Ea3C3 lTLF2M1A U( 0P 123Cl)'], 'result': 'CMPUT 331 (LEC A1 Fall 2023)'}
+
+		{'args': [[7, 10, 2, 8, 9, 5, 3, 4, 6, 1], '3mla tryM2tp3p p1uChTCngP3itU oo oarCFay'], 'result': 'CMPUT 331 F23 Computational Cryptography'}
+
+		{'args': [[2, 13, 3, 11, 8, 10, 9, 12, 15, 1, 7, 14, 4, 5, 6], 'ueneiYRJsa kmreslaeaanenTiatr m getaisntaT    danprdy.Sdai    mitieaenbamis lsenewuurg rsk'], 'result': 'Summer Time Rendering is a Japanese manga series written and illustrated by Yasuki Tanaka.'}
+
+		{'args': [[10, 7, 6, 9, 3, 2, 11, 15, 4, 8, 14, 1, 12, 13, 5], "  fesue  tbidotnpvtAusn  oaot :grt Snlnanl drsatwuoBslra h sGounibssbsshofyiiea.oeW!e   rmanefooaeek'TWel liNiK ire sgstonl maeeyud  rp, r kSso,dKJnie"], 'result': "KonoSuba: God's Blessing on This Wonderful World!, often referred to simply as KonoSuba, is a Japanese light novel series written by Natsume Akatsuki."}
+
+		{'args': [[2, 1], 'BA'], 'result': 'AB'}
+
+		{'args': [[1], 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{};:<>,./?'], 'result': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{};:<>,./?'}
+
+		{'args': [[7, 6, 5, 1, 10, 9, 8, 3, 2, 4], '       1                      '], 'result': '              1               '}
+
+		{'args': [[4, 9, 3, 6, 2, 5, 10, 8, 1, 7], 'dIcFbeJHaKG'], 'result': 'abcdeFGHIJK'}
+
+		{'args': [[2, 3, 1, 5, 4], '\\^`/"*_#~/'], 'result': '"\\`~_*^//#'}
+
+		{'args': [[19, 32, 38, 40, 47, 1, 31, 7, 16, 44, 35, 34, 15, 37, 46, 13, 45, 17, 27, 36, 24, 29, 3, 23, 48, 14, 11, 43, 5, 22, 25, 26, 33, 39, 30, 4, 20, 18, 21, 8, 41, 9, 12, 10, 42, 2, 50, 28, 49, 6], 'c3ptu31m '], 'result': 'cmput 331'}
+
+		{'args': [[2, 9, 10, 5, 6, 8, 4, 1, 3, 7], '993377668811552220044'], 'result': '290568413729056841372'}
+
+		{'args': [[6, 2, 4, 17, 11, 14, 7, 15, 13, 19, 18, 1, 10, 3, 16, 12, 5, 9, 8], 'ª¾¥º¨¼¶É°Ã³Æ«¿´Ç²Å¸Ë·Ê£¹¯Â§»µÈ±Ä©½®Á¬À'], 'result': '£¥§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊË'}
+
+		{'args': [[10, 21, 86, 84, 54, 35, 78, 67, 41, 18, 88, 39, 58, 7, 79, 40, 80, 83, 42, 46, 34, 8, 44, 52, 45, 57, 13, 16, 53, 97, 95, 33, 74, 65, 82, 29, 36, 56, 73, 5, 37, 60, 90, 69, 48, 61, 72, 30, 71, 22, 24, 77, 38, 96, 2, 31, 75, 59, 62, 23, 47, 99, 17, 64, 6, 100, 66, 51, 32, 76, 43, 50, 11, 63, 98, 19, 28, 55, 3, 14, 25, 94, 1, 89, 4, 9, 81, 49, 91, 68, 85, 20, 87, 93, 26, 70, 15, 27, 12, 92], 'n srunsevreuapxpatCefpten ojtdraitehMere  fqçaxn\n nsa dneemeancc lbtn u"s pa cnn eu pseu vin e. :eoateetsm  :tnvMn pedeftaltxCts nd  \'  aee  o lre noépiae s eetan" naarenrarlvsese fnnôlcsevnse srdm    uteu,nondeernliourco.tnjcepEdd astliqesK nt  v" rtrtlàsjt iApa.satdy  si atee reatiln"eare n  ere se a ,inarretiatoeecvHe snreaVqa ruoux inoe eKlrslollnetlaoan e egetdadf og tass ,ee  tointotiesàc si'], 'result': 'Voix japonaise : Megumi Han, voix française : Kelly Marot\nEnfant star, la jeune Kana va rencontrer Aqua et se remettre en question. Cependant avec son entrée dans l\'adolescence, elle perd une grande partie de ses contrats et son statut "exceptionnel" . Cependant à travers de nombreux efforts elle va continuer à vivre de ses talents en enchainant les petits rôles dans des projets "peu qualitatifs".'}
+
+		{'args': [[3, 5, 8, 7, 2, 1, 6, 9, 10, 4], '1627\n\n38\n\n05\n\n49\n\n\n'], 'result': '0\n1\n2\n3\n4\n5\n6\n7\n8\n9'}
+
+		{'args': [[2, 1, 3], 'BA'], 'result': 'AB'}
+
+		{'args': [[5, 2, 3, 4, 1], '   ab    '], 'result': '  a    b '}
+
+		{'args': [[162, 54, 148, 33, 155, 118, 172, 58, 52, 45, 125, 19, 126, 190, 44, 47, 32, 21, 195, 191, 86, 96, 108, 68, 80, 83, 201, 98, 156, 121, 176, 101, 143, 5, 104, 55, 48, 70, 149, 2, 1, 212, 28, 159, 7, 124, 77, 117, 184, 90, 81, 60, 24, 37, 56, 165, 73, 217, 85, 187, 34, 220, 30, 40, 95, 183, 153, 26, 69, 163, 204, 10, 206, 46, 76, 89, 202, 133, 123, 134, 110, 192, 64, 198, 189, 116, 94, 75, 139, 25, 66, 53, 186, 200, 20, 145, 150, 168, 112, 106, 177, 142, 129, 50, 178, 218, 97, 199, 158, 16, 147, 171, 13, 122, 82, 22, 72, 137, 23, 42, 111, 181, 216, 59, 170, 102, 15, 107, 113, 179, 213, 8, 197, 62, 71, 174, 194, 130, 115, 51, 63, 11, 167, 196, 210, 154, 29, 9, 209, 78, 221, 151, 173, 27, 84, 166, 207, 214, 39, 169, 74, 65, 49, 119, 61, 193, 57, 6, 88, 87, 211, 185, 35, 140, 103, 38, 164, 203, 36, 131, 161, 146, 219, 31, 152, 67, 188, 105, 43, 92, 3, 41, 215, 208, 136, 120, 17, 144, 182, 14, 99, 100, 18, 127, 175, 91, 205, 79, 93, 160, 180, 109, 4, 157, 132, 12, 138, 135, 141, 128, 114], "ruRaltf geys -LgelB.t  aopie.35.ntoi1Unrncdbn   Ial' mitn eufia. norofud,d.laehsTei0eq ke  yhnlecrmttnpti oyyiea4.s2a rRepn itanmirMaeo3pl aon.ksb.toanBp inlanla o h[C vecaa Pe dtnr eo ]acdfmyrum  d!oolayyt,r p] i1hsin psdaifelainncy hsg dys ce[o erc. ,i?rs Bn0n3. z Batu0  erch ,sg. a3Sm amdui. pezs. iJr isnk'h 7  su, aa 5 seo2, npeGu oa2tarlvgc.r,sNliiaadar aoie\ngdpyir53 ,re onr.siytsfolodves6s  3wedl leecn i gCaaegw auHt  Nlen eraaau"], 'result': "The opening is now considered inferior to 3.Bb5, the Ruy Lopez, and 3.Bc4, the Italian Game, and is accordingly rarely seen today at any level of play.\nMagnus Carlsen used it for a victory in 2013.[1] Black's main responses are 3...Nf6, leading to quiet play, and 3...d5, leading to sharp play. Ponziani's countergambit 3...f5!? was successfully played in the grandmaster game Hikaru Nakamura-Julio Becerra Rivero, US Championship 2007.[2]"}
+
+		{'args': [[66, 71, 100, 23, 97, 55, 29, 50, 74, 82, 64, 27, 51, 78, 1, 61, 72, 28, 35, 6, 98, 52, 79, 59, 34, 25, 86, 31, 99, 85, 41, 13, 76, 58, 9, 46, 84, 57, 12, 87, 36, 56, 39, 26, 20, 70, 92, 89, 24, 15, 8, 7, 22, 10, 3, 2, 17, 88, 42, 19, 60, 5, 63, 18, 45, 91, 4, 81, 43, 48, 53, 38, 62, 67, 21, 65, 96, 94, 77, 44, 73, 30, 80, 69, 68, 95, 93, 32, 14, 90, 40, 16, 49, 83, 75, 47, 11, 33, 37, 54], 'CMPUT 331!'], 'result': 'C33!1MTUP '}
+
+		{'args': [[1, 2, 3, 4, 5], '\\a""pees\\c\''], 'result': '\\"escape\\\'"'}
+
+a2p4.py
+	crackSharedKey
+		{'args': [3, ['AET', 'WSA', 'OSM']], 'result': []}
+
+		{'args': [3, ['AET', 'WSA']], 'result': [[1, 3, 2]]}
+
+		{'args': [3, ['AET']], 'result': [[1, 3, 2], [2, 1, 3], [3, 2, 1]]}
+
+		{'args': [3, ['WSA']], 'result': [[1, 3, 2], [3, 1, 2]]}
+
+		{'args': [3, ['WSA', 'RILCAET']], 'result': [[1, 3, 2]]}
+
+		{'args': [3, ['WEUNAHSGROI', 'DIEOINNUSGUS', 'SFNNFGUI', 'NARETGO', 'OPUUTT']], 'result': [[1, 2, 3]]}
+
+		{'args': [3, ['KGWIAN', 'BUNENILG', 'RFFTYOI', 'OSPRTOE', 'BWRDNUO', 'CANEATGSLI', 'CCIROINENLG', 'CNLHIE', 'OBISPHIORITN']], 'result': [[3, 1, 2]]}
+
+		{'args': [5, ['EDWSLI', 'NNTSICSAO', 'UHTLGOY', 'IEEENDSVC']], 'result': [[3, 5, 1, 4, 2]]}
+
+		{'args': [2, ['CUCLONI', 'OFRFES', 'WCYAK', 'SMOEUMND', 'CEMRA', 'DCEEKD', 'MRSAE', 'ARTDEAE', 'ABBA', 'SRMEGTOBR']], 'result': [[1, 2]]}
+
+		{'args': [4, ['LNRAXY', 'HEOODT', 'MERSATK', 'SAMDUNMS', 'MGLANI', 'GTAISN', 'BSDOE', 'VETESO']], 'result': [[1, 3, 2, 4]]}
+
+		{'args': [4, ['RAXLNY', 'OODHET', 'RSATMEK', 'MDUNSAMS', 'LANMGI', 'AISGTN', 'DOBSE', 'GNNIAREG']], 'result': [[3, 2, 1, 4]]}
+
+		{'args': [5, ['TAEBTIN', 'ILLXAECPBNIE', 'COOGRONYHL']], 'result': [[1, 4, 3, 5, 2]]}
+
+		{'args': [5, ['TINBTAE', 'PBNIEECILLXA', 'UETFDLA']], 'result': [[5, 2, 3, 1, 4]]}
+
+		{'args': [4, ['ELSNIT', 'TSLEIN', 'PPHYA']], 'result': [[4, 3, 1, 2]]}
+
+		{'args': [3, ['OUSCPEMT', 'ECCDOAMRY', 'OTPTCNRRUEAS', 'IASNSGL']], 'result': [[2, 1, 3]]}
+
+		{'args': [6, ['ATECRRE', 'URDHLE']], 'result': [[2, 3, 4, 1, 5, 6]]}
+
+		{'args': [4, ['RRNBSOTSEO', 'HGLXNEOAA', 'UUARSN']], 'result': [[1, 3, 2, 4]]}
+
+		{'args': [4, ['BSEORRNOTS', 'XNAAHGLEO', 'DREDCWOO']], 'result': [[3, 4, 1, 2]]}
+
+		{'args': [4, ['EOBSRRNOTS', 'AAXNHGLEO', 'EDDRCWOO']], 'result': [[4, 3, 1, 2]]}
+
+		{'args': [4, ['OTSRRNEOBS', 'EOHGLAAXN', 'OESCRU']], 'result': [[2, 1, 4, 3]]}
+

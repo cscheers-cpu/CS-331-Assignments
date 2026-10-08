@@ -51,10 +51,25 @@ def insertBlanks(key: List[int], plaintext: list[str | None], blanks: int, rows:
 
     return plaintext
 
+def trimKey(key: list, message: str):
+    newkey = [0] * len(message)
+    counter = 0
+    for column in key:
+        if column <= len(message):
+            newkey[counter] = column
+            counter += 1
+        if counter == len(message):
+            break
+
+    return newkey
+
 
 def decipherMessage(key: List[int], message: str) -> str:
     plainlist: list[str | None] = list(message)
     plainstring = ""
+    if len(key) > len(message):
+        key = trimKey(key, message)
+
     rows = len(message) // len(key)
     if len(message) % len(key) > 0:
         rows = rows + 1
@@ -68,6 +83,7 @@ def decipherMessage(key: List[int], message: str) -> str:
         for column in range(1, len(key) + 1): #iter through column values
             column = key.index(column) #get index of column from key
             index = (column * rows) + row #jump between columns while maintaining row
+      
             letter = plainlist[index]
 
             if letter is None:
@@ -81,7 +97,7 @@ def decipherMessage(key: List[int], message: str) -> str:
 
 
 def test():
-    pass
+    assert decipherMessage([19, 32, 38, 40, 47, 1, 31, 7, 16, 44, 35, 34, 15, 37, 46, 13, 45, 17, 27, 36, 24, 29, 3, 23, 48, 14, 11, 43, 5, 22, 25, 26, 33, 39, 30, 4, 20, 18, 21, 8, 41, 9, 12, 10, 42, 2, 50, 28, 49, 6], 'c3ptu31m ') == 'cmput 331'
 
 from sys import flags
 
