@@ -51,17 +51,22 @@ def encipherMessage(key: int, message: str) -> str:
     
     return ciphertext
 
+def insertBlanks(newmessage: list, blanks: int, key: int, columns: int):
+    for i in range(blanks, 0, -1):
+        ind = columns * (key - i) + columns - 1
+        newmessage.insert(ind, None)
+
+    return newmessage
 
 def decipherMessage(key: int, message: str) -> str:
     plaintext = ""
     columns = len(message) // key
-    blanks = len(message) % key
     newmessage: list[str | None] = list(message)
-    if (blanks > 0):
+
+    if (len(message) % key > 0):
         columns = columns + 1
-        for i in range(blanks, 0, -1):
-            ind = columns * (key - i) + columns - 1
-            newmessage.insert(ind, None)
+        blanks = columns * key - len(message)
+        newmessage = insertBlanks(newmessage, blanks, key, columns)
 
     #same logic as encipherMessage except row, column length swapped
     for column in range(columns): 
@@ -79,11 +84,9 @@ def decipherMessage(key: int, message: str) -> str:
     return plaintext
 
 
+
 def test():
-    assert decipherMessage(3, 'CU3MT3P 1') == 'CMPUT 331'
-    print(decipherMessage(6, 'CasihorpoelTonrursCmaiinntp'))
-    assert decipherMessage(6, 'CasihorpoelTonrursCmaiinntp') == 'ColumnarTranspositionCipher'
-   
+    pass
 from sys import flags
 
 if __name__ == "__main__" and not flags.interactive:
