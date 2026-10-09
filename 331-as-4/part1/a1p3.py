@@ -91,14 +91,14 @@ def crack_caesar(ciphertext: str, val_words: set) -> tuple[str, str]:
                    
     return decrypt(ciphertext , bestmatch), bestmatch
 
-#updated for a4p1
-def form_dictionary(text_address='dictionary.txt') -> set:
+def form_dictionary(text_address='carroll-alice.txt') -> set:
     word_set = set()
 
     #open 'carroll-alice.txt, copy text into one large string using f.read()
     #capitalize all letters, remove all non characters and spaces, store each word in set = word_set
     with open(text_address, 'r', encoding = 'utf-8') as f:
-        word_set = {line.rstrip("\n") for line in f}
+        for line in f:
+             word_set.add(line.rstrip("\n"))
     return word_set
 
 def test():

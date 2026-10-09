@@ -38,7 +38,7 @@ Author: Chris Scheerschmidt
 
 from detectEnglish import isEnglish
 from itertools import permutations
-from crack_caesar import crack_caesar, form_dictionary
+from a1p3 import crack_caesar, form_dictionary
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -50,8 +50,7 @@ def hack(ciphertype: str, ciphertext: str):
 
 def processing():
     # Add the processing steps here like reading form ciphers.txt, calling the hack function, writing to decrypted.txt, etc.
-    dictionary = form_dictionary("dictionary.txt")
-    print(dictionary)
+    dictionary = form_dictionary('dictionary.txt')
     
     with open("ciphers.txt") as f:
         ciphers = f.readlines()

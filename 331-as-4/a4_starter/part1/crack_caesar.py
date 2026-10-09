@@ -39,7 +39,7 @@ Author: Chris Scheerschmidt
 #use module re for string formatting
 import re
 from sys import flags
-from a1p1 import encrypt, decrypt
+from enc_dec_caesar import encrypt, decrypt
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -91,14 +91,14 @@ def crack_caesar(ciphertext: str, val_words: set) -> tuple[str, str]:
                    
     return decrypt(ciphertext , bestmatch), bestmatch
 
-def form_dictionary(text_address='carroll-alice.txt') -> set:
+#updated for a4p1
+def form_dictionary(text_address='dictionary.txt') -> set:
     word_set = set()
 
     #open 'carroll-alice.txt, copy text into one large string using f.read()
     #capitalize all letters, remove all non characters and spaces, store each word in set = word_set
     with open(text_address, 'r', encoding = 'utf-8') as f:
-        word_set.update(re.sub(r'[^A-Z\s]', '', f.read().upper()).split())
-
+        word_set = {line.rstrip("\n") for line in f}
     return word_set
 
 def test():
