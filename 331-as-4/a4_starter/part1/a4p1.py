@@ -49,7 +49,15 @@ def hack(ciphertype: str, ciphertext: str):
 
 def processing():
     # Add the processing steps here like reading form ciphers.txt, calling the hack function, writing to decrypted.txt, etc.
-    raise NotImplementedError()
+    with open("ciphers.txt") as f:
+        ciphers = f.readlines()
+    
+    for cipher in ciphers:
+        if cipher[0] == "A":
+            pass
+        elif cipher[0] == "C":
+            
+
 
 def test():
     # Test cases for the hack function. You can add more tests as needed.
