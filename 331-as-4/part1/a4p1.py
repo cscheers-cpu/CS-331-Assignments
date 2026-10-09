@@ -36,9 +36,10 @@ General decryption program
 Author: Chris Scheerschmidt
 """
 
-from detectEnglish import isEnglish
+from detectEnglish import isEnglish, ENGLISH_WORDS
 from itertools import permutations
 from a1p3 import crack_caesar, form_dictionary
+from a2p4 import crackSharedKey, getKeys
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -46,7 +47,15 @@ def hack(ciphertype: str, ciphertext: str):
         Input: a line from `ciphers.txt`.
         Output: the decrypted message (or plaintext).
     """
-    raise NotImplementedError()
+    match ciphertype:
+        case 'A':
+            return("")
+        case 'C':
+            return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
+        case 'T':
+            return("")
+          
+
 
 def processing():
     # Add the processing steps here like reading form ciphers.txt, calling the hack function, writing to decrypted.txt, etc.
@@ -56,10 +65,8 @@ def processing():
         ciphers = f.readlines()
     
     for cipher in ciphers:
-        if cipher[0] == "A":
-            pass
-        elif cipher[0] == "C":
-            pass
+        print(hack(cipher[0], cipher))
+        
 
     return 0
             
@@ -67,6 +74,7 @@ def processing():
 
 def test():
     processing()
+    print(hack("C", "GHGIQ"))
     # Test cases for the hack function. You can add more tests as needed.
     assert hack("C", "GHGIQ") == "ABACK", "Caesar hack failed"
     assert hack("T", "IS HAUCREERNP F") == "CIPHERS ARE FUN", "Transposition hack failed"
