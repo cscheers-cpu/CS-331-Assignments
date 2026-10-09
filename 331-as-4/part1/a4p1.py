@@ -38,10 +38,23 @@ Author: Chris Scheerschmidt
 
 from detectEnglish import isEnglish, ENGLISH_WORDS
 from itertools import permutations
-from a2p3mod import decipherMessage
-from a2p4mod import getKeys
-import re
-from a1p3mod import crack_caesar
+from legacy_code.a2p3mod import decipherMessage
+from legacy_code.a2p4mod import getKeys
+from legacy_code.a1p3mod import crack_caesar
+from legacy_code.a3p2mod import affine_key_count
+from legacy_code.a3p5mod import get_lcm, apply_modinverse
+
+AKEYS = [1, 9, 21, 15, 3, 19, 7, 23, 11, 5, 17, 25]
+
+def crackAffine(ciphertext: str, akey: int, bkey:int):
+    plaintext = ""
+    decryptchar = ''
+    for i, char in enumerate(ciphertext):
+        if char.isalpha():
+            decryptchar = 
+            
+
+    
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -50,6 +63,13 @@ def hack(ciphertype: str, ciphertext: str):
         Output: the decrypted message (or plaintext).
     """
     if ciphertype == "A":
+        for akey in AKEYS:
+            for bkey in range(0, 26):
+                if akey == 1 and bkey == 0:
+                    pass
+                else:
+                    crackAffine(ciphertext, akey, bkey)
+
         return ("")
     elif ciphertype == "C":
         return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
