@@ -39,12 +39,12 @@ Author: Chris Scheerschmidt
 #use module re for string formatting
 import re
 from sys import flags
-from a1p1 import encrypt, decrypt
+from a1p1mod import encrypt, decrypt
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-def crack_caesar(ciphertext: str, val_words: set) -> tuple[str, str]:
+def crack_caesar(ciphertext: str, val_words: dict) -> tuple[str, str]:
     #store message 
     #store formatted message as list of CAPITALIZED WORDS
     plaintext = ""

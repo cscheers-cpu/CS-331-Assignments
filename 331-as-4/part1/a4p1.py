@@ -38,10 +38,9 @@ Author: Chris Scheerschmidt
 
 from detectEnglish import isEnglish, ENGLISH_WORDS
 from itertools import permutations
-from a1p3 import crack_caesar, form_dictionary
-from a2p4 import crackSharedKey, getKeys
-
-KEYPERMS = getKeys(9)
+from a2p3mod import decipherMessage
+from a2p4mod import getKeys
+import re
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -49,34 +48,33 @@ def hack(ciphertype: str, ciphertext: str):
         Input: a line from `ciphers.txt`.
         Output: the decrypted message (or plaintext).
     """
-    match ciphertype:
-        case 'A':
-            return("")
-        case 'C':
-            return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
-        case 'T':
-            return
-          
-
+    if ciphertype == "A":
+        return ("")
+    elif ciphertype == "C":
+        return ("")
+    else:
+        trimtext = ciphertext[3:].strip()
+        for i in range(1, 10):
+            perms = getKeys(i)
+            for perm in perms:
+                plaintext = decipherMessage(perm ,trimtext)
+                if isEnglish(plaintext):
+                    return decipherMessage(perm, trimtext)
+            
 
 def processing():
     # Add the processing steps here like reading form ciphers.txt, calling the hack function, writing to decrypted.txt, etc.
-    dictionary = form_dictionary('dictionary.txt')
-    
     with open("ciphers.txt") as f:
         ciphers = f.readlines()
-    
+        
     for cipher in ciphers:
         print(hack(cipher[0], cipher))
-        
-
+    
     return 0
             
 
-
 def test():
     processing()
-    print(hack("C", "GHGIQ"))
     # Test cases for the hack function. You can add more tests as needed.
     assert hack("C", "GHGIQ") == "ABACK", "Caesar hack failed"
     assert hack("T", "IS HAUCREERNP F") == "CIPHERS ARE FUN", "Transposition hack failed"

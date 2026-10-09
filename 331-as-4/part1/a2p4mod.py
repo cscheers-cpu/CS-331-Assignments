@@ -38,29 +38,28 @@ Author: Chris Scheerschmidt
 
 from typing import List
 from itertools import permutations
-from a2p3 import decipherMessage
+from a2p3mod import decipherMessage
+import re
 
-def crackSharedKey(keylength: int, keyperms: list[list[int]], cipher: str) -> list[list[int]]: 
-    dict = form_dictionary()
-
+def crackSharedKey(keyperms: list[list[int]], dict, cipher:str) -> str: 
     keymatches = [0] * len(keyperms)
-    goodkeys: list[list[int]] = []
+    plaintext = ""
 
-    
     for j, perm in enumerate(keyperms): #iter through possible key permutations, save index of each permutation
-        plaintext = decipherMessage(perm, cipher) #decipher word with current key permutation
-
-            #if deciphered word is actual word, increment permutation match counter
-        for word in plaintext:
-            if plaintext in dict: 
+        plaintext = decipherMessage(perm, cipher)
+        cipherlist = list(re.sub(r'[^A-Z\s]', '', plaintext.upper()).split())
+    
+        for word in cipherlist:
+            if word not in dict: 
+                pass
+            else:
+                print(plaintext)
                 keymatches[j] = keymatches[j] + 1 
 
-    #save key permutations that work for every cipherword
-    for i, matches in enumerate(keymatches):
-        if matches == len(cipherWords):
-            goodkeys.append(keyperms[i])
+        if keymatches == len(cipherlist):
+            return plaintext
 
-    return goodkeys
+    return plaintext
 
 #generate all permutations of keys given keylength
 def getKeys(keylength:int) -> list[list[int]] :
