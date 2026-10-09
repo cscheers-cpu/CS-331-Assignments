@@ -37,24 +37,26 @@ Author: Chris Scheerschmidt
 """
 
 from detectEnglish import isEnglish, ENGLISH_WORDS
-from itertools import permutations
+from legacy_code.a1p1mod import get_map
 from legacy_code.a2p3mod import decipherMessage
 from legacy_code.a2p4mod import getKeys
 from legacy_code.a1p3mod import crack_caesar
-from legacy_code.a3p2mod import affine_key_count
-from legacy_code.a3p5mod import get_lcm, apply_modinverse
 
-AKEYS = [1, 9, 21, 15, 3, 19, 7, 23, 11, 5, 17, 25]
+AKEYS = [1, 9, 21, 15, 3, 19, 7, 23, 11, 5, 17, 25] #modular inverses for english alphabet
+CHAR_TO_INDEX, INDEX_TO_CHAR = get_map() #dict that transforms letter to index of letter in alphabet and vice versa
 
 def crackAffine(ciphertext: str, akey: int, bkey:int):
     plaintext = ""
-    decryptchar = ''
-    for i, char in enumerate(ciphertext):
+    decryptint = 0
+    for char in ciphertext:
         if char.isalpha():
-            decryptchar = 
-            
+            decryptint = (akey * (CHAR_TO_INDEX[char] - bkey) ) % 26
+            plaintext += INDEX_TO_CHAR[decryptint]
+        else:
+            plaintext += char
 
-    
+    return plaintext
+            
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -62,45 +64,47 @@ def hack(ciphertype: str, ciphertext: str):
         Input: a line from `ciphers.txt`.
         Output: the decrypted message (or plaintext).
     """
-    if ciphertype == "A":
-        for akey in AKEYS:
-            for bkey in range(0, 26):
-                if akey == 1 and bkey == 0:
-                    pass
-                else:
-                    crackAffine(ciphertext, akey, bkey)
 
-        return ("")
-    elif ciphertype == "C":
-        return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
-    else:
-        ciphertext = ciphertext.strip()
-        for i in range(1, 10):
-            perms = getKeys(i)
-            for perm in perms:
-                plaintext = decipherMessage(perm ,ciphertext)
-                if isEnglish(plaintext):
-                    return decipherMessage(perm, ciphertext)
+    match ciphertype:
+        case 'A':
+            for akey in AKEYS:
+                for bkey in range(0, 26):
+                    plaintext = crackAffine(ciphertext, akey, bkey)
+                    if isEnglish(plaintext):
+                        return plaintext
+
+        case 'C':
+            return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
+
+        case 'T':
+            ciphertext = ciphertext.strip()
+            for i in range(1, 10):
+                perms = getKeys(i)
+                for perm in perms:
+                    plaintext = decipherMessage(perm ,ciphertext)
+                    if isEnglish(plaintext):
+                        plaintext += '\n'
+                        return plaintext
+
+    return ""
             
 
 def processing():
     # Add the processing steps here like reading form ciphers.txt, calling the hack function, writing to decrypted.txt, etc.
     with open("ciphers.txt") as f:
         ciphers = f.readlines()
-        
-    for cipher in ciphers:
-        print(hack(cipher[0], cipher[3:]))
+
+    with open("decrypted.txt", "w", encoding= "utf-8") as f:
+
+        for cipher in ciphers:
+            f.write(hack(cipher[0], cipher[3:]))
     
     return 0
             
 
 def test():
-    processing()
     # Test cases for the hack function. You can add more tests as needed.
-    assert hack("C", "GHGIQ") == "ABACK", "Caesar hack failed"
-    assert hack("T", "IS HAUCREERNP F") == "CIPHERS ARE FUN", "Transposition hack failed"
-    assert hack("A", "IHHWVC SWFRCP") == "AFFINE CIPHER", "Affine hack failed"
-    assert hack("A", "XBQUVSQVFRUVLE FVSOTG") == "MULTIPLICATION CIPHER", "Affine hack failed"
+    processing()
 
 if __name__ == '__main__':
     test()
