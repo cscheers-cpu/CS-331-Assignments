@@ -41,6 +41,7 @@ from itertools import permutations
 from a2p3mod import decipherMessage
 from a2p4mod import getKeys
 import re
+from a1p3mod import crack_caesar
 
 def hack(ciphertype: str, ciphertext: str):
     """
@@ -51,15 +52,15 @@ def hack(ciphertype: str, ciphertext: str):
     if ciphertype == "A":
         return ("")
     elif ciphertype == "C":
-        return ("")
+        return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
     else:
-        trimtext = ciphertext[3:].strip()
+        ciphertext = ciphertext.strip()
         for i in range(1, 10):
             perms = getKeys(i)
             for perm in perms:
-                plaintext = decipherMessage(perm ,trimtext)
+                plaintext = decipherMessage(perm ,ciphertext)
                 if isEnglish(plaintext):
-                    return decipherMessage(perm, trimtext)
+                    return decipherMessage(perm, ciphertext)
             
 
 def processing():
@@ -68,7 +69,7 @@ def processing():
         ciphers = f.readlines()
         
     for cipher in ciphers:
-        print(hack(cipher[0], cipher))
+        print(hack(cipher[0], cipher[3:]))
     
     return 0
             
