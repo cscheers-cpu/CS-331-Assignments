@@ -41,6 +41,8 @@ from itertools import permutations
 from a1p3 import crack_caesar, form_dictionary
 from a2p4 import crackSharedKey, getKeys
 
+KEYPERMS = getKeys(9)
+
 def hack(ciphertype: str, ciphertext: str):
     """
     Decrypt a given ciphertext with either of these algorithm: caesar, transposition, or affine.
@@ -53,7 +55,7 @@ def hack(ciphertype: str, ciphertext: str):
         case 'C':
             return crack_caesar(ciphertext, ENGLISH_WORDS)[0]
         case 'T':
-            return("")
+            return
           
 
 
