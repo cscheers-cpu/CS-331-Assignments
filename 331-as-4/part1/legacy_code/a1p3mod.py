@@ -39,7 +39,7 @@ Author: Chris Scheerschmidt
 #use module re for string formatting
 import re
 from sys import flags
-from a1p1mod import encrypt, decrypt
+from legacy_code.a1p1mod import encrypt, decrypt
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 

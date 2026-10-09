@@ -38,7 +38,7 @@ Author: Chris Scheerschmidt
 
 from typing import List
 from itertools import permutations
-from a2p3mod import decipherMessage
+from legacy_code.a2p3mod import decipherMessage
 import re
 
 def crackSharedKey(keyperms: list[list[int]], dict, cipher:str) -> str: 
