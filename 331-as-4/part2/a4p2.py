@@ -75,8 +75,7 @@ def encryptWord(word: str, key: str):
 
 def searchPlainString(word: str, codebook: dict):
     temp_word = ""
-    temp_char = ""
-    temp_index = 0
+
     for value in codebook:
         codeword = re.search(value, word)
         if codeword:
@@ -101,8 +100,22 @@ def searchCipherString(word: str, codebook: dict):
 
 def decryptWord(word: str, key: str):
     temp_word = ""
+    temp_char = ""
+    temp_index = 0
+
     for char in word:
         if char.isalpha():
+            temp_char = char.upper()
+            temp_index = key.index(temp_char)
+
+            if char.isupper():
+                temp_word += INDEX_TO_CHAR[temp_index]
+            else:
+                temp_word += INDEX_TO_CHAR[temp_index].lower()
+        else:
+            temp_word += char
+
+    return temp_word
 
 
 
@@ -127,11 +140,10 @@ def encryptMessage(key: str, message: str, codebook: dict):
 def decryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
     plaintextlist = [""] * len(messagelist)
-    temp_word = "" 
-    codeword = ""
+    codeword, code_num, word = ""
+
 
     for i, word in enumerate(messagelist):
-        temp_word = word.lower()
         result = searchCipherString(word, codebook)
 
         if result is not None:
@@ -139,6 +151,8 @@ def decryptMessage(key: str, message: str, codebook: dict):
             word = re.sub(code_num, codeword, word)
 
         plaintextlist[i] = decryptWord(word, key)
+
+    return " ".join(messagelist)
         
 
 
