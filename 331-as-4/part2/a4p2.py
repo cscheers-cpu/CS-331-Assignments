@@ -53,6 +53,22 @@ def translateMessage(key: str, message: str, codebook: dict, mode: str):
     """
     raise NotImplementedError()
 
+def encryptWord(word: str, key: str):
+    temp_word = ""
+    for char in word:
+        if char.isalpha():
+            temp_char = char.upper()
+            temp_index = CHAR_TO_INDEX[temp_char]
+            
+            if char.isupper():
+                temp_word += key[temp_index]
+            else:
+                temp_word += key[temp_index].lower()
+        else:
+            temp_word += char
+
+    return temp_word
+
 
 def encryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
@@ -67,19 +83,7 @@ def encryptMessage(key: str, message: str, codebook: dict):
            cipherlist[i] = random.choice(codebook)
 
         else:
-            temp_word = ""
-            for char in word:
-                temp_char = char.upper()
-                temp_index = CHAR_TO_INDEX[temp_char]
-
-                if char.isalpha():
-                    if char.isupper():
-                        temp_word += key[temp_index]
-                    else:
-                        temp_word += key[temp_index].lower()
-
-                else:
-                    temp_word += char
+            cipherlist[i] = encryptWord(word, key)
 
 
 
