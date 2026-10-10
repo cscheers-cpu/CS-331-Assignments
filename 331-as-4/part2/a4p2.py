@@ -56,6 +56,9 @@ def translateMessage(key: str, message: str, codebook: dict, mode: str):
 
 def encryptWord(word: str, key: str):
     temp_word = ""
+    temp_char = ""
+    temp_index = 0
+
     for char in word:
         if char.isalpha():
             temp_char = char.upper()
@@ -70,8 +73,10 @@ def encryptWord(word: str, key: str):
 
     return temp_word
 
-def searchString(word: str, codebook: dict):
+def searchPlainString(word: str, codebook: dict):
     temp_word = ""
+    temp_char = ""
+    temp_index = 0
     for value in codebook:
         codeword = re.search(value, word)
         if codeword:
@@ -82,7 +87,23 @@ def searchString(word: str, codebook: dict):
                 return codeword.group()
 
     return None
-        
+
+def searchCipherString(word: str, codebook: dict):
+
+    for codename, code_list in codebook.items():
+        for code_num in code_list:
+            nomenclator = re.search(code_num, word)
+            if nomenclator:
+                return codename, nomenclator.group()
+
+    return None
+
+
+def decryptWord(word: str, key: str):
+    temp_word = ""
+    for char in word:
+        if char.isalpha():
+
 
 
 def encryptMessage(key: str, message: str, codebook: dict):
@@ -93,20 +114,35 @@ def encryptMessage(key: str, message: str, codebook: dict):
 
     for i, word in enumerate(messagelist):
         temp_word = word.lower()
-        codeword = searchString(temp_word, codebook)
+        codeword = searchPlainString(temp_word, codebook)
 
         if codeword is not None:
-
             word = re.sub(codeword, random.choice(codebook[codeword]), word)
 
         cipherlist[i] = encryptWord(word, key)
 
-    print(cipherlist)
     return " ".join(cipherlist)
 
 
 def decryptMessage(key: str, message: str, codebook: dict):
-    return translateMessage(key, message, codebook, 'decrypt')
+    messagelist = message.split()
+    plaintextlist = [""] * len(messagelist)
+    temp_word = "" 
+    codeword = ""
+
+    for i, word in enumerate(messagelist):
+        temp_word = word.lower()
+        result = searchCipherString(word, codebook)
+
+        if result is not None:
+            codeword, code_num = result
+            word = re.sub(code_num, codeword, word)
+
+        plaintextlist[i] = decryptWord(word, key)
+        
+
+
+
 
 
 def test():
