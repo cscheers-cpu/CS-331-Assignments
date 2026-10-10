@@ -58,6 +58,7 @@ def encryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
     cipherlist = [""] * len(messagelist)
     temp_char = ""
+    temp_index = 0
     temp_word = ""
 
     for i, word in enumerate(messagelist):
@@ -66,8 +67,22 @@ def encryptMessage(key: str, message: str, codebook: dict):
            cipherlist[i] = random.choice(codebook)
 
         else:
-            for i, char in enumerate(word):
+            temp_word = ""
+            for char in word:
                 temp_char = char.upper()
+                temp_index = CHAR_TO_INDEX[temp_char]
+
+                if char.isalpha():
+                    if char.isupper():
+                        temp_word += key[temp_index]
+                    else:
+                        temp_word += key[temp_index].lower()
+
+                else:
+                    temp_word += char
+
+
+
 
         
 
