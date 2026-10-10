@@ -37,10 +37,19 @@ Author: Chris Scheerschmidt
 """
 
 import re
+import detectEnglish
 import simpleSubHacker
 import simpleSubHacker as ssh
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+def loadDictionary():
+    dictionaryFile = open('dictionary.txt')
+    englishWords = set()
+    for word in dictionaryFile.read().split('\n'):
+        englishWords.update(word)
+    dictionaryFile.close()
+    return englishWords
 
 def hackSimpleSub(message: str):
     """
@@ -48,29 +57,37 @@ def hackSimpleSub(message: str):
     First runs the textbook program to get an initial, potentially incomplete decipherment.
     Then uses regular expressions and a dictionary to decipher additional letters.
     """
+    temp_word = ""
+    dictionary = detectEnglish.loadDictionary()
     unmatchedletters = set()
     plaintextlist = []
     incompletelist = []
+    regexletters = ""
     mapping = simpleSubHacker.hackSimpleSub(message)
     
     for cipherletter in mapping.values():
         if len(cipherletter) > 1:
             unmatchedletters.update(cipherletter)
 
-    regexletters = re.compile('[' + ''.join(unmatchedletters) + ']')
-    print(regexletters.pattern)
 
-    plaintextlist = simpleSubHacker.decryptWithCipherletterMapping(message, mapping).split()
+    regexletters = '[' + ''.join(unmatchedletters) + ']'
+
+    plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
+    plaintextlist = plaintext.split()
     incompletelist = [word for word in plaintextlist if '_' in word]
 
     for word in incompletelist:
-        regexletters.sub('_', word)
-        
+       word = word.upper()
+       word = re.sub(r"[^A-Z_]", "", word)
+       print(word)
+       temp_word = '^' + re.sub('_', regexletters, word) + '$'
+       print(temp_word)
+
+       match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
+       print(match)
 
 
-    print(incompletelist)
-
-    return ""
+    return plaintext
 
     
 
@@ -78,6 +95,7 @@ def hackSimpleSub(message: str):
 def test():
     # Provided test.
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
+    print(hackSimpleSub(message))
     assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
     # End of provided test.
     
