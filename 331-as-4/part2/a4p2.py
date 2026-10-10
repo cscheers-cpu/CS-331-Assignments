@@ -68,8 +68,8 @@ def searchPlainString(word: str, codebook: dict):
 
     return None
 
-def searchCipherString(word: str, codebook: dict):
 
+def searchCipherString(word: str, codebook: dict):
     for codename, code_list in codebook.items():
         for code_num in code_list:
             nomenclator = re.search(code_num, word)
@@ -77,6 +77,7 @@ def searchCipherString(word: str, codebook: dict):
                 return codename, nomenclator.group()
 
     return None
+
 
 def encryptWord(word: str, key: str):
     temp_word = ""
@@ -115,10 +116,7 @@ def decryptWord(word: str, key: str):
         else:
             temp_word += char
 
-    print(temp_word)
-
     return temp_word
-
 
 
 def encryptMessage(key: str, message: str, codebook: dict):
