@@ -36,6 +36,7 @@ Author: Chris Scheerschmidt
 """
 
 from old_stuff.a1p1 import get_map
+import random
 
 CHAR_TO_INDEX, INDEX_TO_CHAR = get_map()
 
@@ -57,12 +58,23 @@ def encryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
     cipherlist = [""] * len(messagelist)
     temp_char = ""
+    temp_word = ""
 
     for i, word in enumerate(messagelist):
-       
+        temp_word = word.lower()
+        if temp_word in codebook:
+           cipherlist[i] = random.choice(codebook)
+
+        else:
+            for i, char in enumerate(word):
+                temp_char = char.upper()
+
+        
+
+        
 
 
-    return translateMessage(key, message, codebook, 'encrypt')
+        return translateMessage(key, message, codebook, 'encrypt')
 
 
 def decryptMessage(key: str, message: str, codebook: dict):
