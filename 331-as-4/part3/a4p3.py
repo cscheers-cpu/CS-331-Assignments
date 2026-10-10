@@ -57,13 +57,18 @@ def hackSimpleSub(message: str):
         if len(cipherletter) > 1:
             unmatchedletters.update(cipherletter)
 
+    regexletters = re.compile('[' + ''.join(unmatchedletters) + ']')
+    print(regexletters.pattern)
+
     plaintextlist = simpleSubHacker.decryptWithCipherletterMapping(message, mapping).split()
     incompletelist = [word for word in plaintextlist if '_' in word]
 
-    
+    for word in incompletelist:
+        regexletters.sub('_', word)
+        
+
 
     print(incompletelist)
-
 
     return ""
 
