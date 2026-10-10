@@ -44,34 +44,15 @@ CHAR_TO_INDEX, INDEX_TO_CHAR = get_map()
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
-def translateMessage(key: str, message: str, codebook: dict, mode: str):
-    """
+"""def translateMessage(key: str, message: str, codebook: dict, mode: str):
+    
     Encrypt or decrypt using a nomenclator.
     Takes a substitution cipher key, a message (plaintext or ciphertext),
     a codebook dictionary, and a mode string ('encrypt' or 'decrypt')
     specifying the action to be taken. Returns a string containing the
     ciphertext (if encrypting) or plaintext (if decrypting).
-    """
-    raise NotImplementedError()
-
-def encryptWord(word: str, key: str):
-    temp_word = ""
-    temp_char = ""
-    temp_index = 0
-
-    for char in word:
-        if char.isalpha():
-            temp_char = char.upper()
-            temp_index = CHAR_TO_INDEX[temp_char]
-
-            if char.isupper():
-                temp_word += key[temp_index]
-            else:
-                temp_word += key[temp_index].lower()
-        else:
-            temp_word += char
-
-    return temp_word
+    
+    raise NotImplementedError()"""
 
 def searchPlainString(word: str, codebook: dict):
     temp_word = ""
@@ -97,6 +78,25 @@ def searchCipherString(word: str, codebook: dict):
 
     return None
 
+def encryptWord(word: str, key: str):
+    temp_word = ""
+    temp_char = ""
+    temp_index = 0
+
+    for char in word:
+        if char.isalpha():
+            temp_char = char.upper()
+            temp_index = CHAR_TO_INDEX[temp_char]
+
+            if char.isupper():
+                temp_word += key[temp_index]
+            else:
+                temp_word += key[temp_index].lower()
+        else:
+            temp_word += char
+
+    return temp_word
+
 
 def decryptWord(word: str, key: str):
     temp_word = ""
@@ -114,6 +114,8 @@ def decryptWord(word: str, key: str):
                 temp_word += INDEX_TO_CHAR[temp_index].lower()
         else:
             temp_word += char
+
+    print(temp_word)
 
     return temp_word
 
@@ -140,19 +142,20 @@ def encryptMessage(key: str, message: str, codebook: dict):
 def decryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
     plaintextlist = [""] * len(messagelist)
-    codeword, code_num, word = ""
-
+    codeword = ""
+    code_num = ""
 
     for i, word in enumerate(messagelist):
+        word = decryptWord(word, key)
         result = searchCipherString(word, codebook)
 
         if result is not None:
             codeword, code_num = result
             word = re.sub(code_num, codeword, word)
 
-        plaintextlist[i] = decryptWord(word, key)
+        plaintextlist[i] = word
 
-    return " ".join(messagelist)
+    return " ".join(plaintextlist)
         
 
 
@@ -165,8 +168,10 @@ def test():
     plaintext = "X-ray machines cannot be brought here, as -ray* are very dangerous. Hello;ray! ray;"
     codebook = {'ray':['1']}
     ciphertext = encryptMessage(key, plaintext, codebook)
-    print(ciphertext)
+    print(decryptMessage(key, ciphertext, codebook ))
     assert ciphertext =="G-clh nlwisxar wlxxpj fa fcptuij iaca, lr -1* lca qach olxuacptr. Iammp;clh! 1;"
+
+
     # End of provided tests.
 
 if __name__ == '__main__':
