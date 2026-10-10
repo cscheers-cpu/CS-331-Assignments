@@ -37,6 +37,7 @@ Author: Chris Scheerschmidt
 
 from old_stuff.a1p1 import get_map
 import random
+import re
 
 CHAR_TO_INDEX, INDEX_TO_CHAR = get_map()
 
@@ -59,7 +60,7 @@ def encryptWord(word: str, key: str):
         if char.isalpha():
             temp_char = char.upper()
             temp_index = CHAR_TO_INDEX[temp_char]
-            
+
             if char.isupper():
                 temp_word += key[temp_index]
             else:
@@ -69,31 +70,39 @@ def encryptWord(word: str, key: str):
 
     return temp_word
 
+def searchString(word: str, codebook: dict):
+    temp_word = ""
+    for value in codebook:
+        codeword = re.search(value, word)
+        if codeword:
+            temp_word = re.sub(codeword.group(), '', word)
+            if any(char.isalpha() for char in temp_word):
+                return None
+            else:
+                return codeword.group()
+
+    return None
+        
+
 
 def encryptMessage(key: str, message: str, codebook: dict):
     messagelist = message.split()
     cipherlist = [""] * len(messagelist)
-    temp_char = ""
-    temp_index = 0
     temp_word = ""
+    codeword = ""
 
     for i, word in enumerate(messagelist):
         temp_word = word.lower()
-        if temp_word in codebook:
-           cipherlist[i] = random.choice(codebook)
+        codeword = searchString(temp_word, codebook)
 
-        else:
-            cipherlist[i] = encryptWord(word, key)
+        if codeword is not None:
 
+            word = re.sub(codeword, random.choice(codebook[codeword]), word)
 
+        cipherlist[i] = encryptWord(word, key)
 
-
-        
-
-        
-
-
-        return translateMessage(key, message, codebook, 'encrypt')
+    print(cipherlist)
+    return " ".join(cipherlist)
 
 
 def decryptMessage(key: str, message: str, codebook: dict):
@@ -106,7 +115,8 @@ def test():
     plaintext = "X-ray machines cannot be brought here, as -ray* are very dangerous. Hello;ray! ray;"
     codebook = {'ray':['1']}
     ciphertext = encryptMessage(key, plaintext, codebook)
-    assert ciphertext=="G-clh nlwisxar wlxxpj fa fcptuij iaca, lr -1* lca qach olxuacptr. Iammp;clh! 1;"
+    print(ciphertext)
+    assert ciphertext =="G-clh nlwisxar wlxxpj fa fcptuij iaca, lr -1* lca qach olxuacptr. Iammp;clh! 1;"
     # End of provided tests.
 
 if __name__ == '__main__':
