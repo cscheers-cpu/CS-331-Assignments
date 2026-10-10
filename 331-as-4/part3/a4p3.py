@@ -79,6 +79,8 @@ def hackSimpleSub(message: str):
     for word in incompletelist:
        word = word.upper()
        word = re.sub(r"[^A-Z_]", "", word)
+       all_indices = [idx for idx, char in enumerate(word) if char == '_']
+    
        print(word)
        temp_word = '^' + re.sub('_', regexletters, word) + '$'
        print(temp_word)
