@@ -61,7 +61,7 @@ def hackSimpleSub(message: str):
     dictionary = detectEnglish.loadDictionary()
     unmatchedletters = set()
     plaintextlist = []
-    incompletelist = []
+    incompletedict = {}
     regexletters = ""
     mapping = simpleSubHacker.hackSimpleSub(message)
     
@@ -74,19 +74,37 @@ def hackSimpleSub(message: str):
 
     plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
     plaintextlist = plaintext.split()
-    incompletelist = [word for word in plaintextlist if '_' in word]
+    for word, index in plaintextlist:
+        if '_' in word:
+            if word not in incompletedict:
+                incompletedict.update({word: [index]})
+            else:
+                incompletedict[word].append(index)
 
-    for word in incompletelist:
-       word = word.upper()
-       word = re.sub(r"[^A-Z_]", "", word)
-       all_indices = [idx for idx, char in enumerate(word) if char == '_']
+    for word, indexlist in incompletedict.items():
+        temp_word = word.upper()
+        if temp_word[-1] == 'S':
+            temp_word = temp_word + '?'
+            temp_word = re.sub(r"[^A-Z_?]", "", temp_word)
+        else:
+           temp_word = re.sub(r"[^A-Z_]", "", temp_word)
+
+        all_indices = [idx for idx, char in enumerate(word) if char == '_']
     
-       print(word)
-       temp_word = '^' + re.sub('_', regexletters, word) + '$'
-       print(temp_word)
+        print(word)
+        temp_word = '^' + re.sub('_', regexletters, word) + '$'
+        print(temp_word)
 
-       match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
-       print(match)
+        match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
+        print(match)
+
+        if match is not None:
+            if word.islower():
+                match = match.lower()
+                
+
+                    
+
 
 
     return plaintext
