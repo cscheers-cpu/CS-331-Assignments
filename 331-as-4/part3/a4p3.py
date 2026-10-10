@@ -74,6 +74,8 @@ def hackSimpleSub(message: str):
 
     plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
     plaintextlist = plaintext.split()
+
+    #save words with '_' and indices where they occur in plaintext
     for word, index in plaintextlist:
         if '_' in word:
             if word not in incompletedict:
@@ -81,15 +83,29 @@ def hackSimpleSub(message: str):
             else:
                 incompletedict[word].append(index)
 
+    #iter through unknown words and their plaintext indices
     for word, indexlist in incompletedict.items():
         temp_word = word.upper()
+
+        #if word plural, make 'S' optional so dictionary will still identify if plural not in dictionary
+        #replace all non char elements in word
+        #THINK OF OTHER CASES
         if temp_word[-1] == 'S':
             temp_word = temp_word + '?'
             temp_word = re.sub(r"[^A-Z_?]", "", temp_word)
+
+        #handle contractions ('re, 'nt, etc)
+        elif "'" in temp_word:
+            apostindex = temp_word.find("'")
+            temp_word = temp_word[0:apostindex]
+            temp_word = re.sub(r"[^A-Z_]", "", temp_word)
+
+        #standard word
         else:
            temp_word = re.sub(r"[^A-Z_]", "", temp_word)
 
-        all_indices = [idx for idx, char in enumerate(word) if char == '_']
+        #indices of where '_' in single word
+        all_indices = [idx for idx, char in enumerate(word) if char == '_'] #index 
     
         print(word)
         temp_word = '^' + re.sub('_', regexletters, word) + '$'
