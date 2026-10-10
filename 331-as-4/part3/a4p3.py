@@ -37,6 +37,7 @@ Author: Chris Scheerschmidt
 """
 
 import re
+import simpleSubHacker
 import simpleSubHacker as ssh
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -47,7 +48,26 @@ def hackSimpleSub(message: str):
     First runs the textbook program to get an initial, potentially incomplete decipherment.
     Then uses regular expressions and a dictionary to decipher additional letters.
     """
-    raise NotImplementedError()
+    unmatchedletters = set()
+    plaintextlist = []
+    incompletelist = []
+    mapping = simpleSubHacker.hackSimpleSub(message)
+    
+    for cipherletter in mapping.values():
+        if len(cipherletter) > 1:
+            unmatchedletters.update(cipherletter)
+
+    plaintextlist = simpleSubHacker.decryptWithCipherletterMapping(message, mapping).split()
+    incompletelist = [word for word in plaintextlist if '_' in word]
+
+    
+
+    print(incompletelist)
+
+
+    return ""
+
+    
 
 
 def test():

@@ -6,7 +6,7 @@ import re, copy, simpleSubCipher, wordPatterns, makeWordPatterns
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 nonLettersOrSpacePattern = re.compile('[^A-Z\s]')
 
-def main():
+def main() -> None:
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
 
     # Determine the possible valid ciphertext translations:
@@ -35,12 +35,12 @@ def main():
     
 
 
-def getBlankCipherletterMapping():
+def getBlankCipherletterMapping() -> dict[str, list[str]]:
     # Returns a dictionary value that is a blank cipherletter mapping.
     return {'A': [], 'B': [], 'C': [], 'D': [], 'E': [], 'F': [], 'G': [], 'H': [], 'I': [], 'J': [], 'K': [], 'L': [], 'M': [], 'N': [], 'O': [], 'P': [], 'Q': [], 'R': [], 'S': [], 'T': [], 'U': [], 'V': [], 'W': [], 'X': [], 'Y': [], 'Z': []}
 
 
-def addLettersToMapping(letterMapping, cipherword, candidate):
+def addLettersToMapping(letterMapping, cipherword, candidate) -> None:
     # The `letterMapping` parameter is a "cipherletter mapping" dictionary
     # value that the return value of this function starts as a copy of.
     # The `cipherword` parameter is a string value of the ciphertext word.
@@ -58,7 +58,7 @@ def addLettersToMapping(letterMapping, cipherword, candidate):
 
 
 
-def intersectMappings(mapA, mapB):
+def intersectMappings(mapA, mapB) -> dict[str, list[str]]:
     # To intersect two maps, create a blank map, and then add only the
     # potential decryption letters if they exist in BOTH maps.
     intersectedMapping = getBlankCipherletterMapping()
@@ -80,7 +80,7 @@ def intersectMappings(mapA, mapB):
     return intersectedMapping
 
 
-def removeSolvedLettersFromMapping(letterMapping):
+def removeSolvedLettersFromMapping(letterMapping) -> dict[str, list[str]]:
     # Cipherletters in the mapping that map to only one letter are
     # "solved" and can be removed from the other letters.
     # For example, if 'A' maps to potential letters ['M', 'N'], and 'B'
@@ -115,7 +115,7 @@ def removeSolvedLettersFromMapping(letterMapping):
     return letterMapping
 
 
-def hackSimpleSub(message):
+def hackSimpleSub(message: str) -> dict[str, list[str]]:
     intersectedMap = getBlankCipherletterMapping()
     cipherwordList = nonLettersOrSpacePattern.sub('', message.upper()).split()
     for cipherword in cipherwordList:
@@ -137,7 +137,7 @@ def hackSimpleSub(message):
     return removeSolvedLettersFromMapping(intersectedMap)
 
 
-def decryptWithCipherletterMapping(ciphertext, letterMapping):
+def decryptWithCipherletterMapping(ciphertext, letterMapping) -> str:
     # Return a string of the ciphertext decrypted with the letter mapping,
     # with any ambiguous decrypted letters replaced with an _ underscore.
 
