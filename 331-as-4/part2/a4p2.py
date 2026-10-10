@@ -35,6 +35,10 @@ Nomenclator cipher
 Author: Chris Scheerschmidt
 """
 
+from old_stuff.a1p1 import get_map
+
+CHAR_TO_INDEX, INDEX_TO_CHAR = get_map()
+
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
@@ -50,6 +54,14 @@ def translateMessage(key: str, message: str, codebook: dict, mode: str):
 
 
 def encryptMessage(key: str, message: str, codebook: dict):
+    messagelist = message.split()
+    cipherlist = [""] * len(messagelist)
+    temp_char = ""
+
+    for i, word in enumerate(messagelist):
+       
+
+
     return translateMessage(key, message, codebook, 'encrypt')
 
 
@@ -68,3 +80,12 @@ def test():
 
 if __name__ == '__main__':
     test()
+
+
+""" if char.isalpha():
+            temp_char = char.upper()
+            char_index = CHAR_TO_INDEX[char]
+            if char.isupper():
+                ciphertext[i] = temp_char
+            else:
+                ciphertext[i] = temp_char.lower()"""
