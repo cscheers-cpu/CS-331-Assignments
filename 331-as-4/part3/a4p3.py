@@ -44,13 +44,20 @@ LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 
 class wordMatches:
-    def __init__(self, cipherword: str, plainword: str,  formatword: str, plainindices: list[int],  formatindices: list[int], wordmatches:list[str] = []):
+    def __init__(self,
+            cipherword: str, 
+            plainword: str,  
+            formatword: str, 
+            plainindices: list[int],  
+            formatindices: list[int], 
+            wordmatches: list[str] | None = None):
+        
         self.cipherword = cipherword
         self.plainword = plainword
         self.formatword = formatword
         self.formatindices = formatindices
         self.plainindices = plainindices
-        self.wordmatches = wordmatches
+        self.wordmatches = wordmatches if wordmatches is not None else []
         
     def get_cipherword(self):
         return self.cipherword
@@ -70,7 +77,7 @@ class wordMatches:
     def get_wordmatches(self):
         return self.wordmatches
 
-    def set_plainwords(self, wordmatches: list[str]):
+    def set_wordmatches(self, wordmatches: list[str]):
         self.wordmatches = wordmatches
 
 
@@ -89,7 +96,8 @@ def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]:
 
     return unmatchedletters
 
-def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict:
+#cipherword = key, value = getMatches object
+def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict[str, wordMatches]:
     incompletedict = {}
     plainindices: list[int] = []
 
@@ -107,7 +115,7 @@ def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) ->
 
     return incompletedict
 
-def getFormattedWord(word: str, regexletters:str):
+def getFormattedWord(word: str, regexletters:str) -> tuple[str, list[int]]:
     temp_word = word.upper()
 
     #check if contraction
@@ -128,6 +136,28 @@ def getFormattedWord(word: str, regexletters:str):
     return temp_word, format_indices
 
 
+def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str], standarddict: set[str]) -> dict[str, wordMatches]:
+    for matchobject in incompletedict.values():
+        #search dictionary for word
+
+        temp_word = matchobject.get_formatword()
+
+        if "'" in temp_word:
+            matches = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
+
+        else:
+            matchone = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
+            matchtwo = [d_word for d_word in standarddict if re.search(temp_word, d_word)]
+            for match in matchtwo:
+                if match not in matchone:
+                    matchone.append(match)
+            matches = matchone
+        
+        matchobject.set_wordmatches(matches)
+
+    return incompletedict
+
+
 
 """
     Simple substitution cipher hacker.
@@ -143,32 +173,24 @@ def hackSimpleSub(message: str):
     regexletters = '[' + ''.join(unmatchedletters) + ']'
 
     plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
-    incompletedict = getIncompleteWordDict(plaintext, message)
+    incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
 
-    #iter through unknown words and their plaintext indices
-    for item in incompletedict:
-        #search dictionary for word
-        incompletedict[item] = getFormattedWord(item, regexletters, incompletedict)
-        print(temp_word)
+    incompletedict = getMatches(incompletedict, contractiondict, standarddict)
 
-        if "'" in temp_word:
-            match = next((d_word for d_word in contractiondict if re.search(temp_word, d_word)), None)
-        else:
-            match = next((d_word for d_word in standarddict if re.search(temp_word, d_word)), None)
-            if match is None:
-                match = next((d_word for d_word in contractiondict if re.search(temp_word, d_word)), None)
-
-        print(match)
-        print(indextuple)
-        if match is not None:
-            for i, j in zip(indextuple[0], indextuple[1]):
-                print(i)
-                plainletter = match[j]
-                cipherletter = cipherword[i].upper()
-                print(plainletter, cipherletter)
-                print()
-                mapping[cipherletter] = [plainletter]
-
+    for item in incompletedict.values():
+        cipherword = item.get_cipherword()
+        plainword = item.get_plainword()
+        formatword = item.get_formatword()
+        plainindices =  item.get_plainindices()
+        formatindices = item.get_formatindices()
+        wordmatches = item.get_wordmatches()
+        print(cipherword)
+        print(plainword)
+        print(formatword)
+        print(plainindices)
+        print(formatindices)
+        print(wordmatches)
+        print()
 
     print(plaintext)
     plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
@@ -193,3 +215,12 @@ def test():
     assert(hackSimpleSub(messageone)) == solution
 if __name__ == '__main__':
     test()
+
+
+"""for i, j in zip(indextuple[0], indextuple[1]):
+                print(i)
+                plainletter = match[j]
+                cipherletter = cipherword[i].upper()
+                print(plainletter, cipherletter)
+                print()
+                mapping[cipherletter] = [plainletter]"""
