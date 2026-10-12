@@ -42,12 +42,44 @@ import simpleSubHacker as ssh
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
+
+class wordMatches:
+    def __init__(self, cipherword: str, plainword: str,  formatword: str, plainindices: list[int],  formatindices: list[int], wordmatches:list[str] = []):
+        self.cipherword = cipherword
+        self.plainword = plainword
+        self.formatword = formatword
+        self.formatindices = formatindices
+        self.plainindices = plainindices
+        self.wordmatches = wordmatches
+        
+    def get_cipherword(self):
+        return self.cipherword
+    
+    def get_plainword(self):
+        return self.plainword
+
+    def get_formatword(self):
+        return self.formatword
+    
+    def get_plainindices(self):
+        return self.plainindices
+
+    def get_formatindices(self):
+        return self.formatindices
+
+    def get_wordmatches(self):
+        return self.wordmatches
+
+    def set_plainwords(self, wordmatches: list[str]):
+        self.wordmatches = wordmatches
+
+
 def loadDictionary(file: str) -> set[str]:
+    dict = set()
     with open(file) as f:
-        englishWords = set()
         for word in f.read().split('\n'):
-            englishWords.add(word)
-    return englishWords
+            dict.add(word)
+    return dict
 
 def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]: 
     unmatchedletters: set[str] = set()
@@ -57,20 +89,43 @@ def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]:
 
     return unmatchedletters
 
-def getIncompleteWordDict(plaintext: str, ciphertext: str) -> dict[str, tuple[str, list[int], list[int]]]:
-    incompletedict: dict[str, tuple[str, list[int], list[int]]] = {}
+def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict:
+    incompletedict = {}
+    plainindices: list[int] = []
+
     plaintextlist = plaintext.split()
     cipherlist = ciphertext.split()
 
     for index, word in enumerate(plaintextlist):
         if '_' in word:
-            if word not in incompletedict:
-                incompletedict.update({word: (cipherlist[index], [], [])}) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
+            if cipherlist[index] not in incompletedict:
+                formatted_word, formatted_indices = getFormattedWord(word, regexletters)
+                plainindices = [i for i, char in enumerate(word) if char == '_']
+                incompletedict[cipherlist[index]] = wordMatches(cipherlist[index], word, formatted_word, plainindices, formatted_indices) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
             else:
                 pass
 
-
     return incompletedict
+
+def getFormattedWord(word: str, regexletters:str):
+    temp_word = word.upper()
+
+    #check if contraction
+    if "'" in temp_word and temp_word[-1] != "'":
+        temp_word = re.sub(r"[^A-Z_']", "", temp_word)
+
+    else:
+        temp_word = re.sub(r"[^A-Z_]", "", temp_word)
+        #check if plural
+        if temp_word[-1] == 'S':
+                temp_word = temp_word + '?'
+        else:
+            pass
+
+    format_indices = [i for i, char in enumerate(temp_word) if char == '_']
+    temp_word = '^' + re.sub('_', regexletters, temp_word) + '$'
+    
+    return temp_word, format_indices
 
 
 
@@ -82,9 +137,7 @@ def getIncompleteWordDict(plaintext: str, ciphertext: str) -> dict[str, tuple[st
 def hackSimpleSub(message: str):
     standarddict = loadDictionary('dictionary.txt')
     contractiondict = loadDictionary('english_contractions.txt')
-
-    print(standarddict)
-
+    newmapping: dict[str, list[str]] = {}
     mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
     unmatchedletters = getUnmatchedLetters(mapping)
     regexletters = '[' + ''.join(unmatchedletters) + ']'
@@ -92,60 +145,34 @@ def hackSimpleSub(message: str):
     plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
     incompletedict = getIncompleteWordDict(plaintext, message)
 
-    regexletters = ""
-    temp_word = ""
-
     #iter through unknown words and their plaintext indices
-    for word, tuple in incompletedict.items():
-        temp_word = word.upper()
-        tuple[1].extend([i for i, char in enumerate(word) if char == '_'])
-
-        #if word plural, make 'S' optional so dictionary will still identify if plural not in dictionary
-        #replace all non char elements in word
-        #THINK OF OTHER CASES
-        #all indices = indices of where '_' occur in single word
-        if temp_word[-1] == 'S':
-            temp_word = temp_word + '?'
-            temp_word = re.sub(r"[^A-Z_?]", "", temp_word)
-            tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index
-
-        #handle contractions ('re, 'nt, etc)
-        elif "'" in temp_word:
-            apostindex = temp_word.find("'")
-            temp_word = temp_word[0:apostindex]
-            tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index 
-            temp_word = re.sub(r"[^A-Z_]", "", temp_word)
-
-        #standard word
-        else:
-           temp_word = re.sub(r"[^A-Z_]", "", temp_word)
-           tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index 
-
-        #convert string to regex, eg. insert [ABCD] at '_'
-        temp_word = '^' + re.sub('_', regexletters, temp_word) + '$'
-
-
+    for item in incompletedict:
         #search dictionary for word
-        match = next((d_word for d_word in standarddict if re.search(temp_word, d_word)), None)
+        incompletedict[item] = getFormattedWord(item, regexletters, incompletedict)
+        print(temp_word)
 
+        if "'" in temp_word:
+            match = next((d_word for d_word in contractiondict if re.search(temp_word, d_word)), None)
+        else:
+            match = next((d_word for d_word in standarddict if re.search(temp_word, d_word)), None)
+            if match is None:
+                match = next((d_word for d_word in contractiondict if re.search(temp_word, d_word)), None)
 
+        print(match)
+        print(indextuple)
         if match is not None:
-            for i, j in zip(tuple[1], tuple[2]):
+            for i, j in zip(indextuple[0], indextuple[1]):
                 print(i)
                 plainletter = match[j]
-                cipherletter = tuple[0][i].upper()
+                cipherletter = cipherword[i].upper()
                 print(plainletter, cipherletter)
                 print()
                 mapping[cipherletter] = [plainletter]
 
 
-    
-    print(mapping)
-             
-    plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
-
     print(plaintext)
-
+    plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
+    print(plaintext)
 
 
     return plaintext
@@ -155,11 +182,14 @@ def hackSimpleSub(message: str):
 
 def test():
     # Provided test.
+    """
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
-    hackSimpleSub(message)
-    assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
-    # End of provided test.
-    
-
+        assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
+        messageone = 'Cug zlxtq pfwdk iwv hlseo wmgf cug rjyn awb, plc cug awb, pgxkb mgfn cxfga jicgf j rwkb jicgfkwwk wi tujoxkb ozlxffgro cufwlbu cug bjfagk, oxsern njdkga jka dgkc pjtq cw orgge. Sgjkduxrg, cug iwv cfwccga efwlarn jtfwoo cug sgjawd, ergjoga dxcu xco osjrr mxtcwfn. Kwpwan kwcxtga, wi twlfog; cug ijfsgf djo plon fgejxfxkb cug wra igktg kgjf cug fxmgf.'
+        solution = 'The quick brown fox jumps over the lazy dog, but the dog, being very tired after a long afternoon of chasing squirrels through the garden, simply yawned and went back to sleep. Meanwhile, the fox trotted proudly across the meadow, pleased with its small victory. Nobody noticed, of course; the farmer was busy repairing the old fence near the river.'
+    """
+    messageone = 'Cug zlxtq pfwdk iwv hlseo wmgf cug rjyn awb, plc cug awb, pgxkb mgfn cxfga jicgf j rwkb jicgfkwwk wi tujoxkb ozlxffgro cufwlbu cug bjfagk, oxsern njdkga jka dgkc pjtq cw orgge. Sgjkduxrg, cug iwv cfwccga efwlarn jtfwoo cug sgjawd, ergjoga dxcu xco osjrr mxtcwfn. Kwpwan kwcxtga, wi twlfog; cug ijfsgf djo plon fgejxfxkb cug wra igktg kgjf cug fxmgf.'
+    solution =  'The quick brown fox jumps over the lazy dog, but the dog, being very tired after a long afternoon of chasing squirrels through the garden, simply yawned and went back to sleep. Meanwhile, the fox trotted proudly across the meadow, pleased with its small victory. Nobody noticed, of course; the farmer was busy repairing the old fence near the river.'
+    assert(hackSimpleSub(messageone)) == solution
 if __name__ == '__main__':
     test()
