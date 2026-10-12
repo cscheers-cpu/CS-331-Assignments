@@ -35,55 +35,63 @@
 Enhanced substitution cipher solver
 Author: Chris Scheerschmidt
 """
+from __future__ import annotations
 
 import re
-import detectEnglish
-import simpleSubHacker
 import simpleSubHacker as ssh
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-def loadDictionary():
-    dictionaryFile = open('dictionary.txt')
+def loadDictionary(file: str) -> set[str]:
+    dictionaryFile = open(file)
     englishWords = set()
     for word in dictionaryFile.read().split('\n'):
         englishWords.update(word)
     dictionaryFile.close()
     return englishWords
 
-def hackSimpleSub(message: str):
-    """
-    Simple substitution cipher hacker.
-    First runs the textbook program to get an initial, potentially incomplete decipherment.
-    Then uses regular expressions and a dictionary to decipher additional letters.
-    """
-    temp_word = ""
-    dictionary = detectEnglish.loadDictionary()
-    unmatchedletters = set()
-    plaintextlist = []
-    incompletedict = {}
-    regexletters = ""
-    mapping = simpleSubHacker.hackSimpleSub(message)
-    
-    for cipherletter in mapping.values():
-        if len(cipherletter) > 1:
-            unmatchedletters.update(cipherletter)
+def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]: 
+    unmatchedletters: set[str] = set()
+    for plainletters in mapping.values():
+        if len(plainletters) > 1:
+            unmatchedletters.update(plainletters)
 
+    return unmatchedletters
 
-    regexletters = '[' + ''.join(unmatchedletters) + ']'
-    plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
+def getIncompleteWordDict(plaintext: str, ciphertext: str) -> dict[str, tuple[str, list[int], list[int]]]:
+    incompletedict: dict[str, tuple[str, list[int], list[int]]] = {}
     plaintextlist = plaintext.split()
-    cipherlist = message.split()
+    cipherlist = ciphertext.split()
 
-
-    #save words with '_' and indices where they occur in plaintext
     for index, word in enumerate(plaintextlist):
         if '_' in word:
             if word not in incompletedict:
                 incompletedict.update({word: (cipherlist[index], [], [])}) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
             else:
                 pass
-                
+
+    return incompletedict
+
+
+
+"""
+    Simple substitution cipher hacker.
+    First runs the textbook program to get an initial, potentially incomplete decipherment.
+    Then uses regular expressions and a dictionary to decipher additional letters.
+"""
+def hackSimpleSub(message: str):
+    standarddict = loadDictionary('dictionary.txt')
+    contractiondict = loadDictionary('english_contractions.txt')
+
+    mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
+    unmatchedletters = getUnmatchedLetters(mapping)
+    regexletters = '[' + ''.join(unmatchedletters) + ']'
+
+    plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
+    incompletedict = getIncompleteWordDict(plaintext, message)
+
+    regexletters = ""
+    temp_word = ""
 
     #iter through unknown words and their plaintext indices
     for word, tuple in incompletedict.items():
@@ -116,13 +124,10 @@ def hackSimpleSub(message: str):
 
 
         #search dictionary for word
-        match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
+        match = next((d_word for d_word in standarddict if re.search(temp_word, d_word)), None)
 
 
-        print()
-        print(match)
         if match is not None:
-            print(word, tuple)
             for i, j in zip(tuple[1], tuple[2]):
                 print(i)
                 plainletter = match[j]
@@ -135,7 +140,7 @@ def hackSimpleSub(message: str):
     
     print(mapping)
              
-    plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
+    plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
 
     print(plaintext)
 
