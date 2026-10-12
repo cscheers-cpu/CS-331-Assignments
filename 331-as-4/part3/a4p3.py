@@ -43,11 +43,10 @@ import simpleSubHacker as ssh
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 def loadDictionary(file: str) -> set[str]:
-    dictionaryFile = open(file)
-    englishWords = set()
-    for word in dictionaryFile.read().split('\n'):
-        englishWords.update(word)
-    dictionaryFile.close()
+    with open(file) as f:
+        englishWords = set()
+        for word in f.read().split('\n'):
+            englishWords.add(word)
     return englishWords
 
 def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]: 
@@ -70,6 +69,7 @@ def getIncompleteWordDict(plaintext: str, ciphertext: str) -> dict[str, tuple[st
             else:
                 pass
 
+
     return incompletedict
 
 
@@ -82,6 +82,8 @@ def getIncompleteWordDict(plaintext: str, ciphertext: str) -> dict[str, tuple[st
 def hackSimpleSub(message: str):
     standarddict = loadDictionary('dictionary.txt')
     contractiondict = loadDictionary('english_contractions.txt')
+
+    print(standarddict)
 
     mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
     unmatchedletters = getUnmatchedLetters(mapping)
