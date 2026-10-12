@@ -69,54 +69,60 @@ def hackSimpleSub(message: str):
         if len(cipherletter) > 1:
             unmatchedletters.update(cipherletter)
 
-
     regexletters = '[' + ''.join(unmatchedletters) + ']'
-
     plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
     plaintextlist = plaintext.split()
+    cipherlist = message.split()
+
 
     #save words with '_' and indices where they occur in plaintext
-    for word, index in plaintextlist:
+    for index, word in enumerate(plaintextlist):
         if '_' in word:
             if word not in incompletedict:
-                incompletedict.update({word: [index]})
+                incompletedict.update({word: (cipherlist[index], [])}) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
             else:
-                incompletedict[word].append(index)
+                pass
+                
 
+    print(incompletedict)
     #iter through unknown words and their plaintext indices
-    for word, indexlist in incompletedict.items():
+    for word in incompletedict:
         temp_word = word.upper()
 
         #if word plural, make 'S' optional so dictionary will still identify if plural not in dictionary
         #replace all non char elements in word
         #THINK OF OTHER CASES
+        #all indices = indices of where '_' occur in single word
         if temp_word[-1] == 'S':
             temp_word = temp_word + '?'
             temp_word = re.sub(r"[^A-Z_?]", "", temp_word)
+            word = [i for i, char in enumerate(word) if char == '_'] #index 
 
         #handle contractions ('re, 'nt, etc)
         elif "'" in temp_word:
             apostindex = temp_word.find("'")
             temp_word = temp_word[0:apostindex]
+            all_indices = [i for i, char in enumerate(word) if char == '_'] #index 
             temp_word = re.sub(r"[^A-Z_]", "", temp_word)
 
         #standard word
         else:
            temp_word = re.sub(r"[^A-Z_]", "", temp_word)
+           all_indices = [idx for idx, char in enumerate(word) if char == '_'] #index 
 
-        #indices of where '_' in single word
-        all_indices = [idx for idx, char in enumerate(word) if char == '_'] #index 
-    
         print(word)
+        #convert string to regex, eg. insert [ABCD] at '_'
         temp_word = '^' + re.sub('_', regexletters, word) + '$'
         print(temp_word)
 
+        #search dictionary for word
         match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
         print(match)
 
         if match is not None:
-            if word.islower():
-                match = match.lower()
+            for index in all_indices:
+                pass
+             
                 
 
                     
