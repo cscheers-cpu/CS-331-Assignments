@@ -69,6 +69,7 @@ def hackSimpleSub(message: str):
         if len(cipherletter) > 1:
             unmatchedletters.update(cipherletter)
 
+
     regexletters = '[' + ''.join(unmatchedletters) + ']'
     plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
     plaintextlist = plaintext.split()
@@ -79,15 +80,15 @@ def hackSimpleSub(message: str):
     for index, word in enumerate(plaintextlist):
         if '_' in word:
             if word not in incompletedict:
-                incompletedict.update({word: (cipherlist[index], [])}) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
+                incompletedict.update({word: (cipherlist[index], [], [])}) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
             else:
                 pass
                 
 
-    print(incompletedict)
     #iter through unknown words and their plaintext indices
-    for word in incompletedict:
+    for word, tuple in incompletedict.items():
         temp_word = word.upper()
+        tuple[1].extend([i for i, char in enumerate(word) if char == '_'])
 
         #if word plural, make 'S' optional so dictionary will still identify if plural not in dictionary
         #replace all non char elements in word
@@ -96,36 +97,47 @@ def hackSimpleSub(message: str):
         if temp_word[-1] == 'S':
             temp_word = temp_word + '?'
             temp_word = re.sub(r"[^A-Z_?]", "", temp_word)
-            word = [i for i, char in enumerate(word) if char == '_'] #index 
+            tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index
 
         #handle contractions ('re, 'nt, etc)
         elif "'" in temp_word:
             apostindex = temp_word.find("'")
             temp_word = temp_word[0:apostindex]
-            all_indices = [i for i, char in enumerate(word) if char == '_'] #index 
+            tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index 
             temp_word = re.sub(r"[^A-Z_]", "", temp_word)
 
         #standard word
         else:
            temp_word = re.sub(r"[^A-Z_]", "", temp_word)
-           all_indices = [idx for idx, char in enumerate(word) if char == '_'] #index 
+           tuple[2].extend([i for i, char in enumerate(temp_word) if char == '_']) #index 
 
-        print(word)
         #convert string to regex, eg. insert [ABCD] at '_'
-        temp_word = '^' + re.sub('_', regexletters, word) + '$'
-        print(temp_word)
+        temp_word = '^' + re.sub('_', regexletters, temp_word) + '$'
+
 
         #search dictionary for word
         match = next((d_word for d_word in dictionary if re.search(temp_word, d_word)), None)
+
+
+        print()
         print(match)
-
         if match is not None:
-            for index in all_indices:
-                pass
-             
-                
+            print(word, tuple)
+            for i, j in zip(tuple[1], tuple[2]):
+                print(i)
+                plainletter = match[j]
+                cipherletter = tuple[0][i].upper()
+                print(plainletter, cipherletter)
+                print()
+                mapping[cipherletter] = [plainletter]
 
-                    
+
+    
+    print(mapping)
+             
+    plaintext = simpleSubHacker.decryptWithCipherletterMapping(message, mapping)
+
+    print(plaintext)
 
 
 
@@ -137,7 +149,7 @@ def hackSimpleSub(message: str):
 def test():
     # Provided test.
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
-    print(hackSimpleSub(message))
+    hackSimpleSub(message)
     assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
     # End of provided test.
     
