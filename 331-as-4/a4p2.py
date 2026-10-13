@@ -55,26 +55,20 @@ LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     raise NotImplementedError()"""
 
 def searchPlainString(word: str, codebook: dict):
-    temp_word = ""
-
-    for value in codebook:
-        codeword = re.search(value, word)
-        if codeword:
-            temp_word = re.sub(codeword.group(), '', word)
-            if any(char.isalpha() for char in temp_word):
-                return None
-            else:
-                return codeword.group()
-
+    word = re.sub(r'[\n\t\r]', ' ',)
+    word = re.sub(r'[^A-Z]', '', word)
+    for codeword, codenumbers in codebook.items():
+        if word == codeword:
+            return codenumbers
+                
     return None
 
 
 def searchCipherString(word: str, codebook: dict):
+    word = re.sub(r'[^0-9]', '', word)
     for codename, code_list in codebook.items():
-        for code_num in code_list:
-            nomenclator = re.search(code_num, word)
-            if nomenclator:
-                return codename, nomenclator.group()
+        if word in code_list:
+            return codename
 
     return None
 
@@ -120,61 +114,131 @@ def decryptWord(word: str, key: str):
 
 
 def encryptMessage(key: str, message: str, codebook: dict):
-    messagelist = message.split()
+    codebook = {codeword.upper(): codenumbers for codeword, codenumbers in codebook.items()}
+
+    escape_sequences = r"(\\[ntr0vfdwsbWDSB])"
+    message = message.encode('unicode_escape').decode('utf-8')
+    messagelist = re.split(escape_sequences, message)
+    messagelist = [word for word in messagelist if word != '']
+    print(messagelist)
     cipherlist = [""] * len(messagelist)
-    temp_word = ""
-    codeword = ""
+    codenumbers = []
+    
 
     for i, word in enumerate(messagelist):
-        temp_word = word.lower()
-        codeword = searchPlainString(temp_word, codebook)
+        codenumbers = searchPlainString(word.upper(), codebook)
 
-        if codeword is not None:
-            word = re.sub(codeword, random.choice(codebook[codeword]), word)
+        if codenumbers is not None:
+            number = random.choice(codenumbers)
+            if not word.isalnum():
+                temp_word = re.search(r"[a-zA-Z0-9].*[a-zA-Z0-9]|[a-zA-Z0-9]", word)
+                if temp_word:
+                    temp_word = temp_word.group()
+                    word = re.sub(temp_word, number, word)
+            else:
+                word = number
 
         cipherlist[i] = encryptWord(word, key)
 
     return " ".join(cipherlist)
 
+def applyEscape(esclist, escsequences, codebook, key):
+    newlist = [""] * len(esclist)
+
+    for i, word in enumerate(esclist):
+        if re.search(escsequences, word):
+            newlist[i] = word
+        else:
+            word = decryptWord(word, key)
+            codeword = searchCipherString(word, codebook)
+
+            if codeword is not None:
+                if not word.isalnum():
+                    word = re.sub(r'^([^a-zA-Z0-9]*)[a-zA-Z0-9]+([^a-zA-Z0-9]*)$', rf'\1{codeword}\2', word)
+                else:
+                    word = codeword
+            newlist[i] = word
+
+    return ''.join(newlist)
+            
+
 
 def decryptMessage(key: str, message: str, codebook: dict):
-    messagelist = message.split()
+    message = message.encode('unicode-escape').decode('utf-8')
+    messagelist = []
+    current_word = []
+
+    for char in message:
+        if char == ' ':
+            if current_word:
+                messagelist.append("".join(current_word))
+                current_word = []
+            messagelist.append(' ')
+        else:
+            current_word.append(char)
+
+    if current_word:
+        messagelist.append("".join(current_word))
+
+    print(messagelist)
+    escape_sequences = r'\\[ntrvfb0]'
     plaintextlist = [""] * len(messagelist)
     codeword = ""
-    code_num = ""
 
     for i, word in enumerate(messagelist):
-        word = decryptWord(word, key)
-        result = searchCipherString(word, codebook)
+        if  re.search(escape_sequences, word):
+            print(word)
+            esclist = re.split(r'(\\.)', word)
+            word = applyEscape(esclist, escape_sequences, codebook, key)
+            print(word)
+        else:
+            word = decryptWord(word, key)
+            codeword = searchCipherString(word, codebook)
 
-        if result is not None:
-            codeword, code_num = result
-            word = re.sub(code_num, codeword, word)
+            if codeword is not None:
+                if not word.isalnum():
+                    word = re.sub(r'^([^a-zA-Z0-9]*)[a-zA-Z0-9]+([^a-zA-Z0-9]*)$', rf'\1{codeword}\2', word)
+                else:
+                    word = codeword
 
         plaintextlist[i] = word
 
-    return " ".join(plaintextlist)
+    plaintext = ''. join(plaintextlist)
+    plaintext = plaintext.encode('utf-8').decode('unicode_escape')
+    return plaintext
         
 
 
-
+    escape_sequences = r"[\n\t\r\0\v\f\b]|\S+"
+    messagelist = re.findall(escape_sequences, message)
 
 
 def test():
-    # Provided tests.
+    # 16. newlines and spacing
     key = 'LFWOAYUISVKMNXPBDCRJTQEGHZ'
-    plaintext = "X-ray machines cannot be brought here, as -ray* are very dangerous. Hello;ray! ray;"
-    codebook = {'ray':['1']}
-    ciphertext = encryptMessage(key, plaintext, codebook)
-    print(decryptMessage(key, ciphertext, codebook ))
-    assert ciphertext =="G-clh nlwisxar wlxxpj fa fcptuij iaca, lr -1* lca qach olxuacptr. Iammp;clh! 1;"
+    codebook = {'cat': ['9']}
+    plaintext = 'Line one has the cat.\nLine two,  with  double spaces\tand a tab.'
+    ciphertext = 'Msxa pxa ilr jia 9.\nMsxa jep,  esji  optfma rblwar\tlxo l jlf.'
+    expected = 'Line one has the cat.\nLine two,  with  double spaces\tand a tab.'
+    assert decryptMessage(key, ciphertext, codebook) == expected
+    assert decryptMessage(key, encryptMessage(key, plaintext, codebook), codebook) == expected
+    assert encryptMessage(key, plaintext, codebook) == ciphertext
+
+    print('all Problem 2 asserts passed')
 
 
     # End of provided tests.
 
 if __name__ == '__main__':
     test()
-
+    """   key = 'LFWOAYUISVKMNXPBDCRJTQEGHZ'
+        plaintext = "X-ray machines cannot be brought here, as -ray* are very dangerous. Hello;ray! ray;"
+        codebook = {'ray':['1']}
+        ciphertext = encryptMessage(key, plaintext, codebook)
+        print(decryptMessage(key, ciphertext, codebook ))
+        assert ciphertext =="G-clh nlwisxar wlxxpj fa fcptuij iaca, lr -1* lca qach olxuacptr. Iammp;clh! 1;"""
+    # Provided tests.
+ 
 
 """ if char.isalpha():
             temp_char = char.upper()
