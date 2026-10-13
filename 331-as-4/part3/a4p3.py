@@ -80,6 +80,9 @@ class wordMatches:
     def set_wordmatches(self, wordmatches: list[str]):
         self.wordmatches = wordmatches
 
+    def len_wordmatches(self) -> int:
+        return len(self.wordmatches)
+
 
 def loadDictionary(file: str) -> set[str]:
     dict = set()
@@ -136,8 +139,9 @@ def getFormattedWord(word: str, regexletters:str) -> tuple[str, list[int]]:
     return temp_word, format_indices
 
 
-def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str], standarddict: set[str]) -> dict[str, wordMatches]:
+def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str], standarddict: set[str], regexletters:str) -> dict[str, wordMatches]:
     for matchobject in incompletedict.values():
+        matches = []
         #search dictionary for word
 
         temp_word = matchobject.get_formatword()
@@ -145,6 +149,14 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
         if "'" in temp_word:
             matches = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
 
+        elif len(temp_word) == 1:
+            print("here")
+            if 'A' in regexletters:
+                matches.append('A')
+            if 'I' in regexletters:
+                matches.append('I')
+            if 'O' in regexletters:
+                matches.append('O')
         else:
             matchone = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
             matchtwo = [d_word for d_word in standarddict if re.search(temp_word, d_word)]
@@ -152,11 +164,10 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
                 if match not in matchone:
                     matchone.append(match)
             matches = matchone
-        
+
         matchobject.set_wordmatches(matches)
 
     return incompletedict
-
 
 
 """
@@ -175,9 +186,19 @@ def hackSimpleSub(message: str):
     plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
     incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
 
-    incompletedict = getMatches(incompletedict, contractiondict, standarddict)
+    incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
+    incompletelist: list[wordMatches] = [value for value in incompletedict.values() if value.len_wordmatches() > 0]
 
-    for item in incompletedict.values():
+    incompletelist.sort(key=lambda obj: obj.len_wordmatches(), reverse=True)
+    
+    for thing in reversed(incompletelist):
+        print(thing.get_plainword())
+        print(thing.get_wordmatches())
+        print()
+
+
+
+    """  for item in incompletedict.values():
         cipherword = item.get_cipherword()
         plainword = item.get_plainword()
         formatword = item.get_formatword()
@@ -190,7 +211,7 @@ def hackSimpleSub(message: str):
         print(plainindices)
         print(formatindices)
         print(wordmatches)
-        print()
+        print()"""
 
     print(plaintext)
     plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
