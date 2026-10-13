@@ -59,6 +59,9 @@ class wordMatches:
         self.formatindices = formatindices
         self.plainindices = plainindices
         self.wordmatches = wordmatches if wordmatches is not None else []
+
+    def __repr__(self) -> str:
+        return f"Cipherword: {self.cipherword}  plainword: {self.plainword} wordmatches: {self.wordmatches}"
         
     def get_cipherword(self):
         return self.cipherword
@@ -86,6 +89,8 @@ class wordMatches:
 
     def len_indices(self) -> int:
         return len(self.plainindices)
+
+    
 
 def loadDictionary(file: str) -> set[str]:
     dict = set()
@@ -173,8 +178,9 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
     return incompletedict
 
 
-def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, list[str]]):
+def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, list[str]], matchedletters):
     possibleletters = {}
+    print(matchlist)
     for thing in matchlist:
         cipherword = thing.get_cipherword()
         cipherindices = thing.get_plainindices()
@@ -199,15 +205,12 @@ def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, lis
 
     for cipherletter, matchletters in possibleletters.items():
         if len(matchletters) == 1:
-
             char = next(iter(matchletters))
             mapping[cipherletter] = [char]
+            matchedletters.add(char)
 
-            for other_letters, value in mapping.items():
-                if char in value and other_letters != cipherletter:
-                    value.remove(char)
+    return mapping, matchedletters
 
-    return mapping
 
 """
     Simple substitution cipher hacker.
@@ -220,8 +223,9 @@ def hackSimpleSub(message: str):
     impossibleletters = loadDictionary('impossible_letter_combinations.txt')
 
     mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
-    newmapping = mapping
+
     unmatchedletters = getUnmatchedLetters(mapping)
+    matchedletters = set(letter for letter in LETTERS if letter not in unmatchedletters)
     regexletters = '[' + ''.join(unmatchedletters) + ']'
 
     plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
@@ -235,16 +239,27 @@ def hackSimpleSub(message: str):
     incompletelist.sort(key=lambda obj: obj.len_wordmatches())
     listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
 
-    oldmapping = set()
     for i in range(100):
-        index = 0
-        mapping = getPossibleLetterCombos(listbylength[index], mapping)
-        while oldmapping == mapping and index < len(listbylength) - 1:
-            index += 1
-            mapping = getPossibleLetterCombos(listbylength[index], mapping)
+        if listbylength:
+            mapping, matchedletters = getPossibleLetterCombos(listbylength[0], mapping, matchedletters)
+        else:
+            break
 
-        print(mapping)
-        oldmapping = mapping
+        check = True
+        while check:
+            check = False
+            prematchedletters= matchedletters
+            for value in mapping.values():
+                if len(value) > 1:
+                    for letter in value:
+                        if letter in matchedletters:
+                            value.remove(letter)
+
+                            if len(value) == 1:
+                                matchedletters.add(value[0])
+            if matchedletters > prematchedletters:
+                check = True
+            
         plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
 
         unmatchedletters = getUnmatchedLetters(mapping)
@@ -258,8 +273,12 @@ def hackSimpleSub(message: str):
 
         listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
 
-        print(plaintext)
+        if i == 99:
+            for item in listbylength:
+                for listy in item:
+                    print(repr(listy))
 
+    print(mapping)
     return plaintext
 
         
