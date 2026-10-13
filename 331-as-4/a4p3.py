@@ -37,60 +37,11 @@ Author: Chris Scheerschmidt
 """
 from __future__ import annotations
 import re
-import simpleSubHacker as ssh
-import math
+import helper_functions.simpleSubHacker as ssh
 from itertools import groupby
+from helper_functions.wordMatch import wordMatch
 
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-
-class wordMatches:
-    def __init__(self,
-            cipherword: str, 
-            plainword: str,  
-            formatword: str, 
-            plainindices: list[int],  
-            formatindices: list[int], 
-            wordmatches: list[str] | None = None):
-        
-        self.cipherword = cipherword
-        self.plainword = plainword
-        self.formatword = formatword
-        self.formatindices = formatindices
-        self.plainindices = plainindices
-        self.wordmatches = wordmatches if wordmatches is not None else []
-
-    def __repr__(self) -> str:
-        return f"Cipherword: {self.cipherword}  plainword: {self.plainword} wordmatches: {self.wordmatches}"
-        
-    def get_cipherword(self):
-        return self.cipherword
-    
-    def get_plainword(self):
-        return self.plainword
-
-    def get_formatword(self):
-        return self.formatword
-    
-    def get_plainindices(self):
-        return self.plainindices
-
-    def get_formatindices(self):
-        return self.formatindices
-
-    def get_wordmatches(self):
-        return self.wordmatches
-
-    def set_wordmatches(self, wordmatches: list[str]):
-        self.wordmatches = wordmatches
-
-    def len_wordmatches(self) -> int:
-        return len(self.wordmatches)
-
-    def len_indices(self) -> int:
-        return len(self.plainindices)
-
-    
+LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 
 
 def loadDictionary(file: str) -> set[str]:
     dict = set()
@@ -108,7 +59,7 @@ def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]:
     return unmatchedletters
 
 #cipherword = key, value = getMatches object
-def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict[str, wordMatches]:
+def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict[str, wordMatch]:
     incompletedict = {}
     plainindices: list[int] = []
     plaintextlist = []
@@ -129,7 +80,7 @@ def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) ->
             if cipherlist[index] not in incompletedict:
                 formatted_word, formatted_indices = getFormattedWord(word, regexletters)
                 plainindices = [i for i, char in enumerate(word) if char == '_']
-                incompletedict[cipherlist[index]] = wordMatches(cipherlist[index], word, formatted_word, plainindices, formatted_indices) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
+                incompletedict[cipherlist[index]] = wordMatch(cipherlist[index], word, formatted_word, plainindices, formatted_indices) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
             else:
                 pass
 
@@ -155,7 +106,7 @@ def getFormattedWord(word: str, regexletters:str) -> tuple[str, list[int]]:
     return temp_word, format_indices
 
 
-def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str], standarddict: set[str], regexletters:str) -> dict[str, wordMatches]:
+def getMatches(incompletedict: dict[str, wordMatch], contractiondict: set[str], standarddict: set[str], regexletters:str) -> dict[str, wordMatch]:
     for matchobject in incompletedict.values():
         matches = []
         #search dictionary for word
@@ -180,12 +131,12 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
                     matchone.append(match)
             matches = matchone
 
-        matchobject.set_wordmatches(matches)
+        matchobject.set_wordMatch(matches)
 
     return incompletedict
 
 
-def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, list[str]], matchedletters):
+def getPossibleLetterCombos(matchlist: list[wordMatch], mapping: dict[str, list[str]], matchedletters):
     possibleletters = {}
     for thing in matchlist:
         cipherword = thing.get_cipherword()
@@ -194,7 +145,7 @@ def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, lis
         numindices = thing.len_indices()
         checkmatches = set()
         
-        for word in thing.get_wordmatches():
+        for word in thing.get_wordMatch():
             for i in range(numindices):
                 cipherindex = cipherindices[i]
                 cipherletter = cipherword[cipherindex].upper()
@@ -214,7 +165,7 @@ def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, lis
                 cipherletter = cipherword[cipherindex].upper()
 
                 matchindex = matchindices[i]
-                matchletter = thing.get_wordmatches()[0][matchindex]
+                matchletter = thing.get_wordMatch()[0][matchindex]
                 mapping[cipherletter] = [matchletter]
                 matchedletters.add(matchletter)
                     
@@ -262,12 +213,12 @@ def hackSimpleSub(message: str):
    
 
     incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
-    incompletelist: list[wordMatches] = [value for value in incompletedict.values() if value.len_wordmatches() > 0]
+    incompletelist: list[wordMatch] = [value for value in incompletedict.values() if value.len_wordMatch() > 0]
     print()
 
 
-    incompletelist.sort(key=lambda obj: obj.len_wordmatches())
-    listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
+    incompletelist.sort(key=lambda obj: obj.len_wordMatch())
+    listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())]
     print(incompletedict)
     print(listbylength[0])
 
@@ -297,10 +248,10 @@ def hackSimpleSub(message: str):
         incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
         incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
 
-        incompletelist: list[wordMatches] = [value for value in incompletedict.values() if value.len_wordmatches() > 0]
-        incompletelist.sort(key=lambda obj: obj.len_wordmatches())
+        incompletelist: list[wordMatch] = [value for value in incompletedict.values() if value.len_wordMatch() > 0]
+        incompletelist.sort(key=lambda obj: obj.len_wordMatch())
 
-        listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
+        listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())]
 
 
     return ssh.decryptWithCipherletterMapping(origmessage, mapping)
@@ -309,6 +260,7 @@ def hackSimpleSub(message: str):
    
 #for words with '-' in them, split at '-'
 def test():
+    pass
 
     #messageten = '''Zjp lqz xqz ed zjp nqz. Zjp lqz xqu zjp hqz. Zjp hqz hqd oqxz zjp nqz, qdf zjp lqz hqd qszph zjp hqz, qdf zjqz uqx zjqz.'''
     #solutionten = '''The cat sat on the mat. The cat saw the rat. The rat ran past the mat, and the cat ran after the rat, and that was that.'''

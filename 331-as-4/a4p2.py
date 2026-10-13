@@ -35,7 +35,7 @@ Nomenclator cipher
 Author: Chris Scheerschmidt
 """
 
-from old_stuff.a1p1 import get_map
+from legacy_code.a1p1mod import get_map
 import random
 import re
 

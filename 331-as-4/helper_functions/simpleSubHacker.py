@@ -1,10 +1,10 @@
 # Simple Substitution Cipher Hacker
 # https://www.nostarch.com/crackingcodes (BSD Licensed)
 
-import re, copy, simpleSubCipher, wordPatterns, makeWordPatterns
+import re, copy, helper_functions.simpleSubCipher as simpleSubCipher, helper_functions.wordPatterns as wordPatterns, helper_functions.makeWordPatterns as makeWordPatterns
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-nonLettersOrSpacePattern = re.compile('[^A-Z\s]')
+nonLettersOrSpacePattern = re.compile(r'[^A-Z\s]')
 
 def main():
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'

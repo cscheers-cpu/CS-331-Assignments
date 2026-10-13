@@ -6,7 +6,7 @@
 # http://invpy.com/dictionary.txt)
 
 import pprint
-
+from pathlib import Path
 
 def getWordPattern(word):
     # Returns a string of the pattern form of the given word.
@@ -26,8 +26,10 @@ def getWordPattern(word):
 
 def main():
     allPatterns = {}
+    filepath = Path(__file__).parent.parent / 'dictionaries' / 'dictionary.txt'
 
-    fo = open('dictionary.txt')
+
+    fo = open(filepath)
     wordList = fo.read().split('\n')
     fo.close()
 
