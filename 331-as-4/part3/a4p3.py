@@ -36,9 +36,10 @@ Enhanced substitution cipher solver
 Author: Chris Scheerschmidt
 """
 from __future__ import annotations
-
 import re
 import simpleSubHacker as ssh
+import math
+from itertools import groupby
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -83,6 +84,8 @@ class wordMatches:
     def len_wordmatches(self) -> int:
         return len(self.wordmatches)
 
+    def len_indices(self) -> int:
+        return len(self.plainindices)
 
 def loadDictionary(file: str) -> set[str]:
     dict = set()
@@ -170,6 +173,42 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
     return incompletedict
 
 
+def getPossibleLetterCombos(matchlist: list[wordMatches], mapping: dict[str, list[str]]):
+    possibleletters = {}
+    for thing in matchlist:
+        cipherword = thing.get_cipherword()
+        cipherindices = thing.get_plainindices()
+        matchindices = thing.get_formatindices()
+        numindices = thing.len_indices()
+
+        for word in thing.get_wordmatches():
+            for i in range(numindices):
+                cipherindex = cipherindices[i]
+                cipherletter = cipherword[cipherindex].upper()
+
+
+                matchindex = matchindices[i]
+                matchletter = word[matchindex]
+
+                if cipherletter not in possibleletters:
+                    possibleletters.update({cipherletter: set()})
+                    possibleletters[cipherletter].add(matchletter)
+                else:
+                    possibleletters[cipherletter].add(matchletter)
+
+
+    for cipherletter, matchletters in possibleletters.items():
+        if len(matchletters) == 1:
+
+            char = next(iter(matchletters))
+            mapping[cipherletter] = [char]
+
+            for other_letters, value in mapping.items():
+                if char in value and other_letters != cipherletter:
+                    value.remove(char)
+
+    return mapping
+
 """
     Simple substitution cipher hacker.
     First runs the textbook program to get an initial, potentially incomplete decipherment.
@@ -178,23 +217,101 @@ def getMatches(incompletedict: dict[str, wordMatches], contractiondict: set[str]
 def hackSimpleSub(message: str):
     standarddict = loadDictionary('dictionary.txt')
     contractiondict = loadDictionary('english_contractions.txt')
-    newmapping: dict[str, list[str]] = {}
+    impossibleletters = loadDictionary('impossible_letter_combinations.txt')
+
     mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
+    newmapping = mapping
     unmatchedletters = getUnmatchedLetters(mapping)
     regexletters = '[' + ''.join(unmatchedletters) + ']'
 
     plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
+    newplaintext = ""
     incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
 
     incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
     incompletelist: list[wordMatches] = [value for value in incompletedict.values() if value.len_wordmatches() > 0]
 
-    incompletelist.sort(key=lambda obj: obj.len_wordmatches(), reverse=True)
-    
-    for thing in reversed(incompletelist):
-        print(thing.get_plainword())
-        print(thing.get_wordmatches())
+
+    incompletelist.sort(key=lambda obj: obj.len_wordmatches())
+    listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
+
+    oldmapping = set()
+    for i in range(100):
+        index = 0
+        mapping = getPossibleLetterCombos(listbylength[index], mapping)
+        while oldmapping == mapping and index < len(listbylength) - 1:
+            index += 1
+            mapping = getPossibleLetterCombos(listbylength[index], mapping)
+
+        print(mapping)
+        oldmapping = mapping
+        plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
+
+        unmatchedletters = getUnmatchedLetters(mapping)
+        regexletters = '[' + ''.join(unmatchedletters) + ']'
+
+        incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
+        incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
+
+        incompletelist: list[wordMatches] = [value for value in incompletedict.values() if value.len_wordmatches() > 0]
+        incompletelist.sort(key=lambda obj: obj.len_wordmatches())
+
+        listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordmatches())]
+
+        print(plaintext)
+
+    return plaintext
+
+        
+    test = getPossibleLetterCombos(listbylength[0], mapping, message)
+    for i in range(5):
+        print(f"these have {listbylength[i][0].len_wordmatches()} number of matches")
         print()
+        for value in listbylength[i]:
+            cipherword = value.get_cipherword()
+            plainword = value.get_plainword()
+            formatword = value.get_formatword()
+            plainindices =  value.get_plainindices()
+            formatindices = value.get_formatindices()
+            wordmatches = value.get_wordmatches()
+            print(cipherword)
+            print(plainword)
+            print(formatword)
+            print(plainindices)
+            print(formatindices)
+            print(wordmatches)
+            print()
+    permutations = math.factorial(len(unmatchedletters))
+
+    """
+        for i in range(permutations):
+        initmatch = incompletelist[-1]
+        matchindex = initmatch.len_wordmatches()
+        cipherword = initmatch.get_cipherword().upper()
+
+
+        for j in range(initmatch.len_indices()):
+            cipherindex = initmatch.get_plainindices()[j]
+            cipherletter = cipherword[cipherindex]
+
+            matchword = initmatch.get_wordmatches()[j]
+            matchindex = initmatch.get_formatindices()[j]
+            matchletter = [matchword[matchindex]]
+
+            newmapping[cipherletter] = matchletter
+
+            newplaintext = ssh.decryptWithCipherletterMapping(message, newmapping).upper()
+            for combo in impossibleletters:
+                if combo in newplaintext:"""
+
+                    
+
+
+
+
+
+
+        
 
 
 
@@ -224,7 +341,12 @@ def hackSimpleSub(message: str):
 
 
 def test():
-    # Provided test.
+    """
+    print(hackSimpleSub(message))
+        assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
+        # Provided test."""
+    message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
+    
     """
     message = 'Sy l nlx sr pyyacao l ylwj eiswi upar lulsxrj isr sxrjsxwjr, ia esmm rwctjsxsza sj wmpramh, lxo txmarr jia aqsoaxwa sr pqaceiamnsxu, ia esmm caytra jp famsaqa sj. Sy, px jia pjiac ilxo, ia sr pyyacao rpnajisxu eiswi lyypcor l calrpx ypc lwjsxu sx lwwpcolxwa jp isr sxrjsxwjr, ia esmm lwwabj sj aqax px jia rmsuijarj aqsoaxwa. Jia pcsusx py nhjir sr agbmlsxao sx jisr elh. -Facjclxo Ctrramm'
         assert(hackSimpleSub(message)=="If a man is offered a fact which goes against his instincts, he will scrutinize it closely, and unless the evidence is overwhelming, he will refuse to believe it. If, on the other hand, he is offered something which affords a reason for acting in accordance to his instincts, he will accept it even on the slightest evidence. The origin of myths is explained in this way. -Bertrand Russell")
