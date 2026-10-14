@@ -40,16 +40,56 @@ import re
 import helper_functions.simpleSubHacker as ssh
 from itertools import groupby
 from helper_functions.wordMatch import wordMatch
+from pathlib import Path
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 
 
-def loadDictionary(file: str) -> set[str]:
+#load dictionary from .txt
+def loadDictionary(filepath) -> set[str]:
     dict = set()
-    with open(file) as f:
+    with open(filepath) as f:
         for word in f.read().split('\n'):
             dict.add(word)
     return dict
+CONTRACTIONDICT = loadDictionary(Path(__file__).parent / 'dictionaries' /'english_contractions.txt')
+STANDARDDICT = loadDictionary(Path(__file__).parent / 'dictionaries' /'dictionary.txt')
 
+"""
+    Simple substitution cipher hacker.
+    First runs the textbook program to get an initial, potentially incomplete decipherment.
+    Then uses regular expressions and a dictionary to decipher additional letters.
+"""
+def hackSimpleSub(message: str):
+    origmessage = message #save copy of original cipher
+
+    message = re.sub(r"[^a-zA-Z_']", " ", message) # remove all symbols from cipher except characters, '_' and "'"
+    mapping = ssh.hackSimpleSub(message)
+
+    unmatchedletters = getUnmatchedLetters(mapping)
+    matchedletters = set(letter for letter in LETTERS if letter not in unmatchedletters)
+    regexletters = '[' + ''.join(unmatchedletters) + ']'
+
+    #decipher, store all words with '_' in incomplete dict
+    plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
+    incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
+
+    #search through dictionaries for possible words, store in incomplete dict, wordMatches object
+    incompletedict = getMatches(incompletedict, regexletters)
+    incompletelist: list[wordMatch] = [value for value in incompletedict.values() if value.len_wordMatch() > 0] #eliminate words with no word matches
+
+    #sort wordMatch objects in list based on number of wordmatches per plainword
+    incompletelist.sort(key=lambda obj: obj.len_wordMatch()) 
+    listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())]
+
+    #find mapped letters, update mapping, update ciphertext, find mapped letters, ... until all words have been matched
+    while listbylength:
+        listbylength, mapping = recursiveUpdate(listbylength, mapping, matchedletters, message)
+
+
+    return ssh.decryptWithCipherletterMapping(origmessage, mapping)
+
+
+#find inital unmatched letters in deciphered message
 def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]: 
     unmatchedletters: set[str] = set()
     for plainletters in mapping.values():
@@ -58,63 +98,57 @@ def getUnmatchedLetters(mapping: dict[str, list[str]]) -> set[str]:
 
     return unmatchedletters
 
-#cipherword = key, value = getMatches object
+
+#make dictionary of incomplete words in plaintext
+#cipherword is key, wordMatch object is value
 def getIncompleteWordDict(plaintext: str, ciphertext: str, regexletters: str) -> dict[str, wordMatch]:
     incompletedict = {}
-    plainindices: list[int] = []
-    plaintextlist = []
-    cipherlist = []
+    plainindices = []
 
     plaintextlist = plaintext.split()
     cipherlist = ciphertext.split()
 
-
+    #replace all hyphens with ' '
     plaintextlist = [re.sub(r"\b.-\b|\b-.|(?<=\w)-(?=\w)", ' ', word) for word in plaintextlist]
     cipherlist = [re.sub(r"\b.-\b|\b-.|(?<=\w)-(?=\w)", ' ', word) for word in cipherlist]
 
+    #eliminate whitespace after hyphen elimination
     plaintextlist = [split_word for word in plaintextlist for split_word in word.split()]
     cipherlist = [split_word for word in cipherlist for split_word in word.split()]
 
-    for index, word in enumerate(plaintextlist):
-        if '_' in word:
-            if cipherlist[index] not in incompletedict:
-                formatted_word, formatted_indices = getFormattedWord(word, regexletters)
-                plainindices = [i for i, char in enumerate(word) if char == '_']
-                incompletedict[cipherlist[index]] = wordMatch(cipherlist[index], word, formatted_word, plainindices, formatted_indices) #incomplete word = key, tuple(cipherword, []) = value. empty list to hold indices of '_'
-            else:
-                pass
+    #make dict
+    for plainword, cipherword in zip(plaintextlist, cipherlist):
+        if '_' in plainword:
+            if cipherword not in incompletedict:
+                formatted_word, formatted_indices = getFormattedWord(plainword, regexletters)
+                plainindices = [i for i, char in enumerate(plainword) if char == '_']
+                incompletedict[cipherword] = wordMatch(cipherword, plainword, formatted_word, plainindices, formatted_indices) 
 
     return incompletedict
 
+
+#format plainword with regex sequence
+#regex sequence is all unmatched letters
 def getFormattedWord(word: str, regexletters:str) -> tuple[str, list[int]]:
-    temp_word = word.upper()
+    word = word.upper()
+    word = re.sub(r"^'+|'+$", "", word)
+    if word and word[-1] == 'S':
+            word = word + '?'
 
-    if "'" in temp_word and temp_word[-1] != "'":
-        temp_word = re.sub(r"[^A-Z_']", "", temp_word)
-
-    else:
-        temp_word = re.sub(r"[^A-Z_]", "", temp_word)
-        #check if plural
-        if temp_word[-1] == 'S':
-                temp_word = temp_word + '?'
-        else:
-            pass
-
-    format_indices = [i for i, char in enumerate(temp_word) if char == '_']
-    temp_word = '^' + re.sub('_', regexletters, temp_word) + '$'
+    format_indices = [i for i, char in enumerate(word) if char == '_']    #make list of indices of '_'
+    word = '^' + re.sub('_', regexletters, word) + '$'
     
-    return temp_word, format_indices
+    return word, format_indices
 
 
-def getMatches(incompletedict: dict[str, wordMatch], contractiondict: set[str], standarddict: set[str], regexletters:str) -> dict[str, wordMatch]:
+#search through dictionaries for possible words given plaintext word
+def getMatches(incompletedict: dict[str, wordMatch], regexletters:str) -> dict[str, wordMatch]:
     for matchobject in incompletedict.values():
         matches = []
-        #search dictionary for word
-
         temp_word = matchobject.get_formatword()
 
         if "'" in temp_word:
-            matches = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
+            matches = [d_word for d_word in CONTRACTIONDICT if re.search(temp_word, d_word)]
 
         elif len(temp_word) == 1:
             if 'A' in regexletters:
@@ -124,56 +158,52 @@ def getMatches(incompletedict: dict[str, wordMatch], contractiondict: set[str], 
             if 'O' in regexletters:
                 matches.append('O')
         else:
-            matchone = [d_word for d_word in contractiondict if re.search(temp_word, d_word)]
-            matchtwo = [d_word for d_word in standarddict if re.search(temp_word, d_word)]
-            for match in matchtwo:
-                if match not in matchone:
-                    matchone.append(match)
-            matches = matchone
+            #search both contraction dict for slang and given dict. combine elements into one list
+            matchlistone = [d_word for d_word in CONTRACTIONDICT if re.search(temp_word, d_word)]
+            matchlisttwo = [d_word for d_word in STANDARDDICT if re.search(temp_word, d_word)]
+
+            for match in matchlisttwo:
+                if match not in matchlistone:
+                    matchlistone.append(match)
+            matches = matchlistone
 
         matchobject.set_wordMatch(matches)
 
     return incompletedict
 
 
+#go through list of wordMatch objects
+#determine which letters can be mapped based on dictionary hits
+#all wordMatches in list have same number of possible dicionary words
+#logic works because these have smallest possble matched dict words (if we find a matched letter here, must be THE letter)
 def getPossibleLetterCombos(matchlist: list[wordMatch], mapping: dict[str, list[str]], matchedletters):
     possibleletters = {}
-    for thing in matchlist:
-        cipherword = thing.get_cipherword()
-        cipherindices = thing.get_plainindices()
-        matchindices = thing.get_formatindices()
-        numindices = thing.len_indices()
-        checkmatches = set()
-        
-        for word in thing.get_wordMatch():
-            for i in range(numindices):
-                cipherindex = cipherindices[i]
-                cipherletter = cipherword[cipherindex].upper()
 
-                matchindex = matchindices[i]
-                matchletter = word[matchindex]
+    for matchobject in matchlist:
+        cipherword:str = matchobject.get_cipherword()
+        cipherindices: list[int] = matchobject.get_plainindices()
+        matchindices: list[int] = matchobject.get_formatindices()
+        numindices: int = matchobject.len_indices()
+        wordmatches: list[str] = matchobject.get_wordMatch()
+        checkmatches = set()                                        
+
+        for word in wordmatches:
+            for i in range(numindices):
+                cipherletter = cipherword[cipherindices[i]].upper()
+                matchletter = word[matchindices[i]]
+
                 checkmatches.add(matchletter)
-                if cipherletter not in possibleletters:
-                    possibleletters.update({cipherletter: set()})
-                    possibleletters[cipherletter].add(matchletter)
-                else:
-                    possibleletters[cipherletter].add(matchletter)
-            
+                possibleletters.setdefault(cipherletter, set()).add(matchletter)
+
+        #if n letters have been matched, and there n indices, these must be the letters
         if len(checkmatches) == numindices:
             for i in range(numindices):
-                cipherindex = cipherindices[i]
-                cipherletter = cipherword[cipherindex].upper()
-
-                matchindex = matchindices[i]
-                matchletter = thing.get_wordMatch()[0][matchindex]
+                cipherletter = cipherword[cipherindices[i]].upper()
+                matchletter = wordmatches[0][matchindices[i]]
                 mapping[cipherletter] = [matchletter]
                 matchedletters.add(matchletter)
-                    
 
-
-            
-
-
+    #if out of all words that have been checked, there is a letter that has only been mapped once, this must be the letter
     for cipherletter, matchletters in possibleletters.items():
         if len(matchletters) == 1:
             char = next(iter(matchletters))
@@ -183,93 +213,54 @@ def getPossibleLetterCombos(matchlist: list[wordMatch], mapping: dict[str, list[
     return mapping, matchedletters
 
 
-"""
-    Simple substitution cipher hacker.
-    First runs the textbook program to get an initial, potentially incomplete decipherment.
-    Then uses regular expressions and a dictionary to decipher additional letters.
-"""
-def hackSimpleSub(message: str):
-    origmessage = message
-    standarddict = loadDictionary('dictionary.txt')
-    contractiondict = loadDictionary('english_contractions.txt')
+#find mapped letters, update mapping, update ciphertext, find mapped letters, ... until all words have been matched
+def recursiveUpdate(listbylength, mapping, matchedletters, message):
+    mapping, matchedletters = getPossibleLetterCombos(listbylength[0], mapping, matchedletters) #match plain letters to cipher letters based on words found in dictionaries
+    matchedletters, mapping = updateMatchedLetters(matchedletters, mapping) #update mapping given new matched letters
 
-    message = re.sub(r"[^a-zA-Z_']", " ", message)
-    mapping: dict[str, list[str]] = ssh.hackSimpleSub(message)
+    plaintext = ssh.decryptWithCipherletterMapping(message, mapping) #update plaintext
 
-
-    unmatchedletters = getUnmatchedLetters(mapping)
-    matchedletters = set(letter for letter in LETTERS if letter not in unmatchedletters)
+    #update unmatchedletters, regexletters
+    unmatchedletters = [letter for letter in LETTERS if letter not in matchedletters]
     regexletters = '[' + ''.join(unmatchedletters) + ']'
 
-    plaintext: str = ssh.decryptWithCipherletterMapping(message, mapping)
-    """    plaintext = re.sub(r"[^a-zA-Z_']", " ", plaintext)
-    scrubbedciphertext = re.sub(r"[^a-zA-Z_']", " ", message)"""
-
-    print(plaintext)
-    print()
-    print(message)
-
+    #update dict
     incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
-   
+    incompletedict = getMatches(incompletedict, regexletters)
 
-    incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
+    #sort list of wordMatches
     incompletelist: list[wordMatch] = [value for value in incompletedict.values() if value.len_wordMatch() > 0]
-    print()
-
-
     incompletelist.sort(key=lambda obj: obj.len_wordMatch())
-    listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())]
-    print(incompletedict)
-    print(listbylength[0])
 
-    while listbylength:
-        mapping, matchedletters = getPossibleLetterCombos(listbylength[0], mapping, matchedletters)
-
-        check = True
-        while check:
-            check = False
-            prematchedletters = matchedletters
-            for value in mapping.values():
-                if len(value) > 1:
-                    for letter in value:
-                        if letter in matchedletters:
-                            value.remove(letter)
-
-                            if len(value) == 1:
-                                matchedletters.add(value[0])
-            if matchedletters > prematchedletters:
-                check = True
-            
-        plaintext = ssh.decryptWithCipherletterMapping(message, mapping)
-
-        unmatchedletters = [letter for letter in LETTERS if letter not in matchedletters]
-        regexletters = '[' + ''.join(unmatchedletters) + ']'
-
-        incompletedict = getIncompleteWordDict(plaintext, message, regexletters)
-        incompletedict = getMatches(incompletedict, contractiondict, standarddict, regexletters)
-
-        incompletelist: list[wordMatch] = [value for value in incompletedict.values() if value.len_wordMatch() > 0]
-        incompletelist.sort(key=lambda obj: obj.len_wordMatch())
-
-        listbylength = [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())]
+    return [list(group) for key, group in groupby(incompletelist, key=lambda obj: obj.len_wordMatch())], mapping
 
 
-    return ssh.decryptWithCipherletterMapping(origmessage, mapping)
+#update mapping until matched letters have been removed from all values
+def updateMatchedLetters(matchedletters, mapping):
+    check = True
+    while check:
+        check = False
+        prematchedletters = matchedletters
+        for value in mapping.values():
+            if len(value) > 1:
+                for letter in value:
+                    if letter in matchedletters:
+                        value.remove(letter)
+
+                        #if after updating, current value has only one element, add it to matchedletters
+                        if len(value) == 1:
+                            matchedletters.add(value[0])
+
+        #once we iterate through values and matchedletters has not been appended, we have removed matched letters from all unmatched cipher, plailetter combos            
+        if matchedletters > prematchedletters:
+            check = True
+
+    return matchedletters, mapping
 
         
-   
-#for words with '-' in them, split at '-'
 def test():
     pass
-
-    #messageten = '''Zjp lqz xqz ed zjp nqz. Zjp lqz xqu zjp hqz. Zjp hqz hqd oqxz zjp nqz, qdf zjp lqz hqd qszph zjp hqz, qdf zjqz uqx zjqz.'''
-    #solutionten = '''The cat sat on the mat. The cat saw the rat. The rat ran past the mat, and the cat ran after the rat, and that was that.'''
-    #assert hackSimpleSub(messageten) == solutionten
     
-
-
-
-
 
 if __name__ == '__main__':
     test()
