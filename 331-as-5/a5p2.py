@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright <<Insert the date here>> <<Insert your name here>>
+# Copyright 10/17/26 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -31,34 +31,36 @@
 #---------------------------------------------------------------
 
 """
-CMPUT 331 Assignment 5 Problem 3 Student Solution
-Author: <Your name here>
+CMPUT 331 Assignment 5 Problem 2 Student Solution
+Author: Chris Scheerschmidt
 """
-import a5p1, a5p2
+
 from sys import flags
 
-def checkLetterFrequency(ciphertext: str) -> dict:
-    ciphertext = ciphertext.upper()
-    #keep only alpha
+def pretty_close(array_one, array_two):
+    if len(array_one) != len(array_two):
+        return False
+    for i in range(len(array_one)):
+        if abs(array_one[i] - array_two[i]) > 0.00001:
+            return False
+    return True
 
-    #count total # letters
+def evalDecipherment(text1: str, text2: str) -> [float, float]:
+    """
+    text1 is a plaintext and text2 is an attempted decipherment of a
+    ciphertext created by enciphering text1.
 
-    #count each letter
-    frequency = {}
-
-    for char in letters:
-        if char not in frequency:
-            frequency[char] = 0
-        frequency[char] += 1
-
-    for char in frequency:
-
-    return frequency
-    raise NotImplementedError
+    This function should compare the two files and return a list containing two fields that
+    correspond to the key accuracy and decipherment accuracy of text2 w.r.t. the plaintext, text1
+    """
+    raise NotImplementedError()
 
 
 def test():
-    assert checkLetterFrequency("ABCD") == {"A" : 0.25, "B" : 0.25, "C" : 0.25, "D" : 0.25}
-
+    "Run tests"
+    assert pretty_close(evalDecipherment("this is an example", "tsih ih an ezample") , [0.7272727272727273, 0.7333333333333333])
+    assert pretty_close(evalDecipherment("the most beautiful course is 331!", "tpq munt bqautiful cuurnq in 331!") , [0.7142857142857143, 0.625])
+    
+    
 if __name__ == '__main__' and not flags.interactive:
     test()
