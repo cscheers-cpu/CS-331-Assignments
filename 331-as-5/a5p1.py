@@ -42,7 +42,7 @@ def freqDict(ciphertext: str) -> dict:
     """
     Analyze the frequency of the letters
     """
-    returndict = {}
+    mapping = {}
     cleantext = [char.upper() for char in ciphertext if char.isalpha()]
     letterfreq = Counter(cleantext)
     if not letterfreq:
@@ -51,9 +51,9 @@ def freqDict(ciphertext: str) -> dict:
     letterfreq = dict(sorted(letterfreq.items(), key=lambda item: (-item[1], item[0])))
 
     for i , key in enumerate(letterfreq.keys()):
-        returndict.update({key: ETAOIN[i]})
+        mapping.update({key: ETAOIN[i]})
 
-    return returndict
+    return mapping
 
     
 
@@ -61,8 +61,16 @@ def freqDecrypt(mapping: dict, ciphertext: str) -> str:
     """
     Apply the mapping to ciphertext
     """
-    
-    raise NotImplementedError
+    mappedtext = [''] * len(ciphertext)
+
+    for i, char in enumerate(ciphertext):
+        if char.isalpha():
+            mappedchar = mapping[char.upper()]
+            mappedtext[i] = mappedchar
+        else:
+            mappedtext[i] = char
+
+    return ''.join(mappedtext)
 
 def test():
     "Run tests"
