@@ -29,7 +29,7 @@
 #          gkondrak <at> ualberta.ca
 #
 #---------------------------------------------------------------
-
+ 
 """
 CMPUT 331 Assignment 5 Problem 1 Student Solution
 Author: Chris Scheerschmidt
@@ -42,18 +42,20 @@ def freqDict(ciphertext: str) -> dict:
     """
     Analyze the frequency of the letters
     """
-    counter = Counter(ciphertext.upper())
+    returndict = {}
+    cleantext = [char.upper() for char in ciphertext if char.isalpha()]
+    letterfreq = Counter(cleantext)
+    if not letterfreq:
+        return {}
     
-        sorted_letters = sorted (
-            letters,
-            key=lambda char: (-counter[char], char)
+    letterfreq = dict(sorted(letterfreq.items(), key=lambda item: (-item[1], item[0])))
+
+    for i , key in enumerate(letterfreq.keys()):
+        returndict.update({key: ETAOIN[i]})
+
+    return returndict
+
     
-        )
-        mapping = {}
-        for i in range(len(sorted_letters)):
-    
-        return mapping
-    raise NotImplementedError
 
 def freqDecrypt(mapping: dict, ciphertext: str) -> str:
     """
