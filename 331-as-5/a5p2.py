@@ -36,7 +36,6 @@ Author: Chris Scheerschmidt
 """
 
 from sys import flags
-
 def pretty_close(array_one, array_two):
     if len(array_one) != len(array_two):
         return False
@@ -45,7 +44,7 @@ def pretty_close(array_one, array_two):
             return False
     return True
 
-def evalDecipherment(text1: str, text2: str) -> [float, float]:
+def evalDecipherment(text1: str, text2: str) -> list[float]:
     """
     text1 is a plaintext and text2 is an attempted decipherment of a
     ciphertext created by enciphering text1.
@@ -53,7 +52,31 @@ def evalDecipherment(text1: str, text2: str) -> [float, float]:
     This function should compare the two files and return a list containing two fields that
     correspond to the key accuracy and decipherment accuracy of text2 w.r.t. the plaintext, text1
     """
-    raise NotImplementedError()
+    lettercount = 0
+    matchcount = 0
+    textletters = set()
+    matchletters = set()
+
+    for plainchar, cipherchar in zip(list(text1), list(text2)):
+        if plainchar.isalpha():
+            plainchar = plainchar.upper()
+            textletters.add(plainchar)
+            lettercount += 1
+
+            if cipherchar.isalpha():
+                cipherchar = cipherchar.upper()
+
+                if plainchar == cipherchar:
+                    matchcount += 1
+                    
+                    if plainchar not in matchletters:
+                        matchletters.add(plainchar)
+
+    keyaccuracy = len(matchletters) / len(textletters)
+    deciperaccuracy = matchcount / lettercount
+
+    return [keyaccuracy, deciperaccuracy]
+
 
 
 def test():
