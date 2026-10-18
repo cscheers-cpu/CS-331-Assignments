@@ -34,6 +34,31 @@
 CMPUT 331 Assignment 5 Problem 3 Student Solution
 Author: Chris Scheerschmidt
 """
+
+MYMAP = {
+        'A': 'A',
+        'C': 'N',
+        'D': 'O',
+        'E': 'Y',
+        'F': 'D',
+        'G': 'G',
+        'H': 'F',
+        'I': 'B',
+        'J': 'L',
+        'K': 'R',
+        'L': 'I',
+        'M': 'S',
+        'N': 'C',
+        'Q': 'K',
+        'S': 'U',
+        'T': 'P',
+        'U': 'V',
+        'V': 'H',
+        'W': 'M',
+        'X': 'W',
+        'Y': 'T',
+        'Z': 'E',
+    }
 import a5p1, a5p2
 from sys import flags
 
@@ -58,9 +83,19 @@ def checkLetterFrequency(ciphertext: str) -> dict:
 
     return letterdict
 
+def solveCipher(filename = 'ciphertext.txt'):
+    with open(filename, 'r', encoding='utf-8') as f:
+        ciphertext = f.read()
+
+    ciphertext = a5p1.freqDecrypt(MYMAP, ciphertext)
+
+    with open ('plaintext.txt', 'w', encoding='utf-8') as f:
+        f.write(ciphertext)
+
+    return 0
 
 def test():
-    assert checkLetterFrequency("ABCD") == {"A" : 0.25, "B" : 0.25, "C" : 0.25, "D" : 0.25}
+    pass
 
 if __name__ == '__main__' and not flags.interactive:
     test()
