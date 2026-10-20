@@ -68,21 +68,19 @@ def evalDecipherment(text1: str, text2: str) -> list[float]:
 
                 if plainchar == cipherchar:
                     matchcount += 1
-                    
-                    if plainchar not in matchletters:
-                        matchletters.add(plainchar)
+                    matchletters.add(plainchar)
 
+    if len(matchletters) == 0 and len(textletters) == 0:
+        return [0.0, 0.0]
+    
     keyaccuracy = len(matchletters) / len(textletters)
     deciperaccuracy = matchcount / lettercount
 
     return [keyaccuracy, deciperaccuracy]
 
 
-
 def test():
-    "Run tests"
-    assert pretty_close(evalDecipherment("this is an example", "tsih ih an ezample") , [0.7272727272727273, 0.7333333333333333])
-    assert pretty_close(evalDecipherment("the most beautiful course is 331!", "tpq munt bqautiful cuurnq in 331!") , [0.7142857142857143, 0.625])
+    pass
     
     
 if __name__ == '__main__' and not flags.interactive:

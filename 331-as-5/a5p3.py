@@ -34,7 +34,7 @@
 CMPUT 331 Assignment 5 Problem 3 Student Solution
 Author: Chris Scheerschmidt
 """
-
+#mapping that was found manually
 MYMAP = {
         'A': 'A',
         'C': 'N',
@@ -59,7 +59,8 @@ MYMAP = {
         'Y': 'T',
         'Z': 'E',
     }
-import a5p1, a5p2
+
+import a5p1
 from sys import flags
 
 def checkLetterFrequency(ciphertext: str) -> dict:
@@ -83,6 +84,8 @@ def checkLetterFrequency(ciphertext: str) -> dict:
 
     return letterdict
 
+
+#solve cipher with mapping that was found manually, save to plaintext.txt
 def solveCipher(filename = 'ciphertext.txt'):
     with open(filename, 'r', encoding='utf-8') as f:
         ciphertext = f.read()
