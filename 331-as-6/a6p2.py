@@ -61,12 +61,36 @@ ALPHABET = ['A',
             'Z'
         ]
 
+TEST_MAP = {'O': 'A',   'I': 'J',   'U': 'T',   'N': 'L',   'Q': 'M',   'B': 'F', 
+            
+            'V': 'P',   'E': 'V',   'D': 'H',   'M': 'X',   'L': 'O',   'Y': 'D', 
+
+            'J': 'B',   'C': 'R',   'F': 'G',   'Z': 'C',   'W': 'E',   'K': 'Z', 
+
+            'X': 'W', 'T': 'U', 'S': 'Q', 'A': 'K', 'H': 'I', 'P': 'N', 'G': 'S', 
+
+            'R': 'Y', ' ': ' '
+        }
+
 from sys import flags
 import random
 
+#generate random character mapping
 def get_mapping():
-    keys = random.sample(ALPHABET, len(ALPHABET))
-    values = random.sample(ALPHABET, len(ALPHABET))
+    self_map = True
+    keys = []
+    values = []
+
+    while self_map:
+        self_map = False
+        keys = random.sample(ALPHABET, len(ALPHABET))
+        values = random.sample(ALPHABET, len(ALPHABET))
+
+        for key_letter, value_letter in zip(keys, values):
+            if key_letter == value_letter:
+                self_map = True
+                break
+
     alpha_dict = dict(zip(keys, values))
     alpha_dict.update({' ': ' '})
 
@@ -78,6 +102,7 @@ def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float
   
 
 def test():
+    print(get_mapping())
     "Run tests"
     # TODO: test thoroughly by writing your own regression tests
     # This function is ignored in our marking
