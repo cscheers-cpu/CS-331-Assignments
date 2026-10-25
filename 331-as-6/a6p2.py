@@ -155,7 +155,8 @@ TEST_CIPHERS = ['IIVVVIIV',
 
 from sys import flags
 import random
-from a6p1 import ngramsFreqs
+from a6p1 import ngramsFreqs, getOccurences
+from collections import Counter
 
 #generate random character mapping
 def get_mapping():
@@ -217,19 +218,19 @@ def decipher(mapping = TEST_DECODE, ciphertext = ''):
 
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
-    plaintext = decipher(mapping, ciphertext)
-    testfreqs = ngramsFreqs(plaintext, n)
+    plaintext = decipher(mapping, ciphertext).upper()
 
-    realengrams = frequencies.keys()
-
+    _ , engram_list = getOccurences(plaintext, n)
+    testfreqs = Counter(engram_list)
+    relengrams = frequencies.keys()
+    ngramscore = 0
 
     for engram, testfreq in testfreqs.items():
-        if engram in realengrams:
-            realfreq = frequencies[engram]
-            
-        pass
+        if engram in relengrams:
+            relfreq = frequencies[engram]
+            ngramscore += testfreq * relfreq
 
-    pass
+    return ngramscore
   
 
 def test():
