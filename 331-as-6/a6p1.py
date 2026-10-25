@@ -37,6 +37,15 @@ Problem 1
 from sys import flags
 from collections import Counter
 
+def getOccurences(text, n ):
+    engram_list = [text[i:i+n] for i in range(0, len(text), n)]
+    if len(engram_list[-1]) < n:
+        engram_list.pop()
+    engram_count = len(engram_list)
+
+    return engram_count, engram_list
+
+
 def ngramsFreqs(text: str, n: int) -> dict[str, float]:
     """
     text: the content string
@@ -52,10 +61,7 @@ def ngramsFreqs(text: str, n: int) -> dict[str, float]:
         raise ValueError("n cannot be larger than text")
     
     engram_dict = {}
-    engram_list = [text[i:i+n] for i in range(0, len(text), n)]
-    if len(engram_list[-1]) < n:
-        engram_list.pop()
-    engram_count = len(engram_list)
+    engram_count, engram_list = getOccurences(text, n)
 
     engram_dict = {engram: count / engram_count for engram, count in Counter(engram_list).items()}
 

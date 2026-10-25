@@ -78,7 +78,7 @@ TEST_DECODE = {'G': 'O',    'L': 'Y',   'E': 'K',   'W': 'M',   'C': 'S',   'Y':
 
                'P': 'G',    'U': 'X',    'D': 'V',   'X': 'T',  'H': 'R',   ' ': ' '}
 
-test_texts = [
+TEST_TEXTS = [
     "EEFFFEEF",
 
     "HELLO WORLD",
@@ -116,8 +116,46 @@ test_texts = [
     "",
 ]
 
+TEST_CIPHERS = ['IIVVVIIV',
+                 
+                'TIMMG FGHMS', 
+
+                'ZJKZJKZJK', 
+
+                'ZZZZ ZZZZ', 
+
+                'XTI NQRKE JHGFO VGU', 
+
+                'ZXXZKE ZX SZFO',
+
+                'KHLAXGPHZATL RC VQO',
+
+                'Z J K S I', 
+
+                'ZJKSIVPTRBEMWOGANHCXQDFULY', 
+
+                'TIMMG TIMMG TIMMG', 
+
+                'WRCCRCCRAAR HRDIH',
+
+                'ZJ ZJ ZJ ZJ',
+
+                '  Z  J  K  ', 
+
+                'CAZKI CAZKI CAZKI', 
+
+                'KGWAQXIH CKRIOKI',
+
+                'IORPWZ WZKTROI', 
+
+                'Y', 
+
+                ''
+        ]
+
 from sys import flags
 import random
+from a6p1 import ngramsFreqs
 
 #generate random character mapping
 def get_mapping():
@@ -160,6 +198,7 @@ def encipher(mapping = TEST_ENCODE, plaintext = ''):
 
     return ''.join(encipher_list)
 
+
 def decipher(mapping = TEST_DECODE, ciphertext = ''):
     cap_text = ciphertext.upper()
     decipher_list = [""] * len(ciphertext)
@@ -176,14 +215,26 @@ def decipher(mapping = TEST_DECODE, ciphertext = ''):
 
     return ''.join(decipher_list)
 
-    
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
-    raise NotImplementedError()
+    plaintext = decipher(mapping, ciphertext)
+    testfreqs = ngramsFreqs(plaintext, n)
+
+    realengrams = frequencies.keys()
+
+
+    for engram, testfreq in testfreqs.items():
+        if engram in realengrams:
+            realfreq = frequencies[engram]
+            
+        pass
+
+    pass
   
 
 def test():
-    print(get_mapping())
+    test_deciphers = [encipher(TEST_ENCODE, text) for text in TEST_TEXTS]
+    print(test_deciphers)
     "Run tests"
     # TODO: test thoroughly by writing your own regression tests
     # This function is ignored in our marking
