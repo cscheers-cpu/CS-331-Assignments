@@ -72,6 +72,44 @@ TEST_MAP = {'O': 'A',   'I': 'J',   'U': 'T',   'N': 'L',   'Q': 'M',   'B': 'F'
             'R': 'Y', ' ': ' '
         }
 
+test_texts = [
+    "EEFFFEEF",
+
+    "HELLO WORLD",
+
+    "ABCABCABC",
+
+    "AAAA AAAA",
+
+    "THE QUICK BROWN FOX",
+
+    "ATTACK AT DAWN",
+
+    "CRYPTOGRAPHY IS FUN",
+
+    "A B C D E",
+
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+
+    "HELLO HELLO HELLO",
+
+    "MISSISSIPPI RIVER",
+
+    "AB AB AB AB",
+
+    "  A  B  C  ",
+
+    "SPACE SPACE SPACE",
+
+    "COMPUTER SCIENCE",
+
+    "ENIGMA MACHINE",
+
+    "Z",
+
+    "",
+]
+
 from sys import flags
 import random
 
@@ -102,7 +140,6 @@ def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float
   
 
 def test():
-    print(get_mapping())
     "Run tests"
     # TODO: test thoroughly by writing your own regression tests
     # This function is ignored in our marking
