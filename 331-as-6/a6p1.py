@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright 2026 <<Insert your name here>>
+# Copyright 2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -35,13 +35,31 @@ Problem 1
 """
 
 from sys import flags
+from collections import Counter
 
-def ngramsFreqs(text: str, n: int) -> dict:
+def ngramsFreqs(text: str, n: int) -> dict[str, float]:
     """
     text: the content string
     n: the size of the n-grams
     """
-    # raise NotImplementedError()
+    if text == "":
+        return {}
+    if n == 0:
+        return {text: 1}
+    if n < 0:
+        raise ValueError("n cannot be negative")
+    if n > len(text):
+        raise ValueError("n cannot be larger than text")
+    
+    engram_dict = {}
+    engram_list = [text[i:i+n] for i in range(0, len(text), n)]
+    if len(engram_list[-1]) < n:
+        engram_list.pop()
+    engram_count = len(engram_list)
+
+    engram_dict = {engram: count / engram_count for engram, count in Counter(engram_list).items()}
+
+    return engram_dict
     
 
 def test():
