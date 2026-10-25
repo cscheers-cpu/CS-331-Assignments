@@ -144,6 +144,39 @@ def get_mapping():
 
     return alpha_encode, alpha_decode
 
+def encipher(mapping = TEST_ENCODE, plaintext = ''):
+    cap_text = plaintext.upper()
+    encipher_list = [""] * len(plaintext)
+
+    for i in range(0, len(plaintext)):
+        char = mapping[cap_text[i]]
+
+        if plaintext[i].islower():
+            encipher_list[i] = char.lower()
+        elif plaintext[i].isupper():
+            encipher_list[i] = char
+        else:
+            encipher_list[i] = plaintext[i]
+
+    return ''.join(encipher_list)
+
+def decipher(mapping = TEST_DECODE, ciphertext = ''):
+    cap_text = ciphertext.upper()
+    decipher_list = [""] * len(ciphertext)
+
+    for i in range(0, len(ciphertext)):
+        char = mapping[cap_text[i]]
+
+        if ciphertext[i].islower():
+            decipher_list[i] = char.lower()
+        elif ciphertext[i].isupper():
+            decipher_list[i] = char
+        else:
+            decipher_list[i] = ciphertext[i]
+
+    return ''.join(decipher_list)
+
+    
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
     raise NotImplementedError()
