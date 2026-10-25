@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright 2026 <<Insert your name here>>
+# Copyright 2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -33,8 +33,45 @@
 """
 Problem 2
 """
+ALPHABET = ['A', 
+            'B',
+            'C',
+            'D',
+            'E', 
+            'F', 
+            'G', 
+            'H', 
+            'I', 
+            'J', 
+            'K',
+            'L',
+            'M',
+            'N',
+            'O',
+            'P',
+            'Q',
+            'R',
+            'S',
+            'T',
+            'U',
+            'V',
+            'W',
+            'X',
+            'Y',
+            'Z'
+        ]
 
 from sys import flags
+import random
+
+def get_mapping():
+    keys = random.sample(ALPHABET, len(ALPHABET))
+    values = random.sample(ALPHABET, len(ALPHABET))
+    alpha_dict = dict(zip(keys, values))
+    alpha_dict.update({' ': ' '})
+
+    return alpha_dict
+
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
     raise NotImplementedError()
