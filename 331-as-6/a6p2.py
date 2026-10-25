@@ -61,16 +61,22 @@ ALPHABET = ['A',
             'Z'
         ]
 
-TEST_MAP = {'O': 'A',   'I': 'J',   'U': 'T',   'N': 'L',   'Q': 'M',   'B': 'F', 
+TEST_ENCODE = {'O': 'G',   'Y': 'L',   'K': 'E',   'M': 'W',   'S': 'C',   'Z': 'Y',   'A': 'Z', 
             
-            'V': 'P',   'E': 'V',   'D': 'H',   'M': 'X',   'L': 'O',   'Y': 'D', 
+            'D': 'S',   'B': 'J',   'U': 'Q',   'Q': 'N',   'F': 'V',   'L': 'M',   'J': 'B', 
 
-            'J': 'B',   'C': 'R',   'F': 'G',   'Z': 'C',   'W': 'E',   'K': 'Z', 
+            'C': 'K',    'W': 'F',  'N': 'O',   'H': 'T',    'E': 'I',   'I': 'R',  'P': 'A', 
 
-            'X': 'W', 'T': 'U', 'S': 'Q', 'A': 'K', 'H': 'I', 'P': 'N', 'G': 'S', 
+            'G': 'P',   'X': 'U',   'V': 'D',   'T': 'X',    'R': 'H',  ' ': ' '
+}
 
-            'R': 'Y', ' ': ' '
-        }
+TEST_DECODE = {'G': 'O',    'L': 'Y',   'E': 'K',   'W': 'M',   'C': 'S',   'Y': 'Z',   'Z': 'A', 
+               
+               'S': 'D',     'J': 'B',   'Q': 'U',  'N': 'Q',   'V': 'F',   'M': 'L',    'B': 'J', 
+
+               'K': 'C',    'F': 'W',    'O': 'N',  'T': 'H',   'I': 'E',    'R': 'I',   'A': 'P', 
+
+               'P': 'G',    'U': 'X',    'D': 'V',   'X': 'T',  'H': 'R',   ' ': ' '}
 
 test_texts = [
     "EEFFFEEF",
@@ -129,10 +135,14 @@ def get_mapping():
                 self_map = True
                 break
 
-    alpha_dict = dict(zip(keys, values))
-    alpha_dict.update({' ': ' '})
+    alpha_encode = dict(zip(keys, values))
+    alpha_encode.update({' ': ' '})
 
-    return alpha_dict
+    alpha_decode = dict(zip(values, keys))
+    alpha_decode.update({' ': ' '})
+
+
+    return alpha_encode, alpha_decode
 
 
 def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float:
@@ -140,6 +150,7 @@ def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float
   
 
 def test():
+    print(get_mapping())
     "Run tests"
     # TODO: test thoroughly by writing your own regression tests
     # This function is ignored in our marking
