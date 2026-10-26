@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright 2026 <<Insert your name here>>
+# Copyright 2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -35,7 +35,8 @@ Problem 3
 """
 
 from sys import flags
-
+from a6p1 import getOccurences, ngramsFreqs
+from a6p2 import keyScore
 
 '''
 Use this section to import your code from A6P2 
@@ -48,8 +49,34 @@ def keyScore(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> float
 
 
 
-def bestSuccessor(mapping: dict, ciphertext: str, frequencies: dict, n: int) -> dict:
-    raise NotImplementedError()
+def bestSuccessor(mapping: dict[str, str], ciphertext: str, frequencies: dict, n: int) -> dict[str, str]:
+    cipherchar_map = list(mapping.keys())
+    plainchar_map = list(mapping.values())
+    bestmapping = mapping
+    bestmapscore = keyScore(bestmapping, ciphertext, frequencies, n)
+    origbestmap = True
+
+    for i, (cipherchar, plainchar) in enumerate(zip(cipherchar_map, plainchar_map)):
+        for nestedcipherchar, nestedplainchar in zip(cipherchar_map[i+1:], plainchar_map[i+1:]):
+            newmapping = mapping.copy()
+            newmapping[cipherchar] = nestedplainchar
+            newmapping[nestedcipherchar] = plainchar
+            newmapscore = keyScore(newmapping, ciphertext, frequencies, n)
+
+            if newmapscore > bestmapscore:
+                bestmapping = newmapping
+                bestmapscore = newmapscore
+                origbestmap = False
+
+            elif newmapscore < bestmapscore:
+                pass
+
+            else:
+                if not origbestmap:
+                    bestmapping = breakKeyScoreTie(mapping, bestmapping, newmapping)
+
+    return bestmapping
+    
 
 def breakKeyScoreTie(originalMapping, successorMappingA, successorMappingB):
     """
