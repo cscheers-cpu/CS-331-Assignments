@@ -39,8 +39,10 @@ from collections import Counter
 
 def getOccurences(text, n ):
     engram_list = [text[i:i+n] for i in range(0, len(text), n)]
-    if len(engram_list[-1]) < n:
-        engram_list.pop()
+
+    if len(engram_list) % n != 0:
+        engram_list.append(text[-1 * n - 1:])
+
     engram_count = len(engram_list)
 
     return engram_count, engram_list
@@ -65,6 +67,9 @@ def ngramsFreqs(text: str, n: int) -> dict[str, float]:
 
     engram_dict = {engram: count / engram_count for engram, count in Counter(engram_list).items()}
 
+    for key, value in engram_dict.items():
+        print(key, value)
+    
     return engram_dict
     
 
