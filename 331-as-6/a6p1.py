@@ -66,9 +66,6 @@ def ngramsFreqs(text: str, n: int) -> dict[str, float]:
     engram_count, engram_list = getOccurences(text, n)
 
     engram_dict = {engram: count / engram_count for engram, count in Counter(engram_list).items()}
-
-    for key, value in engram_dict.items():
-        print(key, value)
     
     return engram_dict
     

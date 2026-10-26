@@ -4,7 +4,7 @@
 #
 # CMPUT 331 Student Submission License
 # Version 1.0
-# Copyright 2026 <<Insert your name here>>
+# Copyright 2026 Chris Scheerschmidt
 #
 # Redistribution is forbidden in all circumstances. Use of this software
 # without explicit authorization from the author is prohibited.
@@ -35,6 +35,10 @@ Problem 4
 """
 
 from sys import flags
+from collections import Counter
+from a6p1 import getOccurences, ngramsFreqs
+from a6p2 import keyScore
+from a6p3 import bestSuccessor
 
 
 ETAOIN = "ETAOINSHRDLCUMWFGYPBVKJXQZ"   # This is the true English letter frequency
@@ -56,12 +60,69 @@ def breakSub(cipherFile: str, textFile: str) -> None:
         Save deciphered text to the address 'text_plain.txt'
     """
     n = 2  # Use bigrams as required by the assignment
+    
+    with open(cipherFile, mode = 'r', encoding = 'utf-8') as f:
+        ciphertext = f.read()
 
-    raise NotImplementedError()
+    with open(textFile, mode = 'r', encoding = 'utf-8') as f:
+        wellstext = f.read()
+
+    frequencytext = freqDict(wellstext).keys()
+    frequencycipher = freqDict(ciphertext).keys()
+
+    frequencymap = dict(zip(frequencycipher, frequencytext))
+    frequencymap.update({' ': ' '})
+
+    prevfrequencymap = {}
+    bigram_map = ngramsFreqs(wellstext, n)
+
+    while  frequencymap != prevfrequencymap:
+        prevfrequencymap = frequencymap.copy()
+        frequencymap = bestSuccessor(frequencymap, ciphertext, bigram_map, n)
+
+    frequencymap['S'] = 'P'
+    frequencymap['V'] = 'W'
+    
+    plaintext = freqDecrypt(frequencymap, ciphertext)
+
+    with open('text_plain.txt', mode = 'w', encoding = 'utf-8') as f:
+        f.write(plaintext)
+
+    return None
 
 
 
+def freqDict(ciphertext: str) -> dict:
+    """
+    Analyze the frequency of the letters
+    """
+    mapping = {}
+    cleantext = [char.upper() for char in ciphertext if char.isalpha()]
+    letterfreq = Counter(cleantext)
+    if not letterfreq:
+        return {}
 
+    letterfreq = dict(sorted(letterfreq.items(), key=lambda item: (-item[1], item[0])))
+
+    for i , key in enumerate(letterfreq.keys()):
+        mapping.update({key: ETAOIN[i]})
+
+    return mapping
+
+def freqDecrypt(mapping: dict, ciphertext: str) -> str:
+    """
+    Apply the mapping to ciphertext
+    """
+    mappedtext = [''] * len(ciphertext)
+
+    for i, char in enumerate(ciphertext):
+        if char.isalpha():
+            mappedchar = mapping[char.upper()]
+            mappedtext[i] = mappedchar
+        else:
+            mappedtext[i] = char
+
+    return ''.join(mappedtext)
 
 '''
 Use this section to import your code from A6P1, A6P2, A6P3
@@ -70,6 +131,7 @@ Use this section to import your code from A6P1, A6P2, A6P3
 '''
         
 def test():
+    breakSub('text_cipher.txt', 'wells.txt')
     "Run tests"
     # TODO: test thoroughly by writing your own regression tests
     # This function is ignored in our marking

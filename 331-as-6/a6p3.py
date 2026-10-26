@@ -56,8 +56,8 @@ def bestSuccessor(mapping: dict[str, str], ciphertext: str, frequencies: dict, n
     bestmapscore = keyScore(bestmapping, ciphertext, frequencies, n)
     origbestmap = True
 
-    for i, (cipherchar, plainchar) in enumerate(zip(cipherchar_map, plainchar_map)):
-        for nestedcipherchar, nestedplainchar in zip(cipherchar_map[i+1:], plainchar_map[i+1:]):
+    for i, (cipherchar, plainchar) in enumerate(zip(cipherchar_map[:-1], plainchar_map[:-1])):
+        for nestedcipherchar, nestedplainchar in zip(cipherchar_map[i+1:-1], plainchar_map[i+1:-1]):
             newmapping = mapping.copy()
             newmapping[cipherchar] = nestedplainchar
             newmapping[nestedcipherchar] = plainchar
